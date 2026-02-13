@@ -74,24 +74,57 @@ function showSection(sectionId) {
 }
 
 // AI Chatbot Functions
-function sendMessage() {
+async function sendMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
     if (!message) return;
 
-    addMessageToChat('user', message);
+    // Clear input and show user message
     input.value = '';
-
+    addMessageToChat('user', message);
+    
     // Show typing indicator
     showTypingIndicator();
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+        // Check if backend is available (optional, but good for UX)
+        // For now, we'll try to send the message directly
+        
+        const response = await fetch('http://localhost:3000/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Remove typing indicator and show AI response
         removeTypingIndicator();
-        const response = generateAIResponse(message);
-        addMessageToChat('ai', response);
-        speakResponse(response);
-    }, 1500);
+        addMessageToChat('ai', data.reply);
+        // speakResponse(data.reply); // Auto-read disabled per user request
+
+    } catch (error) {
+        console.error('Chat Error:', error);
+        
+        // Fallback to local hardcoded response if server fails
+        console.log('Falling back to local response...');
+        removeTypingIndicator();
+        
+        // Add a small delay for natural feeling if immediate fail
+        setTimeout(() => {
+            const fallbackResponse = generateAIResponse(message);
+            // Append a small note about offline mode if needed, or just show response
+            const responseWithNote = `${fallbackResponse}<br><br><span class="text-xs text-gray-500">(Offline Mode)</span>`;
+            addMessageToChat('ai', responseWithNote);
+            // speakResponse(fallbackResponse); // Auto-read disabled per user request
+        }, 500);
+    }
 }
 
 function addMessageToChat(sender, message) {
