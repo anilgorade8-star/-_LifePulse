@@ -6,12 +6,13 @@ let map = null;
 let heartRateInterval = null;
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initApp();
+    loadProfileData();
     animateStats();
     initCharts();
     checkConnectivity();
-    
+
     // Heart rate simulation
     setInterval(() => {
         const hr = 70 + Math.floor(Math.random() * 10);
@@ -23,7 +24,7 @@ function initApp() {
     // Check online status
     window.addEventListener('online', () => updateOnlineStatus(true));
     window.addEventListener('offline', () => updateOnlineStatus(false));
-    
+
     // Initialize medicine reminders
     checkMedicineReminders();
     setInterval(checkMedicineReminders, 60000); // Check every minute
@@ -54,14 +55,14 @@ function showSection(sectionId) {
         section.classList.add('hidden');
         section.classList.remove('active');
     });
-    
+
     // Show target section
     const target = document.getElementById(sectionId);
     if (target) {
         target.classList.remove('hidden');
         target.classList.add('active');
         window.scrollTo(0, 0);
-        
+
         // Initialize section-specific features
         if (sectionId === 'emergency') {
             setTimeout(initMap, 100);
@@ -77,13 +78,13 @@ function sendMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
     if (!message) return;
-    
+
     addMessageToChat('user', message);
     input.value = '';
-    
+
     // Show typing indicator
     showTypingIndicator();
-    
+
     // Simulate AI response
     setTimeout(() => {
         removeTypingIndicator();
@@ -97,7 +98,7 @@ function addMessageToChat(sender, message) {
     const container = document.getElementById('chatContainer');
     const div = document.createElement('div');
     div.className = 'flex items-start space-x-3 chat-message';
-    
+
     if (sender === 'user') {
         div.innerHTML = `
             <div class="flex-1 flex justify-end">
@@ -119,7 +120,7 @@ function addMessageToChat(sender, message) {
             </div>
         `;
     }
-    
+
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
 }
@@ -152,7 +153,7 @@ function removeTypingIndicator() {
 
 function generateAIResponse(input) {
     const lower = input.toLowerCase();
-    
+
     // Emergency detection
     if (lower.includes('chest pain') || lower.includes('heart attack') || lower.includes('can\'t breathe')) {
         return `🚨 <b>This sounds like a medical emergency!</b><br><br>
@@ -163,7 +164,7 @@ function generateAIResponse(input) {
         • If you have aspirin, chew one (if not allergic)<br>
         • Do not drive yourself`;
     }
-    
+
     // Common symptoms
     if (lower.includes('fever') || lower.includes('headache')) {
         return `Based on your symptoms (fever and headache), this could be:<br><br>
@@ -179,7 +180,7 @@ function generateAIResponse(input) {
         • Cold compress on forehead<br><br>
         <b>⚠️ See a doctor if:</b> Fever persists >3 days, severe headache with vomiting, or neck stiffness.`;
     }
-    
+
     if (lower.includes('stomach') || lower.includes('pain')) {
         return `For stomach pain, the cause depends on the location:<br><br>
         <b>Upper abdomen:</b> Could be acidity, gastritis, or ulcer<br>
@@ -192,7 +193,7 @@ function generateAIResponse(input) {
         • Avoid spicy/oily food<br><br>
         <b>⚠️ Go to hospital if:</b> Severe pain, vomiting blood, or no bowel movement with swelling.`;
     }
-    
+
     if (lower.includes('diabetes') || lower.includes('sugar')) {
         return `For diabetes management:<br><br>
         <b>Diet tips:</b><br>
@@ -206,7 +207,7 @@ function generateAIResponse(input) {
         • Take medicines on time<br><br>
         Would you like a personalized diet chart? Click on "Diet Generator" in the menu!`;
     }
-    
+
     if (lower.includes('pregnant') || lower.includes('pregnancy')) {
         return `Congratulations! For a healthy pregnancy:<br><br>
         <b>Essential care:</b><br>
@@ -221,7 +222,7 @@ function generateAIResponse(input) {
         • Baby not moving<br><br>
         <b>Free government scheme:</b> Register for Janani Suraksha Yojana (JSY) for free delivery and Rs. 1400 cash assistance.`;
     }
-    
+
     // Default response
     return `Thank you for sharing. To help you better, could you tell me:<br><br>
     1. How long have you had these symptoms?<br>
@@ -267,13 +268,13 @@ function toggleVoiceInput() {
         const recognition = new SpeechRecognition();
         recognition.lang = currentLanguage === 'hi' ? 'hi-IN' : 'en-IN';
         recognition.start();
-        
-        recognition.onresult = function(event) {
+
+        recognition.onresult = function (event) {
             const transcript = event.results[0][0].transcript;
             document.getElementById('chatInput').value = transcript;
         };
-        
-        recognition.onend = function() {
+
+        recognition.onend = function () {
             setTimeout(() => closeVoiceModal(), 1000);
         };
     }
@@ -305,7 +306,7 @@ function startVoiceChat() {
 // Emergency Functions
 function triggerSOS() {
     document.getElementById('sosModal').classList.remove('hidden');
-    
+
     // Simulate emergency call
     setTimeout(() => {
         // In real app, this would trigger actual phone call and location sharing
@@ -322,29 +323,29 @@ function initMap() {
     if (map) {
         map.remove();
     }
-    
+
     // Default to Delhi coordinates (in real app, use geolocation)
     map = L.map('map').setView([28.6139, 77.2090], 13);
-    
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-    
+
     // Add hospital markers
     const hospitals = [
         { name: "AIIMS Hospital", lat: 28.5672, lng: 77.2100, type: "Government" },
         { name: "Safdarjung Hospital", lat: 28.5733, lng: 77.2000, type: "Government" },
         { name: "City Hospital", lat: 28.6200, lng: 77.2200, type: "Private" }
     ];
-    
+
     const hospitalList = document.getElementById('hospitalList');
     hospitalList.innerHTML = '';
-    
+
     hospitals.forEach(hospital => {
         const marker = L.marker([hospital.lat, hospital.lng]).addTo(map);
         marker.bindPopup(`<b>${hospital.name}</b><br>${hospital.type} Hospital<br>
             <button onclick="getDirections(${hospital.lat}, ${hospital.lng})" class="text-blue-600 underline">Get Directions</button>`);
-        
+
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
         div.innerHTML = `
@@ -371,9 +372,9 @@ function takeMedicine(btn) {
     btn.innerHTML = '<i class="fas fa-check-double"></i>';
     btn.classList.add('bg-green-500', 'text-white', 'border-green-500');
     btn.disabled = true;
-    
+
     showNotification('Medicine marked as taken!', 'success');
-    
+
     // Update adherence chart
     updateAdherenceChart();
 }
@@ -408,7 +409,7 @@ function addMedicine() {
 function checkMedicineReminders() {
     const now = new Date();
     const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-    
+
     document.querySelectorAll('.medicine-card').forEach(card => {
         const medTime = card.getAttribute('data-time');
         if (medTime === currentTime && !card.classList.contains('taken')) {
@@ -426,20 +427,20 @@ function checkMedicineReminders() {
 function generateDiet() {
     const condition = document.getElementById('dietCondition').value;
     const region = document.getElementById('dietRegion').value;
-    
+
     if (!condition) {
         showNotification('Please select a health condition', 'error');
         return;
     }
-    
+
     document.getElementById('dietPlan').classList.remove('hidden');
-    
+
     // Customize based on condition
     const breakfast = document.getElementById('breakfastList');
     const lunch = document.getElementById('lunchList');
     const dinner = document.getElementById('dinnerList');
     const tips = document.getElementById('nutritionTips');
-    
+
     if (condition === 'diabetes') {
         breakfast.innerHTML = `
             <li>• 1 cup oats/upma with vegetables (no sugar)</li>
@@ -465,7 +466,7 @@ function generateDiet() {
         `;
         tips.innerHTML += `<li>• Take iron and folic acid supplements daily</li>`;
     }
-    
+
     showNotification('Personalized diet plan generated!', 'success');
 }
 
@@ -473,7 +474,7 @@ function generateDiet() {
 function analyzeReport(input) {
     if (input.files && input.files[0]) {
         showNotification('Uploading and analyzing report...', 'info');
-        
+
         setTimeout(() => {
             document.getElementById('analysisResult').classList.remove('hidden');
             showNotification('Analysis complete!', 'success');
@@ -493,7 +494,7 @@ function startConsultation(doctorName) {
 function changeLanguage() {
     currentLanguage = document.getElementById('languageSelect').value;
     showNotification(`Language changed to ${currentLanguage.toUpperCase()}`, 'success');
-    
+
     // In real app, this would reload content with translations
     if (currentLanguage === 'hi') {
         showNotification('अब हिंदी में उपलब्ध', 'success');
@@ -568,7 +569,7 @@ function animateStats() {
         { id: 'statDoctors', target: 2500, suffix: '+' },
         { id: 'statLives', target: 100000, suffix: '+' }
     ];
-    
+
     stats.forEach(stat => {
         const element = document.getElementById(stat.id);
         if (element) {
@@ -595,7 +596,7 @@ function showNotification(message, type = 'info') {
         warning: 'bg-yellow-500',
         info: 'bg-blue-500'
     };
-    
+
     div.className = `fixed top-20 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in`;
     div.innerHTML = `
         <div class="flex items-center">
@@ -603,15 +604,240 @@ function showNotification(message, type = 'info') {
             ${message}
         </div>
     `;
-    
+
     document.body.appendChild(div);
     setTimeout(() => div.remove(), 3000);
 }
 
-// Profile Toggle
+// Profile Functions
+let emergencyContactIdCounter = 3; // Start from 3 since we have 2 default contacts
+
 function toggleProfile() {
-    alert('Profile menu would open here. Features:\n- Edit profile\n- Emergency contacts\n- Medical history\n- Settings\n- Logout');
+    const panel = document.getElementById('profilePanel');
+    panel.classList.remove('translate-x-full');
 }
+
+function closeProfile() {
+    const panel = document.getElementById('profilePanel');
+    panel.classList.add('translate-x-full');
+}
+
+function toggleEditMode(section) {
+    const viewDiv = document.getElementById(section + 'View');
+    const editDiv = document.getElementById(section + 'Edit');
+
+    if (viewDiv && editDiv) {
+        viewDiv.classList.toggle('hidden');
+        editDiv.classList.toggle('hidden');
+    }
+}
+
+function cancelEdit(section) {
+    const viewDiv = document.getElementById(section + 'View');
+    const editDiv = document.getElementById(section + 'Edit');
+
+    if (viewDiv && editDiv) {
+        viewDiv.classList.remove('hidden');
+        editDiv.classList.add('hidden');
+    }
+}
+
+function savePersonalInfo() {
+    // Get values from edit fields
+    const name = document.getElementById('editName').value;
+    const age = document.getElementById('editAge').value;
+    const gender = document.getElementById('editGender').value;
+    const bloodGroup = document.getElementById('editBloodGroup').value;
+    const phone = document.getElementById('editPhone').value;
+    const email = document.getElementById('editEmail').value;
+
+    // Update view fields
+    document.getElementById('viewName').textContent = name;
+    document.getElementById('viewAge').textContent = age;
+    document.getElementById('viewGender').textContent = gender;
+    document.getElementById('viewBloodGroup').textContent = bloodGroup;
+    document.getElementById('viewPhone').textContent = phone;
+    document.getElementById('viewEmail').textContent = email;
+
+    // Update header display
+    document.getElementById('profileNameDisplay').textContent = name;
+    document.getElementById('profileAgeGenderDisplay').textContent = `${age} years • ${gender}`;
+
+    // Hide edit mode
+    cancelEdit('personal');
+
+    // Save to localStorage
+    const profileData = { name, age, gender, bloodGroup, phone, email };
+    localStorage.setItem('profileData', JSON.stringify(profileData));
+
+    showNotification('Profile updated successfully!', 'success');
+}
+
+function saveMedicalInfo() {
+    // Get values from edit fields
+    const height = document.getElementById('editHeight').value;
+    const weight = document.getElementById('editWeight').value;
+    const conditions = document.getElementById('editConditions').value;
+    const allergies = document.getElementById('editAllergies').value;
+    const medications = document.getElementById('editMedications').value;
+
+    // Update view fields
+    document.getElementById('viewHeightWeight').textContent = `${height} cm • ${weight} kg`;
+    document.getElementById('viewConditions').textContent = conditions;
+    document.getElementById('viewAllergies').textContent = allergies;
+    document.getElementById('viewMedications').textContent = medications;
+
+    // Hide edit mode
+    cancelEdit('medical');
+
+    // Save to localStorage
+    const medicalData = { height, weight, conditions, allergies, medications };
+    localStorage.setItem('medicalData', JSON.stringify(medicalData));
+
+    showNotification('Medical history updated successfully!', 'success');
+}
+
+function addEmergencyContact() {
+    const name = prompt('Enter contact name (e.g., "Mother - Sunita"):');
+    if (!name) return;
+
+    const phone = prompt('Enter phone number:');
+    if (!phone) return;
+
+    const contactId = emergencyContactIdCounter++;
+    const contactsList = document.getElementById('emergencyContactsList');
+
+    const colors = ['bg-red-50', 'bg-blue-50', 'bg-green-50', 'bg-yellow-50', 'bg-purple-50'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    const div = document.createElement('div');
+    div.className = `flex items-center justify-between p-3 ${color} rounded-lg emergency-contact`;
+    div.setAttribute('data-id', contactId);
+    div.innerHTML = `
+        <div class="flex-1">
+            <p class="font-medium contact-name">${name}</p>
+            <p class="text-sm text-gray-600 contact-phone">${phone}</p>
+        </div>
+        <button onclick="editEmergencyContact(${contactId})" class="text-gray-500 hover:text-purple-600 mr-2">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button onclick="deleteEmergencyContact(${contactId})" class="text-gray-500 hover:text-red-600">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+
+    contactsList.appendChild(div);
+    saveEmergencyContacts();
+    showNotification('Emergency contact added!', 'success');
+}
+
+function editEmergencyContact(contactId) {
+    const contactDiv = document.querySelector(`.emergency-contact[data-id="${contactId}"]`);
+    if (!contactDiv) return;
+
+    const nameEl = contactDiv.querySelector('.contact-name');
+    const phoneEl = contactDiv.querySelector('.contact-phone');
+
+    const newName = prompt('Enter new name:', nameEl.textContent);
+    if (newName) {
+        nameEl.textContent = newName;
+    }
+
+    const newPhone = prompt('Enter new phone:', phoneEl.textContent);
+    if (newPhone) {
+        phoneEl.textContent = newPhone;
+    }
+
+    saveEmergencyContacts();
+    showNotification('Contact updated!', 'success');
+}
+
+function deleteEmergencyContact(contactId) {
+    if (!confirm('Are you sure you want to delete this contact?')) return;
+
+    const contactDiv = document.querySelector(`.emergency-contact[data-id="${contactId}"]`);
+    if (contactDiv) {
+        contactDiv.remove();
+        saveEmergencyContacts();
+        showNotification('Contact deleted!', 'success');
+    }
+}
+
+function saveEmergencyContacts() {
+    const contacts = [];
+    document.querySelectorAll('.emergency-contact').forEach(contact => {
+        const id = contact.getAttribute('data-id');
+        const name = contact.querySelector('.contact-name').textContent;
+        const phone = contact.querySelector('.contact-phone').textContent;
+        contacts.push({ id, name, phone });
+    });
+    localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
+}
+
+function loadProfileData() {
+    // Load personal data
+    const profileData = localStorage.getItem('profileData');
+    if (profileData) {
+        const data = JSON.parse(profileData);
+        document.getElementById('viewName').textContent = data.name;
+        document.getElementById('editName').value = data.name;
+        document.getElementById('viewAge').textContent = data.age;
+        document.getElementById('editAge').value = data.age;
+        document.getElementById('viewGender').textContent = data.gender;
+        document.getElementById('editGender').value = data.gender;
+        document.getElementById('viewBloodGroup').textContent = data.bloodGroup;
+        document.getElementById('editBloodGroup').value = data.bloodGroup;
+        document.getElementById('viewPhone').textContent = data.phone;
+        document.getElementById('editPhone').value = data.phone;
+        document.getElementById('viewEmail').textContent = data.email;
+        document.getElementById('editEmail').value = data.email;
+        document.getElementById('profileNameDisplay').textContent = data.name;
+        document.getElementById('profileAgeGenderDisplay').textContent = `${data.age} years • ${data.gender}`;
+    }
+
+    // Load medical data
+    const medicalData = localStorage.getItem('medicalData');
+    if (medicalData) {
+        const data = JSON.parse(medicalData);
+        document.getElementById('viewHeightWeight').textContent = `${data.height} cm • ${data.weight} kg`;
+        document.getElementById('editHeight').value = data.height;
+        document.getElementById('editWeight').value = data.weight;
+        document.getElementById('viewConditions').textContent = data.conditions;
+        document.getElementById('editConditions').value = data.conditions;
+        document.getElementById('viewAllergies').textContent = data.allergies;
+        document.getElementById('editAllergies').value = data.allergies;
+        document.getElementById('viewMedications').textContent = data.medications;
+        document.getElementById('editMedications').value = data.medications;
+    }
+}
+
+function changeProfilePicture() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+
+    fileInput.onchange = function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = document.getElementById('profileImage');
+                const icon = document.getElementById('profileIcon');
+                img.src = event.target.result;
+                img.classList.remove('hidden');
+                icon.classList.add('hidden');
+
+                // Save to localStorage
+                localStorage.setItem('profilePicture', event.target.result);
+                showNotification('Profile picture updated!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    fileInput.click();
+}
+
 
 // Service Worker Registration for Offline Support
 if ('serviceWorker' in navigator) {

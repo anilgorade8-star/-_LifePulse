@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body class="bg-gray-50 text-gray-800">
     <!-- Offline Indicator -->
     <div id="offlineBar" class="offline-indicator">
@@ -25,24 +27,32 @@
                     <i class="fas fa-heartbeat text-3xl text-red-500 mr-2"></i>
                     <span class="text-2xl font-bold gradient-text">LifePulse</span>
                 </div>
-                
+
                 <div class="hidden md:flex items-center space-x-8">
-                    <button onclick="showSection('home')" class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Home</button>
-                    <button onclick="showSection('dashboard')" class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Dashboard</button>
-                    <button onclick="showSection('ai-assistant')" class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">AI Assistant</button>
-                    <button onclick="showSection('emergency')" class="nav-btn text-red-600 hover:text-red-700 font-medium transition"><i class="fas fa-ambulance mr-1"></i>Emergency</button>
-                    <button onclick="showSection('family')" class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Family</button>
+                    <button onclick="showSection('home')"
+                        class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Home</button>
+                    <button onclick="showSection('dashboard')"
+                        class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Dashboard</button>
+                    <button onclick="showSection('ai-assistant')"
+                        class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">AI Assistant</button>
+                    <button onclick="showSection('emergency')"
+                        class="nav-btn text-red-600 hover:text-red-700 font-medium transition"><i
+                            class="fas fa-ambulance mr-1"></i>Emergency</button>
+                    <button onclick="showSection('family')"
+                        class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Family</button>
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <select id="languageSelect" onchange="changeLanguage()" class="bg-gray-100 border-none rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-purple-500">
+                    <select id="languageSelect" onchange="changeLanguage()"
+                        class="bg-gray-100 border-none rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-purple-500">
                         <option value="en">English</option>
                         <option value="hi">हिंदी</option>
                         <option value="ta">தமிழ்</option>
                         <option value="te">తెలుగు</option>
                         <option value="bn">বাংলা</option>
                     </select>
-                    <button onclick="toggleProfile()" class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center hover:bg-purple-200 transition">
+                    <button onclick="toggleProfile()"
+                        class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center hover:bg-purple-200 transition">
                         <i class="fas fa-user text-purple-600"></i>
                     </button>
                 </div>
@@ -52,7 +62,7 @@
 
     <!-- Main Content Container -->
     <div id="mainContainer">
-        
+
         <!-- HOME SECTION -->
         <section id="home" class="section active">
             <!-- Hero -->
@@ -60,39 +70,49 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div class="grid md:grid-cols-2 gap-12 items-center">
                         <div>
-                            <div class="inline-block bg-white/20 rounded-full px-4 py-1 mb-4 text-sm font-semibold backdrop-blur-sm">
-                                  <i class="fas fa-shield-alt mr-2"></i>
+                            <div
+                                class="inline-block bg-white/20 rounded-full px-4 py-1 mb-4 text-sm font-semibold backdrop-blur-sm">
+                                <i class="fas fa-shield-alt mr-2"></i>
                             </div>
                             <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
                                 Healthcare Without Barriers
                             </h1>
                             <p class="text-xl mb-8 text-white/90">
-                                AI-powered healthcare support designed for rural India. Works offline, speaks your language, and connects you to doctors instantly.
+                                AI-powered healthcare support designed for rural India. Works offline, speaks your
+                                language, and connects you to doctors instantly.
                             </p>
                             <div class="flex flex-wrap gap-4">
-                                <button onclick="showSection('ai-assistant')" class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition">
+                                <button onclick="showSection('ai-assistant')"
+                                    class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition">
                                     <i class="fas fa-robot mr-2"></i>Talk to AI Doctor
                                 </button>
-                                <button onclick="showSection('emergency')" class="bg-red-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-red-600 transition sos-button">
+                                <button onclick="showSection('emergency')"
+                                    class="bg-red-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-red-600 transition sos-button">
                                     <i class="fas fa-phone-alt mr-2"></i>SOS Emergency
                                 </button>
                             </div>
                             <div class="mt-8 flex items-center space-x-6 text-sm">
-                                <span class="flex items-center"><i class="fas fa-check-circle mr-2"></i>24/7 Available</span>
-                                <span class="flex items-center"><i class="fas fa-check-circle mr-2"></i>10+ Languages</span>
-                                <span class="flex items-center"><i class="fas fa-check-circle mr-2"></i>Offline Mode With App</span>
+                                <span class="flex items-center"><i class="fas fa-check-circle mr-2"></i>24/7
+                                    Available</span>
+                                <span class="flex items-center"><i class="fas fa-check-circle mr-2"></i>10+
+                                    Languages</span>
+                                <span class="flex items-center"><i class="fas fa-check-circle mr-2"></i>Offline Mode
+                                    With App</span>
                             </div>
                         </div>
                         <div class="relative">
                             <div class="glass-effect rounded-3xl p-6 max-w-md mx-auto">
                                 <div class="bg-white rounded-2xl p-4 shadow-xl">
                                     <div class="flex items-center mb-4">
-                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
                                             <i class="fas fa-robot text-purple-600"></i>
                                         </div>
                                         <div>
                                             <h3 class="font-bold text-gray-800">Dr. AI Assistant</h3>
-                                            <p class="text-xs text-green-500 flex items-center"><span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>Online</p>
+                                            <p class="text-xs text-green-500 flex items-center"><span
+                                                    class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>Online
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="space-y-3" id="heroChat">
@@ -101,8 +121,11 @@
                                         </div>
                                     </div>
                                     <div class="mt-4 flex gap-2">
-                                        <input type="text" placeholder="Type your symptoms..." class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" onkeypress="if(event.key==='Enter') heroChat(this)">
-                                        <button class="w-10 h-10 bg-purple-600 rounded-full text-white flex items-center justify-center hover:bg-purple-700">
+                                        <input type="text" placeholder="Type your symptoms..."
+                                            class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                            onkeypress="if(event.key==='Enter') heroChat(this)">
+                                        <button
+                                            class="w-10 h-10 bg-purple-600 rounded-full text-white flex items-center justify-center hover:bg-purple-700">
                                             <i class="fas fa-microphone"></i>
                                         </button>
                                     </div>
@@ -142,62 +165,81 @@
                 <div class="max-w-7xl mx-auto px-4">
                     <div class="text-center mb-16">
                         <h2 class="text-4xl font-bold mb-4">Your Complete Healthcare Companion</h2>
-                        <p class="text-gray-600 max-w-2xl mx-auto">Bridging the healthcare gap with AI-powered solutions designed specifically for rural India's unique challenges.</p>
+                        <p class="text-gray-600 max-w-2xl mx-auto">Bridging the healthcare gap with AI-powered solutions
+                            designed specifically for rural India's unique challenges.</p>
                     </div>
-                    
+
                     <div class="grid md:grid-cols-3 gap-8">
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer" onclick="showSection('ai-assistant')">
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                            onclick="showSection('ai-assistant')">
                             <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-robot text-3xl text-purple-600"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-3">AI Health Assistant</h3>
-                            <p class="text-gray-600 mb-4">24/7 intelligent health guidance powered by advanced AI. Get instant answers to health queries in your local language.</p>
-                            <span class="text-purple-600 font-semibold flex items-center">Explore <i class="fas fa-arrow-right ml-2"></i></span>
+                            <p class="text-gray-600 mb-4">24/7 intelligent health guidance powered by advanced AI. Get
+                                instant answers to health queries in your local language.</p>
+                            <span class="text-purple-600 font-semibold flex items-center">Explore <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
                         </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer" onclick="showSection('emergency')">
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                            onclick="showSection('emergency')">
                             <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-ambulance text-3xl text-red-600"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-3">Emergency Support</h3>
-                            <p class="text-gray-600 mb-4">One-touch SOS with instant hospital locator. Connect to emergency services and nearby hospitals within seconds.</p>
-                            <span class="text-red-600 font-semibold flex items-center">Explore <i class="fas fa-arrow-right ml-2"></i></span>
+                            <p class="text-gray-600 mb-4">One-touch SOS with instant hospital locator. Connect to
+                                emergency services and nearby hospitals within seconds.</p>
+                            <span class="text-red-600 font-semibold flex items-center">Explore <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
                         </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer" onclick="showSection('doctor-connect')">
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                            onclick="showSection('doctor-connect')">
                             <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-user-md text-3xl text-blue-600"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-3">Doctor Connect</h3>
-                            <p class="text-gray-600 mb-4">Connect with verified doctors for online consultations. Video calls, chat, and prescription delivery.</p>
-                            <span class="text-blue-600 font-semibold flex items-center">Explore <i class="fas fa-arrow-right ml-2"></i></span>
+                            <p class="text-gray-600 mb-4">Connect with verified doctors for online consultations. Video
+                                calls, chat, and prescription delivery.</p>
+                            <span class="text-blue-600 font-semibold flex items-center">Explore <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
                         </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer" onclick="showSection('dashboard')">
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                            onclick="showSection('dashboard')">
                             <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-chart-line text-3xl text-green-600"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-3">Health Dashboard</h3>
-                            <p class="text-gray-600 mb-4">Track and manage your family's health metrics. Monitor vitals, medications, and appointments in one place.</p>
-                            <span class="text-green-600 font-semibold flex items-center">Explore <i class="fas fa-arrow-right ml-2"></i></span>
+                            <p class="text-gray-600 mb-4">Track and manage your family's health metrics. Monitor vitals,
+                                medications, and appointments in one place.</p>
+                            <span class="text-green-600 font-semibold flex items-center">Explore <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
                         </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer" onclick="showSection('medicine')">
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                            onclick="showSection('medicine')">
                             <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-pills text-3xl text-yellow-600"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-3">Medicine Reminder</h3>
-                            <p class="text-gray-600 mb-4">Never miss a dose with smart medication reminders. Track adherence and order refills automatically.</p>
-                            <span class="text-yellow-600 font-semibold flex items-center">Explore <i class="fas fa-arrow-right ml-2"></i></span>
+                            <p class="text-gray-600 mb-4">Never miss a dose with smart medication reminders. Track
+                                adherence and order refills automatically.</p>
+                            <span class="text-yellow-600 font-semibold flex items-center">Explore <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
                         </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer" onclick="showSection('diet')">
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                            onclick="showSection('diet')">
                             <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-utensils text-3xl text-orange-600"></i>
                             </div>
                             <h3 class="text-xl font-bold mb-3">Diet Generator</h3>
-                            <p class="text-gray-600 mb-4">Personalized nutrition plans based on local ingredients. AI-generated diet charts for diabetes, pregnancy, and more.</p>
-                            <span class="text-orange-600 font-semibold flex items-center">Explore <i class="fas fa-arrow-right ml-2"></i></span>
+                            <p class="text-gray-600 mb-4">Personalized nutrition plans based on local ingredients.
+                                AI-generated diet charts for diabetes, pregnancy, and more.</p>
+                            <span class="text-orange-600 font-semibold flex items-center">Explore <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
                         </div>
                     </div>
                 </div>
@@ -218,21 +260,26 @@
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="startVoiceChat()" class="w-10 h-10 bg-white/20 rounded-full hover:bg-white/30 transition flex items-center justify-center" title="Voice Mode">
+                        <button onclick="startVoiceChat()"
+                            class="w-10 h-10 bg-white/20 rounded-full hover:bg-white/30 transition flex items-center justify-center"
+                            title="Voice Mode">
                             <i class="fas fa-microphone"></i>
                         </button>
-                        <button onclick="clearChat()" class="w-10 h-10 bg-white/20 rounded-full hover:bg-white/30 transition flex items-center justify-center" title="Clear Chat">
+                        <button onclick="clearChat()"
+                            class="w-10 h-10 bg-white/20 rounded-full hover:bg-white/30 transition flex items-center justify-center"
+                            title="Clear Chat">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
             </div>
-            
+
             <div class="flex-1 overflow-hidden flex flex-col max-w-4xl mx-auto w-full">
                 <div id="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-hidden bg-gray-50">
                     <!-- Welcome Message -->
                     <div class="flex items-start space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                        <div
+                            class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-robot text-purple-600"></i>
                         </div>
                         <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-md max-w-[80%]">
@@ -244,44 +291,53 @@
                                 <li>• Emergency guidance</li>
                                 <li>• Mental health support</li>
                             </ul>
-                            <p class="mt-2 text-sm text-purple-600 font-medium">How are you feeling today? Describe your symptoms or ask me anything about your health.</p>
+                            <p class="mt-2 text-sm text-purple-600 font-medium">How are you feeling today? Describe your
+                                symptoms or ask me anything about your health.</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Quick Actions -->
                 <div class="bg-white border-t p-2 flex gap-2 overflow-x-auto scroll-hidden">
-                    <button onclick="sendQuickMessage('I have fever and headache')" class="whitespace-nowrap px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition">
+                    <button onclick="sendQuickMessage('I have fever and headache')"
+                        class="whitespace-nowrap px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition">
                         🤒 Fever & Headache
                     </button>
-                    <button onclick="sendQuickMessage('My stomach is hurting')" class="whitespace-nowrap px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition">
+                    <button onclick="sendQuickMessage('My stomach is hurting')"
+                        class="whitespace-nowrap px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition">
                         🤢 Stomach Pain
                     </button>
-                    <button onclick="sendQuickMessage('I need help with diabetes diet')" class="whitespace-nowrap px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition">
+                    <button onclick="sendQuickMessage('I need help with diabetes diet')"
+                        class="whitespace-nowrap px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition">
                         🥗 Diet Help
                     </button>
-                    <button onclick="sendQuickMessage('Emergency: chest pain')" class="whitespace-nowrap px-4 py-2 bg-red-50 text-red-700 rounded-full text-sm hover:bg-red-100 transition">
+                    <button onclick="sendQuickMessage('Emergency: chest pain')"
+                        class="whitespace-nowrap px-4 py-2 bg-red-50 text-red-700 rounded-full text-sm hover:bg-red-100 transition">
                         🚨 Emergency
                     </button>
                 </div>
-                
+
                 <!-- Input Area -->
                 <div class="bg-white border-t p-4">
                     <div class="flex gap-2">
-                        <button onclick="toggleVoiceInput()" class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition text-gray-600">
+                        <button onclick="toggleVoiceInput()"
+                            class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition text-gray-600">
                             <i class="fas fa-microphone"></i>
                         </button>
-                        <input type="text" id="chatInput" placeholder="Type your health query..." 
+                        <input type="text" id="chatInput" placeholder="Type your health query..."
                             class="flex-1 bg-gray-100 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
                             onkeypress="if(event.key==='Enter') sendMessage()">
-                        <button onclick="sendMessage()" class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition text-white">
+                        <button onclick="sendMessage()"
+                            class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition text-white">
                             <i class="fas fa-paper-plane"></i>
                         </button>
-                        <button onclick="sendImage()" class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition text-gray-600">
+                        <button onclick="sendImage()"
+                            class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition text-gray-600">
                             <i class="fas fa-camera"></i>
                         </button>
                     </div>
-                    <p class="text-xs text-gray-400 mt-2 text-center">AI responses are for informational purposes only. Consult a doctor for medical emergencies.</p>
+                    <p class="text-xs text-gray-400 mt-2 text-center">AI responses are for informational purposes only.
+                        Consult a doctor for medical emergencies.</p>
                 </div>
             </div>
         </section>
@@ -298,7 +354,8 @@
             <div class="max-w-7xl mx-auto px-4 py-8">
                 <!-- SOS Button -->
                 <div class="text-center mb-12">
-                    <button onclick="triggerSOS()" class="w-48 h-48 bg-red-500 rounded-full text-white font-bold text-2xl shadow-2xl sos-button hover:bg-red-600 transition transform hover:scale-105 flex flex-col items-center justify-center mx-auto">
+                    <button onclick="triggerSOS()"
+                        class="w-48 h-48 bg-red-500 rounded-full text-white font-bold text-2xl shadow-2xl sos-button hover:bg-red-600 transition transform hover:scale-105 flex flex-col items-center justify-center mx-auto">
                         <i class="fas fa-phone-alt text-4xl mb-2"></i>
                         SOS
                         <span class="text-sm font-normal">Press for Emergency</span>
@@ -324,9 +381,11 @@
                             <i class="fas fa-address-book mr-2 text-blue-500"></i>Emergency Contacts
                         </h3>
                         <div class="space-y-3">
-                            <a href="tel:108" class="flex items-center justify-between p-4 bg-red-50 rounded-xl hover:bg-red-100 transition">
+                            <a href="tel:108"
+                                class="flex items-center justify-between p-4 bg-red-50 rounded-xl hover:bg-red-100 transition">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white mr-4">
+                                    <div
+                                        class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white mr-4">
                                         <i class="fas fa-ambulance"></i>
                                     </div>
                                     <div>
@@ -336,10 +395,12 @@
                                 </div>
                                 <i class="fas fa-phone-alt text-red-500 text-xl"></i>
                             </a>
-                            
-                            <a href="tel:102" class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition">
+
+                            <a href="tel:102"
+                                class="flex items-center justify-between p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white mr-4">
+                                    <div
+                                        class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white mr-4">
                                         <i class="fas fa-baby"></i>
                                     </div>
                                     <div>
@@ -350,9 +411,11 @@
                                 <i class="fas fa-phone-alt text-blue-500 text-xl"></i>
                             </a>
 
-                            <a href="tel:104" class="flex items-center justify-between p-4 bg-green-50 rounded-xl hover:bg-green-100 transition">
+                            <a href="tel:104"
+                                class="flex items-center justify-between p-4 bg-green-50 rounded-xl hover:bg-green-100 transition">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white mr-4">
+                                    <div
+                                        class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white mr-4">
                                         <i class="fas fa-headset"></i>
                                     </div>
                                     <div>
@@ -365,9 +428,11 @@
                         </div>
 
                         <div class="mt-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
-                            <h4 class="font-bold text-yellow-800 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>First Aid Quick Guide</h4>
+                            <h4 class="font-bold text-yellow-800 mb-2"><i
+                                    class="fas fa-exclamation-triangle mr-2"></i>First Aid Quick Guide</h4>
                             <div class="space-y-2 text-sm text-yellow-700">
-                                <p><strong>Heart Attack:</strong> Keep person calm, loosen clothing, give aspirin if available</p>
+                                <p><strong>Heart Attack:</strong> Keep person calm, loosen clothing, give aspirin if
+                                    available</p>
                                 <p><strong>Bleeding:</strong> Apply direct pressure with clean cloth</p>
                                 <p><strong>Choking:</strong> Perform Heimlich maneuver if trained</p>
                                 <p><strong>Snake Bite:</strong> Keep victim still, immobilize limb, do not cut wound</p>
@@ -460,12 +525,13 @@
                         <h3 class="text-xl font-bold mb-4">Weekly Health Trends</h3>
                         <canvas id="healthTrendChart" class="w-full h-64"></canvas>
                     </div>
-                    
+
                     <div class="bg-white rounded-2xl shadow-lg p-6">
                         <h3 class="text-xl font-bold mb-4">Upcoming Appointments</h3>
                         <div class="space-y-4">
                             <div class="flex items-center p-4 bg-purple-50 rounded-xl">
-                                <div class="w-16 h-16 bg-purple-100 rounded-xl flex flex-col items-center justify-center mr-4">
+                                <div
+                                    class="w-16 h-16 bg-purple-100 rounded-xl flex flex-col items-center justify-center mr-4">
                                     <span class="text-xs text-purple-600 font-bold">FEB</span>
                                     <span class="text-xl font-bold text-purple-700">15</span>
                                 </div>
@@ -473,11 +539,13 @@
                                     <h4 class="font-bold text-gray-800">Dr. Sharma - Cardiologist</h4>
                                     <p class="text-sm text-gray-600">10:00 AM • Video Consultation</p>
                                 </div>
-                                <button class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700">Join</button>
+                                <button
+                                    class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700">Join</button>
                             </div>
-                            
+
                             <div class="flex items-center p-4 bg-blue-50 rounded-xl">
-                                <div class="w-16 h-16 bg-blue-100 rounded-xl flex flex-col items-center justify-center mr-4">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-xl flex flex-col items-center justify-center mr-4">
                                     <span class="text-xs text-blue-600 font-bold">FEB</span>
                                     <span class="text-xl font-bold text-blue-700">18</span>
                                 </div>
@@ -485,11 +553,13 @@
                                     <h4 class="font-bold text-gray-800">Blood Test</h4>
                                     <p class="text-sm text-gray-600">9:00 AM • City Hospital</p>
                                 </div>
-                                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Details</button>
+                                <button
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">Details</button>
                             </div>
                         </div>
-                        
-                        <button onclick="showSection('doctor-connect')" class="w-full mt-4 py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-purple-500 hover:text-purple-600 transition">
+
+                        <button onclick="showSection('doctor-connect')"
+                            class="w-full mt-4 py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-purple-500 hover:text-purple-600 transition">
                             <i class="fas fa-plus mr-2"></i>Book New Appointment
                         </button>
                     </div>
@@ -510,64 +580,80 @@
                 <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-bold">Today's Medications</h3>
-                        <button onclick="addMedicine()" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
+                        <button onclick="addMedicine()"
+                            class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
                             <i class="fas fa-plus mr-2"></i>Add Medicine
                         </button>
                     </div>
-                    
+
                     <div class="space-y-4" id="medicineList">
                         <!-- Morning -->
-                        <div class="medicine-card bg-orange-50 rounded-xl p-4 border-l-4 border-orange-400" data-time="08:00">
+                        <div class="medicine-card bg-orange-50 rounded-xl p-4 border-l-4 border-orange-400"
+                            data-time="08:00">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+                                    <div
+                                        class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
                                         <i class="fas fa-sun text-orange-500"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-800">Metformin 500mg</h4>
                                         <p class="text-sm text-gray-600">After breakfast • 1 tablet</p>
-                                        <span class="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded mt-1 inline-block">8:00 AM</span>
+                                        <span
+                                            class="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded mt-1 inline-block">8:00
+                                            AM</span>
                                     </div>
                                 </div>
-                                <button onclick="takeMedicine(this)" class="w-12 h-12 rounded-full border-2 border-orange-400 hover:bg-orange-400 hover:text-white transition flex items-center justify-center text-orange-400">
+                                <button onclick="takeMedicine(this)"
+                                    class="w-12 h-12 rounded-full border-2 border-orange-400 hover:bg-orange-400 hover:text-white transition flex items-center justify-center text-orange-400">
                                     <i class="fas fa-check"></i>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Afternoon -->
-                        <div class="medicine-card bg-blue-50 rounded-xl p-4 border-l-4 border-blue-400" data-time="14:00">
+                        <div class="medicine-card bg-blue-50 rounded-xl p-4 border-l-4 border-blue-400"
+                            data-time="14:00">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                    <div
+                                        class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
                                         <i class="fas fa-sun text-blue-500"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-800">Vitamin D3</h4>
                                         <p class="text-sm text-gray-600">After lunch • 1 capsule</p>
-                                        <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded mt-1 inline-block">2:00 PM</span>
+                                        <span
+                                            class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded mt-1 inline-block">2:00
+                                            PM</span>
                                     </div>
                                 </div>
-                                <button onclick="takeMedicine(this)" class="w-12 h-12 rounded-full border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition flex items-center justify-center text-blue-400">
+                                <button onclick="takeMedicine(this)"
+                                    class="w-12 h-12 rounded-full border-2 border-blue-400 hover:bg-blue-400 hover:text-white transition flex items-center justify-center text-blue-400">
                                     <i class="fas fa-check"></i>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Evening -->
-                        <div class="medicine-card bg-purple-50 rounded-xl p-4 border-l-4 border-purple-400" data-time="20:00">
+                        <div class="medicine-card bg-purple-50 rounded-xl p-4 border-l-4 border-purple-400"
+                            data-time="20:00">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                                    <div
+                                        class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
                                         <i class="fas fa-moon text-purple-500"></i>
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-800">Amlodipine 5mg</h4>
                                         <p class="text-sm text-gray-600">Before bed • 1 tablet</p>
-                                        <span class="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded mt-1 inline-block">8:00 PM</span>
+                                        <span
+                                            class="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded mt-1 inline-block">8:00
+                                            PM</span>
                                     </div>
                                 </div>
-                                <button onclick="takeMedicine(this)" class="w-12 h-12 rounded-full border-2 border-purple-400 hover:bg-purple-400 hover:text-white transition flex items-center justify-center text-purple-400">
+                                <button onclick="takeMedicine(this)"
+                                    class="w-12 h-12 rounded-full border-2 border-purple-400 hover:bg-purple-400 hover:text-white transition flex items-center justify-center text-purple-400">
                                     <i class="fas fa-check"></i>
                                 </button>
                             </div>
@@ -611,7 +697,8 @@
                             <option value="west">West Indian</option>
                             <option value="east">East Indian</option>
                         </select>
-                        <button onclick="generateDiet()" class="bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
+                        <button onclick="generateDiet()"
+                            class="bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
                             <i class="fas fa-magic mr-2"></i>Generate Plan
                         </button>
                     </div>
@@ -620,29 +707,33 @@
                         <div class="border-t pt-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h4 class="text-2xl font-bold text-green-800">Your Personalized Diet Plan</h4>
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">1500 kcal/day</span>
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">1500
+                                    kcal/day</span>
                             </div>
-                            
+
                             <div class="space-y-4">
                                 <div class="bg-orange-50 rounded-xl p-4">
-                                    <h5 class="font-bold text-orange-800 mb-2"><i class="fas fa-sun mr-2"></i>Breakfast (8:00 AM)</h5>
+                                    <h5 class="font-bold text-orange-800 mb-2"><i class="fas fa-sun mr-2"></i>Breakfast
+                                        (8:00 AM)</h5>
                                     <ul class="space-y-1 text-gray-700" id="breakfastList">
                                         <li>• 2 Rotis with mixed vegetable curry</li>
                                         <li>• 1 cup low-fat milk</li>
                                         <li>• 1 medium apple</li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="bg-yellow-50 rounded-xl p-4">
-                                    <h5 class="font-bold text-yellow-800 mb-2"><i class="fas fa-coffee mr-2"></i>Mid-Morning (11:00 AM)</h5>
+                                    <h5 class="font-bold text-yellow-800 mb-2"><i
+                                            class="fas fa-coffee mr-2"></i>Mid-Morning (11:00 AM)</h5>
                                     <ul class="space-y-1 text-gray-700">
                                         <li>• 1 cup green tea</li>
                                         <li>• 5-6 almonds</li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="bg-blue-50 rounded-xl p-4">
-                                    <h5 class="font-bold text-blue-800 mb-2"><i class="fas fa-sun mr-2"></i>Lunch (1:00 PM)</h5>
+                                    <h5 class="font-bold text-blue-800 mb-2"><i class="fas fa-sun mr-2"></i>Lunch (1:00
+                                        PM)</h5>
                                     <ul class="space-y-1 text-gray-700" id="lunchList">
                                         <li>• 1 cup brown rice</li>
                                         <li>• Dal (lentils) - 1 bowl</li>
@@ -650,9 +741,10 @@
                                         <li>• Green salad</li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="bg-purple-50 rounded-xl p-4">
-                                    <h5 class="font-bold text-purple-800 mb-2"><i class="fas fa-moon mr-2"></i>Dinner (7:00 PM)</h5>
+                                    <h5 class="font-bold text-purple-800 mb-2"><i class="fas fa-moon mr-2"></i>Dinner
+                                        (7:00 PM)</h5>
                                     <ul class="space-y-1 text-gray-700" id="dinnerList">
                                         <li>• 2 Missi rotis</li>
                                         <li>• Palak paneer (low fat)</li>
@@ -660,9 +752,10 @@
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="mt-6 p-4 bg-green-50 rounded-xl border border-green-200">
-                                <h5 class="font-bold text-green-800 mb-2"><i class="fas fa-lightbulb mr-2"></i>AI Nutrition Tips</h5>
+                                <h5 class="font-bold text-green-800 mb-2"><i class="fas fa-lightbulb mr-2"></i>AI
+                                    Nutrition Tips</h5>
                                 <ul class="text-sm text-green-700 space-y-1" id="nutritionTips">
                                     <li>• Use mustard oil or olive oil for cooking (max 3 tsp/day)</li>
                                     <li>• Avoid sugar; use jaggery or stevia if needed</li>
@@ -692,7 +785,8 @@
                         <div class="px-6 pb-6">
                             <div class="relative -top-12 flex justify-center">
                                 <div class="w-24 h-24 bg-white rounded-full p-1">
-                                    <div class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
+                                    <div
+                                        class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
                                         <i class="fas fa-user-md text-4xl text-gray-400"></i>
                                     </div>
                                 </div>
@@ -710,10 +804,12 @@
                                 </div>
                                 <p class="text-gray-600 text-sm mb-4">15 years experience • AIIMS Delhi</p>
                                 <div class="flex gap-2">
-                                    <button onclick="startConsultation('Dr. Priya Sharma')" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm">
+                                    <button onclick="startConsultation('Dr. Priya Sharma')"
+                                        class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm">
                                         <i class="fas fa-video mr-1"></i>Video
                                     </button>
-                                    <button class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition text-sm">
+                                    <button
+                                        class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition text-sm">
                                         <i class="fas fa-comment mr-1"></i>Chat
                                     </button>
                                 </div>
@@ -726,7 +822,8 @@
                         <div class="px-6 pb-6">
                             <div class="relative -top-12 flex justify-center">
                                 <div class="w-24 h-24 bg-white rounded-full p-1">
-                                    <div class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
+                                    <div
+                                        class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
                                         <i class="fas fa-user-md text-4xl text-gray-400"></i>
                                     </div>
                                 </div>
@@ -744,10 +841,12 @@
                                 </div>
                                 <p class="text-gray-600 text-sm mb-4">10 years experience • GMC Mumbai</p>
                                 <div class="flex gap-2">
-                                    <button onclick="startConsultation('Dr. Rajesh Kumar')" class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm">
+                                    <button onclick="startConsultation('Dr. Rajesh Kumar')"
+                                        class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm">
                                         <i class="fas fa-video mr-1"></i>Video
                                     </button>
-                                    <button class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition text-sm">
+                                    <button
+                                        class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition text-sm">
                                         <i class="fas fa-comment mr-1"></i>Chat
                                     </button>
                                 </div>
@@ -760,7 +859,8 @@
                         <div class="px-6 pb-6">
                             <div class="relative -top-12 flex justify-center">
                                 <div class="w-24 h-24 bg-white rounded-full p-1">
-                                    <div class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
+                                    <div
+                                        class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
                                         <i class="fas fa-user-md text-4xl text-gray-400"></i>
                                     </div>
                                 </div>
@@ -778,10 +878,12 @@
                                 </div>
                                 <p class="text-gray-600 text-sm mb-4">12 years experience • CMC Vellore</p>
                                 <div class="flex gap-2">
-                                    <button onclick="startConsultation('Dr. Anjali Patel')" class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition text-sm">
+                                    <button onclick="startConsultation('Dr. Anjali Patel')"
+                                        class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition text-sm">
                                         <i class="fas fa-video mr-1"></i>Video
                                     </button>
-                                    <button class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition text-sm">
+                                    <button
+                                        class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition text-sm">
                                         <i class="fas fa-comment mr-1"></i>Chat
                                     </button>
                                 </div>
@@ -803,34 +905,41 @@
 
             <div class="max-w-7xl mx-auto px-4 py-8">
                 <div class="grid md:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition border-2 border-purple-500">
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition border-2 border-purple-500">
                         <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
                             <i class="fas fa-user text-3xl text-purple-600"></i>
                         </div>
                         <h3 class="font-bold">You</h3>
                         <p class="text-sm text-gray-500">Age: 35 • Male</p>
-                        <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">Healthy</span>
+                        <span
+                            class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">Healthy</span>
                     </div>
-                    
-                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition">
+
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition">
                         <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
                             <i class="fas fa-user text-3xl text-pink-600"></i>
                         </div>
                         <h3 class="font-bold">Wife</h3>
                         <p class="text-sm text-gray-500">Age: 32 • Female</p>
-                        <span class="inline-block mt-2 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">Pregnant</span>
+                        <span
+                            class="inline-block mt-2 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">Pregnant</span>
                     </div>
-                    
-                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition">
+
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition">
                         <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                             <i class="fas fa-child text-3xl text-blue-600"></i>
                         </div>
                         <h3 class="font-bold">Son</h3>
                         <p class="text-sm text-gray-500">Age: 8 • Male</p>
-                        <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">Healthy</span>
+                        <span
+                            class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">Healthy</span>
                     </div>
-                    
-                    <div class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition border-2 border-dashed border-gray-300 hover:border-purple-500">
+
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-xl transition border-2 border-dashed border-gray-300 hover:border-purple-500">
                         <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
                             <i class="fas fa-plus text-3xl text-gray-400"></i>
                         </div>
@@ -856,23 +965,32 @@
                                 <tr>
                                     <td class="px-4 py-3 font-medium">You</td>
                                     <td class="px-4 py-3">Jan 15, 2026</td>
-                                    <td class="px-4 py-3 text-green-600"><i class="fas fa-check-circle mr-1"></i>Up to date</td>
+                                    <td class="px-4 py-3 text-green-600"><i class="fas fa-check-circle mr-1"></i>Up to
+                                        date</td>
                                     <td class="px-4 py-3">Metformin, Vitamin D</td>
-                                    <td class="px-4 py-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">Good</span></td>
+                                    <td class="px-4 py-3"><span
+                                            class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">Good</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 font-medium">Wife</td>
                                     <td class="px-4 py-3">Feb 1, 2026</td>
-                                    <td class="px-4 py-3 text-yellow-600"><i class="fas fa-exclamation-circle mr-1"></i>Flu due</td>
+                                    <td class="px-4 py-3 text-yellow-600"><i
+                                            class="fas fa-exclamation-circle mr-1"></i>Flu due</td>
                                     <td class="px-4 py-3">Prenatal vitamins</td>
-                                    <td class="px-4 py-3"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-sm">Monitor</span></td>
+                                    <td class="px-4 py-3"><span
+                                            class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-sm">Monitor</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 font-medium">Son</td>
                                     <td class="px-4 py-3">Dec 20, 2025</td>
-                                    <td class="px-4 py-3 text-green-600"><i class="fas fa-check-circle mr-1"></i>Up to date</td>
+                                    <td class="px-4 py-3 text-green-600"><i class="fas fa-check-circle mr-1"></i>Up to
+                                        date</td>
                                     <td class="px-4 py-3">None</td>
-                                    <td class="px-4 py-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">Excellent</span></td>
+                                    <td class="px-4 py-3"><span
+                                            class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">Excellent</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -892,12 +1010,16 @@
 
             <div class="max-w-4xl mx-auto px-4 py-8">
                 <div class="bg-white rounded-2xl shadow-lg p-8">
-                    <div class="border-4 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-indigo-500 transition cursor-pointer" onclick="document.getElementById('reportUpload').click()">
+                    <div class="border-4 border-dashed border-gray-300 rounded-2xl p-12 text-center hover:border-indigo-500 transition cursor-pointer"
+                        onclick="document.getElementById('reportUpload').click()">
                         <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
                         <h3 class="text-xl font-bold text-gray-700 mb-2">Upload Medical Report</h3>
                         <p class="text-gray-500 mb-4">Support for PDF, JPG, PNG (Max 10MB)</p>
-                        <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Select File</button>
-                        <input type="file" id="reportUpload" class="hidden" accept=".pdf,.jpg,.jpeg,.png" onchange="analyzeReport(this)">
+                        <button
+                            class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">Select
+                            File</button>
+                        <input type="file" id="reportUpload" class="hidden" accept=".pdf,.jpg,.jpeg,.png"
+                            onchange="analyzeReport(this)">
                     </div>
 
                     <div id="analysisResult" class="hidden mt-8">
@@ -909,7 +1031,7 @@
                                     <p class="text-gray-600 text-sm">Blood Test Report • Analyzed by AI</p>
                                 </div>
                             </div>
-                            
+
                             <div class="space-y-4">
                                 <div class="bg-white rounded-lg p-4 border-l-4 border-green-400">
                                     <h5 class="font-bold text-green-800">Key Findings</h5>
@@ -919,7 +1041,7 @@
                                         <li>• Vitamin D: 18 ng/mL (Low - supplementation recommended)</li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="bg-white rounded-lg p-4 border-l-4 border-yellow-400">
                                     <h5 class="font-bold text-yellow-800">AI Recommendations</h5>
                                     <ul class="mt-2 space-y-1 text-gray-700">
@@ -930,12 +1052,14 @@
                                     </ul>
                                 </div>
                             </div>
-                            
+
                             <div class="mt-6 flex gap-4">
-                                <button class="flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition">
+                                <button
+                                    class="flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition">
                                     <i class="fas fa-download mr-2"></i>Download Report
                                 </button>
-                                <button onclick="showSection('doctor-connect')" class="flex-1 bg-white border-2 border-indigo-600 text-indigo-600 py-3 rounded-lg hover:bg-indigo-50 transition">
+                                <button onclick="showSection('doctor-connect')"
+                                    class="flex-1 bg-white border-2 border-indigo-600 text-indigo-600 py-3 rounded-lg hover:bg-indigo-50 transition">
                                     <i class="fas fa-user-md mr-2"></i>Consult Doctor
                                 </button>
                             </div>
@@ -947,17 +1071,323 @@
 
     </div>
 
+    <!-- PROFILE SECTION -->
+    <div id="profilePanel"
+        class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">My Profile</h2>
+                <button onclick="closeProfile()"
+                    class="w-10 h-10 bg-white/20 rounded-full hover:bg-white/30 transition flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="text-center">
+                <div class="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center relative">
+                    <i class="fas fa-user text-4xl text-purple-600" id="profileIcon"></i>
+                    <img id="profileImage" class="hidden w-full h-full rounded-full object-cover" alt="Profile">
+                    <button onclick="changeProfilePicture()"
+                        class="absolute bottom-0 right-0 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700">
+                        <i class="fas fa-camera text-xs"></i>
+                    </button>
+                </div>
+                <h3 class="text-xl font-bold" id="profileNameDisplay">John Doe</h3>
+                <p class="text-purple-100 text-sm" id="profileAgeGenderDisplay">35 years • Male</p>
+            </div>
+        </div>
+
+        <div class="p-6 space-y-6">
+            <!-- Personal Information -->
+            <div class="bg-white rounded-xl border-2 border-gray-100 p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg flex items-center">
+                        <i class="fas fa-user-circle text-purple-600 mr-2"></i>
+                        Personal Information
+                    </h3>
+                    <button onclick="toggleEditMode('personal')" class="text-purple-600 hover:text-purple-700">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+
+                <div id="personalView" class="space-y-3">
+                    <div>
+                        <label class="text-xs text-gray-500">Full Name</label>
+                        <p class="font-medium" id="viewName">John Doe</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-500">Age</label>
+                            <p class="font-medium" id="viewAge">35</p>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500">Gender</label>
+                            <p class="font-medium" id="viewGender">Male</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Blood Group</label>
+                        <p class="font-medium" id="viewBloodGroup">O+</p>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Phone Number</label>
+                        <p class="font-medium" id="viewPhone">+91 98765 43210</p>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Email</label>
+                        <p class="font-medium" id="viewEmail">john.doe@example.com</p>
+                    </div>
+                </div>
+
+                <div id="personalEdit" class="hidden space-y-3">
+                    <div>
+                        <label class="text-xs text-gray-500">Full Name</label>
+                        <input type="text" id="editName"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                            value="John Doe">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-500">Age</label>
+                            <input type="number" id="editAge"
+                                class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                value="35">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500">Gender</label>
+                            <select id="editGender"
+                                class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Blood Group</label>
+                        <select id="editBloodGroup"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                            <option>O+</option>
+                            <option>O-</option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Phone Number</label>
+                        <input type="tel" id="editPhone"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                            value="+91 98765 43210">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Email</label>
+                        <input type="email" id="editEmail"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                            value="john.doe@example.com">
+                    </div>
+                    <div class="flex gap-2 pt-2">
+                        <button onclick="savePersonalInfo()"
+                            class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-check mr-1"></i> Save
+                        </button>
+                        <button onclick="cancelEdit('personal')"
+                            class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contacts -->
+            <div class="bg-white rounded-xl border-2 border-gray-100 p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg flex items-center">
+                        <i class="fas fa-phone-square-alt text-red-600 mr-2"></i>
+                        Emergency Contacts
+                    </h3>
+                    <button onclick="addEmergencyContact()" class="text-purple-600 hover:text-purple-700">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                </div>
+
+                <div id="emergencyContactsList" class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg emergency-contact"
+                        data-id="1">
+                        <div class="flex-1">
+                            <p class="font-medium contact-name">Wife - Priya</p>
+                            <p class="text-sm text-gray-600 contact-phone">+91 98765 43211</p>
+                        </div>
+                        <button onclick="editEmergencyContact(1)" class="text-gray-500 hover:text-purple-600 mr-2">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteEmergencyContact(1)" class="text-gray-500 hover:text-red-600">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg emergency-contact"
+                        data-id="2">
+                        <div class="flex-1">
+                            <p class="font-medium contact-name">Brother - Raj</p>
+                            <p class="text-sm text-gray-600 contact-phone">+91 98765 43212</p>
+                        </div>
+                        <button onclick="editEmergencyContact(2)" class="text-gray-500 hover:text-purple-600 mr-2">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteEmergencyContact(2)" class="text-gray-500 hover:text-red-600">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medical History -->
+            <div class="bg-white rounded-xl border-2 border-gray-100 p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg flex items-center">
+                        <i class="fas fa-notes-medical text-green-600 mr-2"></i>
+                        Medical History
+                    </h3>
+                    <button onclick="toggleEditMode('medical')" class="text-purple-600 hover:text-purple-700">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+
+                <div id="medicalView" class="space-y-3">
+                    <div>
+                        <label class="text-xs text-gray-500">Height & Weight</label>
+                        <p class="font-medium" id="viewHeightWeight">175 cm • 70 kg</p>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Chronic Conditions</label>
+                        <p class="font-medium" id="viewConditions">Type 2 Diabetes</p>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Allergies</label>
+                        <p class="font-medium" id="viewAllergies">Penicillin, Peanuts</p>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Current Medications</label>
+                        <p class="font-medium" id="viewMedications">Metformin 500mg, Vitamin D3</p>
+                    </div>
+                </div>
+
+                <div id="medicalEdit" class="hidden space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-500">Height (cm)</label>
+                            <input type="number" id="editHeight"
+                                class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                value="175">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500">Weight (kg)</label>
+                            <input type="number" id="editWeight"
+                                class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                                value="70">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Chronic Conditions</label>
+                        <input type="text" id="editConditions"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                            value="Type 2 Diabetes" placeholder="Separate with commas">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Allergies</label>
+                        <input type="text" id="editAllergies"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                            value="Penicillin, Peanuts" placeholder="Separate with commas">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Current Medications</label>
+                        <textarea id="editMedications" rows="2"
+                            class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                            placeholder="Separate with commas">Metformin 500mg, Vitamin D3</textarea>
+                    </div>
+                    <div class="flex gap-2 pt-2">
+                        <button onclick="saveMedicalInfo()"
+                            class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
+                            <i class="fas fa-check mr-1"></i> Save
+                        </button>
+                        <button onclick="cancelEdit('medical')"
+                            class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="bg-white rounded-xl border-2 border-gray-100 p-4">
+                <h3 class="font-bold text-lg mb-4 flex items-center">
+                    <i class="fas fa-cog text-gray-600 mr-2"></i>
+                    Settings
+                </h3>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700">Notifications</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div
+                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+                            </div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700">Medicine Reminders</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div
+                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+                            </div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700">Dark Mode</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div
+                                class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="space-y-3 pb-6">
+                <button
+                    class="w-full py-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition flex items-center justify-center">
+                    <i class="fas fa-download mr-2"></i>
+                    Download My Health Data
+                </button>
+                <button
+                    class="w-full py-3 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition flex items-center justify-center">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Voice Chat Modal -->
     <div id="voiceModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center">
         <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
-            <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <div
+                class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
                 <i class="fas fa-microphone text-4xl text-purple-600"></i>
             </div>
             <h3 class="text-xl font-bold mb-2">Listening...</h3>
             <p class="text-gray-600 mb-6">Speak clearly in Hindi or English</p>
             <div class="flex justify-center gap-4">
-                <button onclick="closeVoiceModal()" class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel</button>
-                <button onclick="processVoice()" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Done</button>
+                <button onclick="closeVoiceModal()"
+                    class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel</button>
+                <button onclick="processVoice()"
+                    class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Done</button>
             </div>
         </div>
     </div>
@@ -972,18 +1402,22 @@
             <p class="text-gray-600 mb-6">Calling 108... Notifying emergency contacts...</p>
             <div class="space-y-3">
                 <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
-                    <span class="flex items-center"><i class="fas fa-phone-alt text-green-500 mr-2"></i>108 Ambulance</span>
+                    <span class="flex items-center"><i class="fas fa-phone-alt text-green-500 mr-2"></i>108
+                        Ambulance</span>
                     <span class="text-green-600 font-bold">Connecting...</span>
                 </div>
                 <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
-                    <span class="flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Location Shared</span>
+                    <span class="flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Location
+                        Shared</span>
                     <span class="text-green-600 font-bold">Active</span>
                 </div>
             </div>
-            <button onclick="closeSOS()" class="mt-6 w-full py-3 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel SOS</button>
+            <button onclick="closeSOS()" class="mt-6 w-full py-3 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel
+                SOS</button>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
