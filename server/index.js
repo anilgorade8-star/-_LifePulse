@@ -24,22 +24,12 @@ app.use((req, res, next) => {
 // API Routes
 app.use('/api', chatRoutes);
 
-// Serve static files (HTML, CSS, JS) from the root directory
-app.use(express.static(path.join(__dirname, '..')));
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-    res.json({
-        status: 'healthy',
-        service: 'LifePulse Backend',
-        timestamp: new Date().toISOString(),
-        geminiConfigured: !!process.env.GEMINI_API_KEY,
-    });
-});
+// Serve static files (HTML, CSS, JS) from the public directory
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Serve index.html for the root route
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // 404 handler for unknown routes

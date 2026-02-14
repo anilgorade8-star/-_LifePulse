@@ -80,13 +80,26 @@ function showSection(sectionId, updateHistory = true) {
     }
 }
 
-// Handle Browser Back/Forward
-window.addEventListener('popstate', (event) => {
-    if (event.state && event.state.section) {
-        showSection(event.state.section, false);
-    } else {
-        // Default to home if no state (e.g., initial load)
-        showSection('home', false);
+// Handle Capacitor Back Button (Mobile)
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if running in Capacitor
+    if (window.Capacitor) {
+        const App = window.Capacitor.Plugins.App;
+        
+        if (App) {
+            App.addListener('backButton', ({ canGoBack }) => {
+                const currentHash = window.location.hash.substring(1);
+                
+                // If not on home, go back in history (which triggers our popstate listener)
+                if (currentHash && currentHash !== 'home') {
+                    window.history.back();
+                } else {
+                    // If on home, exit app
+                    App.exitApp();
+                }
+            });
+            console.log('Capacitor back button listener attached');
+        }
     }
 });
 
