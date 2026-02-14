@@ -20,6 +20,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const hr = 70 + Math.floor(Math.random() * 10);
         document.getElementById('heartRate').textContent = hr;
     }, 3000);
+    
+    // Hide loading screen after everything is loaded
+    window.addEventListener('load', function() {
+        const loader = document.getElementById('loadingScreen');
+        loader.classList.add('fade-out');
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500);
+    });
 });
 
 function initApp() {

@@ -17,6 +17,20 @@
 </head>
 
 <body class="bg-gray-50 text-gray-800">
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loader-container">
+            <i class="fas fa-heartbeat loader-heartbeat"></i>
+            <svg class="pulse-line" width="200" height="60" viewBox="0 0 200 60">
+                <path class="pulse-path" d="M 0 30 L 40 30 L 50 10 L 60 50 L 70 20 L 80 30 L 200 30" 
+                      stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="loading-text">
+            <span class="gradient-text font-bold text-2xl">LifePulse</span>
+        </div>
+    </div>
+
     <!-- Offline Indicator -->
     <div id="offlineBar" class="offline-indicator">
         <i class="fas fa-wifi-slash mr-2"></i> You are offline. Some features may be limited.
