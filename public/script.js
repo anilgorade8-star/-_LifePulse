@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
             loader.style.display = 'none';
         }, 500);
     });
+
+    // Initialize visibility states (footer, nav buttons)
+    showSection('home', false);
 });
 
 function initApp() {
@@ -80,6 +83,29 @@ function showSection(sectionId, updateHistory = true) {
             history.pushState({ section: sectionId }, "", "#" + sectionId);
         }
 
+        // Handle Mobile Back Button visibility
+        const backBtn = document.getElementById('mobileBackButton');
+        if (backBtn) {
+            if (sectionId !== 'home' && window.innerWidth < 768) {
+                backBtn.classList.remove('hidden');
+            } else {
+                backBtn.classList.add('hidden');
+            }
+        }
+
+        // Toggle Footer Visibility
+        const footer = document.getElementById('mainFooter');
+        if (footer) {
+            if (sectionId === 'home') {
+                footer.style.display = 'block';
+                footer.classList.remove('hidden');
+            } else {
+                footer.style.display = 'none';
+                footer.classList.add('hidden');
+            }
+        }
+
+
         // Initialize section-specific features
         if (sectionId === 'emergency') {
             setTimeout(initMap, 100);
@@ -89,6 +115,8 @@ function showSection(sectionId, updateHistory = true) {
         }
     }
 }
+
+
 
 // Handle Capacitor Back Button (Mobile)
 document.addEventListener('DOMContentLoaded', () => {
@@ -1047,8 +1075,20 @@ function sendImage() {
 function downloadHealthData() {
     showNotification('Generating Health Report...', 'info');
 
-    const profileData = JSON.parse(localStorage.getItem('profileData') || '{}');
-    const medicalData = JSON.parse(localStorage.getItem('medicalData') || '{}');
+    const profileData = {
+        name: document.getElementById('viewName').textContent,
+        age: document.getElementById('viewAge').textContent,
+        gender: document.getElementById('viewGender').textContent,
+        bloodGroup: document.getElementById('viewBloodGroup').textContent,
+        phone: document.getElementById('viewPhone').textContent
+    };
+
+    const medicalData = {
+        conditions: document.getElementById('viewConditions').textContent,
+        allergies: document.getElementById('viewAllergies').textContent,
+        medications: document.getElementById('viewMedications').textContent
+    };
+
     const now = new Date();
 
     const element = document.createElement('div');
@@ -1063,12 +1103,12 @@ function downloadHealthData() {
                 <h2 style="color: #4b5563; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Patient Profile</h2>
                 <table style="width: 100%; margin-top: 10px;">
                     <tr>
-                        <td style="padding: 5px 0;"><strong>Name:</strong> ${profileData.name || 'Not provided'}</td>
-                        <td style="padding: 5px 0;"><strong>Age/Gender:</strong> ${profileData.age || '--'}/${profileData.gender || '--'}</td>
+                        <td style="padding: 5px 0;"><strong>Name:</strong> ${profileData.name}</td>
+                        <td style="padding: 5px 0;"><strong>Age/Gender:</strong> ${profileData.age}/${profileData.gender}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 5px 0;"><strong>Blood Group:</strong> ${profileData.bloodGroup || '--'}</td>
-                        <td style="padding: 5px 0;"><strong>Phone:</strong> ${profileData.phone || '--'}</td>
+                        <td style="padding: 5px 0;"><strong>Blood Group:</strong> ${profileData.bloodGroup}</td>
+                        <td style="padding: 5px 0;"><strong>Phone:</strong> ${profileData.phone}</td>
                     </tr>
                 </table>
             </div>
@@ -1093,9 +1133,9 @@ function downloadHealthData() {
             
             <div style="margin-bottom: 30px;">
                 <h2 style="color: #4b5563; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Medical Summary</h2>
-                <p style="margin: 10px 0;"><strong>Medical Conditions:</strong><br> ${medicalData.conditions || 'None recorded'}</p>
-                <p style="margin: 10px 0;"><strong>Allergies:</strong><br> ${medicalData.allergies || 'None recorded'}</p>
-                <p style="margin: 10px 0;"><strong>Current Medications:</strong><br> ${medicalData.medications || 'None recorded'}</p>
+                <p style="margin: 10px 0;"><strong>Medical Conditions:</strong><br> ${medicalData.conditions}</p>
+                <p style="margin: 10px 0;"><strong>Allergies:</strong><br> ${medicalData.allergies}</p>
+                <p style="margin: 10px 0;"><strong>Current Medications:</strong><br> ${medicalData.medications}</p>
             </div>
 
             <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 20px;">
