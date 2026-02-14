@@ -1,0 +1,9 @@
+{
+  "appId": "com.lifepulse.app",
+  "appName": "LifePulse",
+  "webDir": "dist",
+  "server": {
+    "url": "https://life-pulse-one.vercel.app/",
+    "cleartext": true
+  }
+}

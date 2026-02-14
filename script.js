@@ -798,6 +798,7 @@ function deleteEmergencyContact(contactId) {
 }
 
 function saveEmergencyContacts() {
+
     const contacts = [];
     document.querySelectorAll('.emergency-contact').forEach(contact => {
         const id = contact.getAttribute('data-id');
@@ -873,24 +874,17 @@ function changeProfilePicture() {
 }
 
 
-// Service Worker Registration for Offline Support
+// Service Worker Registration
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
-        self.addEventListener('install', e => {
-            e.waitUntil(
-                caches.open('lifepulse-v1').then(cache => {
-                    return cache.addAll(['/']);
-                })
-            );
-        });
-        self.addEventListener('fetch', e => {
-            e.respondWith(
-                caches.match(e.request).then(response => {
-                    return response || fetch(e.request);
-                })
-            );
-        });
-    `)).catch(() => console.log('Service Worker registration skipped'));
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then((registration) => {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch((err) => {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+    });
 }
 
 function sendImage() {
