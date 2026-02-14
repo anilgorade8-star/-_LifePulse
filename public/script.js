@@ -678,26 +678,13 @@ function startConsultation(doctorName) {
 }
 
 // Language Support
-function changeLanguage() {
-    const select = document.getElementById('languageSelect');
-    currentLanguage = select.value;
-    
-    // Update UI text based on language (simplified)
-    showNotification(`Language changed to ${select.options[select.selectedIndex].text}`, 'success');
-    
-    // Here you would update all UI text elements
-    // For now, just showing notification
-    if (currentLanguage === 'hi') {
-        showNotification('अब हिंदी में उपलब्ध', 'success');
-    }
-}
-
 function updateAILanguage() {
     const select = document.getElementById('aiLanguageSelect');
     aiLanguage = select.value;
     const langName = select.options[select.selectedIndex].text;
     showNotification(`AI will now respond in ${langName}`, 'success');
 }
+
 
 // Charts
 function initCharts() {

@@ -61,14 +61,6 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <select id="languageSelect" onchange="changeLanguage()"
-                        class="bg-gray-100 border-none rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-purple-500">
-                        <option value="en">English</option>
-                        <option value="hi">हिंदी</option>
-                        <option value="ta">தமிழ்</option>
-                        <option value="te">తెలుగు</option>
-                        <option value="bn">বাংলা</option>
-                    </select>
                     <button onclick="toggleProfile()"
                         class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center hover:bg-purple-200 transition">
                         <i class="fas fa-user text-purple-600"></i>
@@ -253,12 +245,12 @@
                     <div class="flex gap-2 items-center">
                         <select id="aiLanguageSelect" onchange="updateAILanguage()"
                             class="bg-white/20 border-none rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-white/30">
-                            <option value="en">English</option>
-                            <option value="hi">हिंदी</option>
-                            <option value="ta">தமிழ்</option>
-                            <option value="te">తెలుగు</option>
-                            <option value="bn">বাংলা</option>
-                            <option value="mr">मराठी</option>
+                            <option value="en" class="text-gray-800">English</option>
+                            <option value="hi" class="text-gray-800">हिंदी</option>
+                            <option value="ta" class="text-gray-800">தமிழ்</option>
+                            <option value="te" class="text-gray-800">తెలుగు</option>
+                            <option value="bn" class="text-gray-800">বাংলা</option>
+                            <option value="mr" class="text-gray-800">मराठी</option>
                         </select>
                         <button onclick="startVoiceChat()"
                             class="w-10 h-10 bg-white/20 rounded-full hover:bg-white/30 transition flex items-center justify-center"
