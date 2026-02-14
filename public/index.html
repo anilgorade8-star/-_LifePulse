@@ -150,30 +150,6 @@
                 </div>
             </div>
 
-            <!-- Stats -->
-            <div class="bg-white py-12 border-b">
-                <div class="max-w-7xl mx-auto px-4">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                        <div>
-                            <div class="text-4xl font-bold text-purple-600 mb-2" id="statUsers">0</div>
-                            <div class="text-gray-600">Active Users</div>
-                        </div>
-                        <div>
-                            <div class="text-4xl font-bold text-purple-600 mb-2" id="statConsultations">0</div>
-                            <div class="text-gray-600">AI Consultations</div>
-                        </div>
-                        <div>
-                            <div class="text-4xl font-bold text-purple-600 mb-2" id="statDoctors">0</div>
-                            <div class="text-gray-600">Verified Doctors</div>
-                        </div>
-                        <div>
-                            <div class="text-4xl font-bold text-purple-600 mb-2" id="statLives">0</div>
-                            <div class="text-gray-600">Lives Impacted</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Features Grid -->
             <div class="py-20 bg-gray-50">
                 <div class="max-w-7xl mx-auto px-4">
@@ -1441,6 +1417,91 @@
                 SOS</button>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 py-12">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Brand Section -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-heartbeat text-3xl text-red-500 mr-2"></i>
+                        <span class="text-2xl font-bold gradient-text">LifePulse</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">AI-powered healthcare support designed for rural India. Works offline, speaks your language.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="showSection('home')" class="text-gray-400 hover:text-purple-400 transition">Home</a></li>
+                        <li><a href="#" onclick="showSection('dashboard')" class="text-gray-400 hover:text-purple-400 transition">Dashboard</a></li>
+                        <li><a href="#" onclick="showSection('ai-assistant')" class="text-gray-400 hover:text-purple-400 transition">AI Assistant</a></li>
+                        <li><a href="#" onclick="showSection('emergency')" class="text-gray-400 hover:text-purple-400 transition">Emergency</a></li>
+                        <li><a href="#" onclick="showSection('family')" class="text-gray-400 hover:text-purple-400 transition">Family Health</a></li>
+                    </ul>
+                </div>
+
+                <!-- Features -->
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Features</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="showSection('medicine')" class="text-gray-400 hover:text-purple-400 transition">Medicine Reminder</a></li>
+                        <li><a href="#" onclick="showSection('diet')" class="text-gray-400 hover:text-purple-400 transition">Diet Generator</a></li>
+                        <li><a href="#" onclick="showSection('doctor-connect')" class="text-gray-400 hover:text-purple-400 transition">Doctor Connect</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition">Health Records</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition">Offline Mode</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contact Us</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-purple-400"></i>
+                            <a href="mailto:support@lifepulse.in" class="hover:text-purple-400 transition">support@lifepulse.in</a>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone mt-1 mr-3 text-purple-400"></i>
+                            <a href="tel:1800-123-4567" class="hover:text-purple-400 transition">1800-123-4567</a>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-purple-400"></i>
+                            <span>Healthcare for All<br>Mumbai, India</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    © 2026 LifePulse. All rights reserved. | Making healthcare accessible for everyone.
+                </p>
+                <div class="flex space-x-6 text-sm">
+                    <a href="#" class="text-gray-400 hover:text-purple-400 transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-purple-400 transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-purple-400 transition">About Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

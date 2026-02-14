@@ -33,50 +33,42 @@ Affordable, offline-ready healthcare support designed for rural India, featuring
 
 ## 🚀 Quick Start
 
-### Local Development
+### 1. Local Development (Vercel Dev)
+The recommended way to run LifePulse locally is using the Vercel CLI, which handles both frontline and serverless functions correctly.
+```bash
+# Run the complete environment
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view it.
 
-1. **Clone/Navigate to Project**
-   ```bash
-   cd lifepulse
-   ```
+### 2. Simple Static Server
+If you only want to test the UI without AI features:
+```bash
+# Using Python
+python -m http.server 8000
+```
 
-2. **Start Local Server**
-   ```bash
-   # Using npx (recommended)
-   npx -y http-server -p 8000
-   
-   # Or using Python
-   python -m http.server 8000
-   ```
+### 3. Legacy Local Server
+For testing the legacy Express backend:
+```bash
+npm run dev:local
+```
 
-3. **Open in Browser**
-   ```
-   http://localhost:8000
-   ```
-
-### Project Structure
+## 📂 Project Structure
 
 ```
-lifepulse/
-├── index.html                  # Brand-focused homepage
-├── login.html                   # Login with role selection
-├── pages/                       # Feature pages
-│   ├── ai-assistant.html       # AI chat & symptom checker
-│   ├── emergency.html          # SOS & hospital finder
-│   └── ...                     # Other features (templates)
-├── css/                         # Modular stylesheets
-│   ├── main.css                # Design system & utilities
-│   ├── homepage.css            # Homepage animations
-│   ├── navigation.css          # Nav & hamburger menu
-│   ├── login.css               # Login page styles
-│   └── features.css            # Feature pages styles
-├── js/                          # JavaScript modules
-│   ├── main.js                 # Core functionality
-│   ├── animations.js           # Page transitions & effects
-│   ├── auth.js                 # Authentication logic
-│   └── features/               # Feature-specific scripts
-│       └── ai-assistant.js     # AI chat functionality
-└── README.md                    # This file
+LifePulse/
+├── api/                # Production Backend (Serverless)
+│   └── chat.js         # Gemini AI API Handler
+├── public/             # Frontend Static Assets
+│   ├── index.html      # Main Application UI
+│   ├── script.js       # Frontend Logic
+│   └── styles.css      # Custom Styles
+├── server/             # Legacy Backend (Local Dev Only)
+│   └── index.js        # Express Server
+├── vercel.json         # Deployment Configuration
+├── package.json        # Dependencies & Scripts
+└── VERCEL_DEPLOYMENT.md # Detailed Deployment Guide
 ```
 
 ---

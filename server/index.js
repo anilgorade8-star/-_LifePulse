@@ -1,3 +1,18 @@
+/*
+ * LOCAL DEVELOPMENT SERVER ONLY
+ * 
+ * This Express server is for LOCAL TESTING purposes only.
+ * It is NOT used in Vercel production deployment.
+ * 
+ * For production, the app uses serverless functions in /api folder.
+ * 
+ * To run locally:
+ *   npm run dev:local
+ * 
+ * To run with Vercel locally:
+ *   npm run dev
+ */
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
