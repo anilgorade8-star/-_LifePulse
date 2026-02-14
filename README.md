@@ -224,7 +224,7 @@ Affordable AI healthcare for rural India with 850M+ people lacking access.
 - ✅ **AI-powered** - Intelligent health guidance 24/7
 - ✅ **Accessible** - Multi-language, voice support, elderly-friendly
 - ✅ **Affordable** - No subscription, free basic features
-- ✅ **Scalable** - Cloud-based, handles millions of users
+- ✅ **Scalable** - Cloud-based, handles millions of userslvvsa
 
 ### Demo Strategy
 1. Show brand-focused homepage (professional first impression)
