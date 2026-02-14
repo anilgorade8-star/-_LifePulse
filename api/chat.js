@@ -13,11 +13,24 @@ IMPORTANT GUIDELINES:
 8. Support multilingual health terms and local practices
 9. Provide specific, actionable advice
 
-FORMAT YOUR RESPONSES:
-- Use clear sections with bold headers
-- Use bullet points for lists
-- Keep paragraphs short
-- Include emojis where appropriate for better visual appeal
+CRITICAL FORMATTING RULES - FOLLOW STRICTLY:
+• **ALWAYS use bullet points (•) for ALL information**
+• **NEVER write long paragraphs**
+• Start each response with a brief greeting (1 line max)
+• Organize information under **bold section headers**
+• Each point should be ONE line only
+• Use emojis strategically for visual guidance
+• Keep responses scannable and easy to read
+
+RESPONSE STRUCTURE:
+1. Brief greeting
+2. **Section Header 1** (e.g., **Understanding Your Symptoms**)
+   • Bullet point 1
+   • Bullet point 2
+3. **Section Header 2** (e.g., **What You Can Do**)
+   • Bullet point 1
+   • Bullet point 2
+4. **Important Reminder** - Always end with doctor consultation advice
 
 Remember: You provide preliminary guidance only. Always encourage professional medical consultation for serious concerns.`;
 
@@ -42,7 +55,7 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-        const { message } = req.body || {};
+        const { message, language = 'en' } = req.body || {};
 
         if (!message) {
             return res.status(400).json({ error: 'Message is required' });
@@ -53,11 +66,25 @@ module.exports = async function handler(req, res) {
             console.error('GEMINI_API_KEY is not set');
             return res.status(500).json({ error: 'Server misconfiguration: API Key missing' });
         }
+        
+        // Language name mapping
+        const languageNames = {
+            'en': 'English',
+            'hi': 'Hindi (हिंदी)',
+            'ta': 'Tamil (தமிழ்)',
+            'te': 'Telugu (తెలుగు)',
+            'bn': 'Bengali (বাংলা)',
+            'mr': 'Marathi (मराठी)'
+        };
+        
+        const langInstruction = language !== 'en' 
+            ? `IMPORTANT: Respond in ${languageNames[language] || language}. Use the native script and maintain the same bullet-point format.\n\n`
+            : '';
 
         // Initialize Gemini API
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ 
-            model: 'gemini-1.5-flash',
+            model: 'gemini-2.5-flash',
             generationConfig: {
                 temperature: 0.7,
                 topP: 0.95,
@@ -89,7 +116,7 @@ module.exports = async function handler(req, res) {
             history: [
                 {
                     role: 'user',
-                    parts: [{ text: SYSTEM_PROMPT }],
+                    parts: [{ text: langInstruction + SYSTEM_PROMPT }],
                 },
                 {
                     role: 'model',

@@ -7,7 +7,7 @@ const { model, SYSTEM_PROMPT } = require('../config/gemini');
  */
 async function handleChat(req, res) {
     try {
-        const { message } = req.body;
+        const { message, language = 'en' } = req.body;
 
         // Validate input
         if (!message || typeof message !== 'string' || message.trim().length === 0) {
@@ -23,14 +23,28 @@ async function handleChat(req, res) {
             });
         }
 
-        console.log(`📩 Received message: "${message.substring(0, 50)}..."`);
+        console.log(`📩 Received message: "${message.substring(0, 50)}..." (Language: ${language})`);
+        
+        // Language name mapping
+        const languageNames = {
+            'en': 'English',
+            'hi': 'Hindi (हिंदी)',
+            'ta': 'Tamil (தமிழ்)',
+            'te': 'Telugu (తెలుగు)',
+            'bn': 'Bengali (বাংলা)',
+            'mr': 'Marathi (मराठी)'
+        };
+        
+        const langInstruction = language !== 'en' 
+            ? `IMPORTANT: Respond in ${languageNames[language] || language}. Use the native script and maintain the same bullet-point format.\n\n`
+            : '';
 
         // Create chat session with system prompt
         const chat = model.startChat({
             history: [
                 {
                     role: 'user',
-                    parts: [{ text: SYSTEM_PROMPT }],
+                    parts: [{ text: langInstruction + SYSTEM_PROMPT }],
                 },
                 {
                     role: 'model',

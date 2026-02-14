@@ -1,5 +1,6 @@
 // Global State
 let currentLanguage = 'en';
+let aiLanguage = 'en'; // AI response language
 let chatHistory = [];
 let isOnline = navigator.onLine;
 let map = null;
@@ -136,7 +137,7 @@ async function sendMessage() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ message })
+            body: JSON.stringify({ message, language: aiLanguage })
         });
 
         if (!response.ok) {
@@ -173,12 +174,15 @@ function addMessageToChat(sender, message) {
     const container = document.getElementById('chatContainer');
     const div = document.createElement('div');
     div.className = 'flex items-start space-x-3 chat-message';
+    
+    // Convert line breaks to HTML
+    const formattedMessage = message.replace(/\n/g, '<br>');
 
     if (sender === 'user') {
         div.innerHTML = `
             <div class="flex-1 flex justify-end">
                 <div class="bg-purple-600 text-white rounded-2xl rounded-tr-none p-4 shadow-md max-w-[80%]">
-                    ${message}
+                    ${formattedMessage}
                 </div>
             </div>
             <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
@@ -191,7 +195,7 @@ function addMessageToChat(sender, message) {
                 <i class="fas fa-robot text-purple-600"></i>
             </div>
             <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-md max-w-[80%]">
-                ${message}
+                ${formattedMessage}
             </div>
         `;
     }
@@ -666,13 +670,24 @@ function startConsultation(doctorName) {
 
 // Language Support
 function changeLanguage() {
-    currentLanguage = document.getElementById('languageSelect').value;
-    showNotification(`Language changed to ${currentLanguage.toUpperCase()}`, 'success');
-
-    // In real app, this would reload content with translations
+    const select = document.getElementById('languageSelect');
+    currentLanguage = select.value;
+    
+    // Update UI text based on language (simplified)
+    showNotification(`Language changed to ${select.options[select.selectedIndex].text}`, 'success');
+    
+    // Here you would update all UI text elements
+    // For now, just showing notification
     if (currentLanguage === 'hi') {
         showNotification('अब हिंदी में उपलब्ध', 'success');
     }
+}
+
+function updateAILanguage() {
+    const select = document.getElementById('aiLanguageSelect');
+    aiLanguage = select.value;
+    const langName = select.options[select.selectedIndex].text;
+    showNotification(`AI will now respond in ${langName}`, 'success');
 }
 
 // Charts
