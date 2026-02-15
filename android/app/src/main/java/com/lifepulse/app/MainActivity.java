@@ -11,7 +11,6 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 
 import java.io.File;
-import java.util.ArrayList;
 
 public class MainActivity extends BridgeActivity {
 
@@ -23,11 +22,9 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "MainActivity.onCreate started.");
+        registerPlugin(OfflineAiPlugin.class);
         super.onCreate(savedInstanceState);
-
-        this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
-            add(OfflineAiPlugin.class);
-        }});
 
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
@@ -55,6 +52,7 @@ public class MainActivity extends BridgeActivity {
     }
 
     public void initializeGemma(String modelPath) {
+        Log.d(TAG, "initializeGemma called with path: " + modelPath);
         if (isGemmaInitialized) return;
         new Thread(() -> {
             isGemmaInitialized = gemmaLocalAi.initModel(modelPath);
@@ -86,7 +84,7 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if (isGemmaInitialized) {
             gemmaLocalAi.releaseModel();

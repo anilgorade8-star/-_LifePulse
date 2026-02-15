@@ -1,7 +1,8 @@
 #include <jni.h>
 #include <string>
+#include <vector>
 #include <android/log.h>
-#include "llama.cpp/llama.h"
+#include "llama.h"
 
 // --- Globals for the model and context ---
 llama_model *model = nullptr;
@@ -19,7 +20,7 @@ Java_com_lifepulse_app_GemmaLocalAi_initModel(JNIEnv *env, jobject thiz, jstring
 
     // --- Load the Model ---
     auto mparams = llama_model_default_params();
-    model = llama_load_model_from_file(path, mparams);
+    model = llama_model_load_from_file(path, mparams);
     env->ReleaseStringUTFChars(model_path, path);
 
     if (model == nullptr) {
@@ -33,10 +34,10 @@ Java_com_lifepulse_app_GemmaLocalAi_initModel(JNIEnv *env, jobject thiz, jstring
     cparams.n_threads = 2;
     cparams.n_ctx = 2048; // Context window size
 
-    ctx = llama_new_context_with_model(model, cparams);
+    ctx = llama_init_from_model(model, cparams);
     if (ctx == nullptr) {
         __android_log_print(ANDROID_LOG_ERROR, TAG, "Failed to create context");
-        llama_free_model(model);
+        llama_model_free(model);
         return JNI_FALSE;
     }
 
@@ -56,7 +57,7 @@ Java_com_lifepulse_app_GemmaLocalAi_generateResponse(JNIEnv *env, jobject thiz, 
 
     // --- Tokenize the Prompt ---
     auto tokens = std::vector<llama_token>(llama_n_ctx(ctx));
-    int n_tokens = llama_tokenize(model, full_prompt.c_str(), full_prompt.length(), tokens.data(), tokens.size(), true, false);
+    int n_tokens = llama_tokenize(llama_model_get_vocab(model), full_prompt.c_str(), full_prompt.length(), tokens.data(), tokens.size(), true, false);
     if (n_tokens < 0) {
          __android_log_print(ANDROID_LOG_ERROR, TAG, "Failed to tokenize prompt");
         return env->NewStringUTF("Error: Failed to tokenize prompt.");
@@ -64,28 +65,60 @@ Java_com_lifepulse_app_GemmaLocalAi_generateResponse(JNIEnv *env, jobject thiz, 
     tokens.resize(n_tokens);
 
     // --- Evaluate the Prompt ---
-    llama_eval(ctx, tokens.data(), n_tokens, 0);
+    llama_batch batch = llama_batch_init(n_tokens, 0, 1);
+    llama_seq_id seq_id = 0;
+    for (int32_t i = 0; i < n_tokens; i++) {
+        batch.token[i] = tokens[i];
+        batch.pos[i] = i;
+        batch.n_seq_id[i] = 1;
+        batch.seq_id[i] = &seq_id;
+        batch.logits[i] = 0;
+    }
+    batch.logits[n_tokens - 1] = 1; // only care about logits for the last token
+
+    if (llama_decode(ctx, batch) != 0) {
+        __android_log_print(ANDROID_LOG_ERROR, TAG, "llama_decode failed");
+        llama_batch_free(batch);
+        return env->NewStringUTF("Error: llama_decode failed.");
+    }
 
     // --- Generate the Response ---
     std::string response = "";
     const int max_tokens = 200; // Limit response length
+    int n_cur = n_tokens;
+
+    llama_sampler* sampler = llama_sampler_init_greedy();
 
     for (int i = 0; i < max_tokens; ++i) {
-        llama_token id = llama_sample_token_greedy(ctx, nullptr);
+        // Sample the next token
+        llama_token id = llama_sampler_sample(sampler, ctx, -1);
+        llama_sampler_accept(sampler, id);
 
-        if (id == llama_token_eos(model)) {
-            break; // End of sequence
+        if (id == llama_vocab_eos(llama_model_get_vocab(model))) {
+            break;
         }
 
-        response += llama_token_to_piece(ctx, id);
+        response += llama_vocab_get_text(llama_model_get_vocab(model), id);
 
-        // Evaluate the new token
-        llama_token new_tokens[] = { id };
-        llama_eval(ctx, new_tokens, 1, n_tokens + i);
+        // Prepare for the next iteration
+        batch.n_tokens = 1;
+        batch.token[0] = id;
+        batch.pos[0] = n_cur;
+        batch.logits[0] = 1;
+
+        if (llama_decode(ctx, batch) != 0) {
+            __android_log_print(ANDROID_LOG_ERROR, TAG, "llama_decode failed in loop");
+            break;
+        }
+        n_cur++;
     }
+
+    llama_batch_free(batch);
+    llama_sampler_free(sampler);
 
     return env->NewStringUTF(response.c_str());
 }
+
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_lifepulse_app_GemmaLocalAi_releaseModel(JNIEnv *env, jobject thiz) {
@@ -94,7 +127,7 @@ Java_com_lifepulse_app_GemmaLocalAi_releaseModel(JNIEnv *env, jobject thiz) {
         ctx = nullptr;
     }
     if (model != nullptr) {
-        llama_free_model(model);
+        llama_model_free(model);
         model = nullptr;
     }
     __android_log_print(ANDROID_LOG_INFO, TAG, "Model released");

@@ -9,12 +9,12 @@ project("lifepulse" C CXX)
 # We assume llama.cpp has been placed inside the cpp directory.
 add_subdirectory(llama.cpp)
 
+# Add the include directories for llama.cpp and ggml
+include_directories(llama.cpp/include llama.cpp/ggml/include)
+
 # --- JNI Bridge Library ---
 # Creates a shared library named 'native-lib' from our JNI source file.
 add_library(native-lib SHARED native-lib.cpp)
 
-# Find and link the Android logging library, so we can use __android_log_print for debugging.
-find_library(log-lib log)
-
 # Link our native-lib with the llama library and the Android logging library.
-target_link_libraries(native-lib llama android log-lib)
+target_link_libraries(native-lib llama android log)
