@@ -8,14 +8,12 @@ import android.widget.Toast;
 import android.webkit.WebView;
 
 import androidx.core.view.WindowCompat;
-
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.JSObject;
 
 import java.io.File;
 
 public class MainActivity extends BridgeActivity {
-
     private static final String TAG = "MainActivity";
 
     private NetworkUtils networkUtils;
@@ -25,12 +23,14 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         Log.d(TAG, "MainActivity.onCreate started.");
+        
+        // This line is for the edge-to-edge layout, it is correct.
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         registerPlugin(OfflineAiPlugin.class);
         registerPlugin(com.capacitorjs.plugins.haptics.HapticsPlugin.class);
-
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         gemmaLocalAi = new GemmaLocalAi();
 
