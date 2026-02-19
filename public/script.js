@@ -39,7 +39,14 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Initialize visibility states (footer, nav buttons)
-  showSection("home", false);
+  try {
+    showSection("home", false);
+  } catch (e) {
+    console.error("Error during initial showSection:", e);
+    // Force hide loader if navigation fails
+    const loader = document.getElementById("loadingScreen");
+    if (loader) loader.style.display = "none";
+  }
 });
 
 function initApp() {
@@ -70,7 +77,6 @@ function checkConnectivity() {
   }
 }
 
-// Navigation
 // Navigation
 function showSection(sectionId, updateHistory = true) {
   // Hide all sections
@@ -173,61 +179,9 @@ window.addEventListener("load", () => {
 });
 
 // AI Chatbot Functions
-async function sendMessage() {
-  const input = document.getElementById("chatInput");
-  const message = input.value.trim();
-  if (!message) return;
-
-  // Clear input and show user message
-  input.value = "";
-  addMessageToChat("user", message);
-
-  // Show typing indicator
-  showTypingIndicator();
-
-  try {
-    // Check if backend is available (optional, but good for UX)
-    // For now, we'll try to send the message directly
-
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message, language: aiLanguage }),
-    });
-
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error || `Server error: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // Remove typing indicator and show AI response
-    removeTypingIndicator();
-    addMessageToChat("ai", data.reply);
-    // speakResponse(data.reply); // Auto-read disabled per user request
-  } catch (error) {
-    console.error("Chat Error:", error);
-
-    // Fallback to local hardcoded response if server fails
-    console.log("Falling back to local response...");
-    removeTypingIndicator();
-
-    // Add a small delay for natural feeling if immediate fail
-    setTimeout(() => {
-      const fallbackResponse = generateAIResponse(message);
-      // Append a small note about offline mode if needed, or just show response
-      const responseWithNote = `${fallbackResponse}<br><br><span class="text-xs text-gray-500">(Offline Mode)</span>`;
-      addMessageToChat("ai", responseWithNote);
-      // speakResponse(fallbackResponse); // Auto-read disabled per user request
-    }, 500);
-  }
-}
 
 function addMessageToChat(sender, message) {
-  const container = document.getElementById("chatContainer");
+  const container = document.getElementById("ai-response-area");
   const div = document.createElement("div");
   div.className = "flex items-start space-x-3 chat-message";
 
@@ -261,7 +215,7 @@ function addMessageToChat(sender, message) {
 }
 
 function showTypingIndicator() {
-  const container = document.getElementById("chatContainer");
+  const container = document.getElementById("ai-response-area");
   const div = document.createElement("div");
   div.id = "typingIndicator";
   div.className = "flex items-start space-x-3";
@@ -371,22 +325,38 @@ function generateAIResponse(input) {
 }
 
 function sendQuickMessage(message) {
-  document.getElementById("chatInput").value = message;
-  sendMessage();
+  const input = document.getElementById("ai-prompt-input");
+  if (input) {
+    input.value = message;
+    handleAiRequest();
+  } else {
+    // Fallback for older UI if any
+    const oldInput = document.getElementById("chatInput");
+    if (oldInput) {
+      oldInput.value = message;
+      // Note: We don't have a generic sendMessage anymore, everything uses handleAiRequest
+      handleAiRequest();
+    }
+  }
 }
 
 function heroChat(input) {
   if (event.key === "Enter") {
     showSection("ai-assistant");
     setTimeout(() => {
-      document.getElementById("chatInput").value = input.value;
-      sendMessage();
+      const aiInput = document.getElementById("ai-prompt-input");
+      if (aiInput) {
+        aiInput.value = input.value;
+        handleAiRequest();
+      }
     }, 500);
   }
 }
 
 function clearChat() {
-  document.getElementById("chatContainer").innerHTML = `
+  const container = document.getElementById("ai-response-area");
+  if (container) {
+    container.innerHTML = `
         <div class="flex items-start space-x-3">
             <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-robot text-purple-600"></i>
@@ -396,6 +366,7 @@ function clearChat() {
             </div>
         </div>
     `;
+  }
 }
 
 // Voice Functions
@@ -431,11 +402,7 @@ function closeVoiceModal() {
 
 function processVoice() {
   closeVoiceModal();
-  if (document.getElementById("ai-prompt-input")) {
-    handleAiRequest();
-  } else {
-    sendMessage();
-  }
+  handleAiRequest();
 }
 
 function speakResponse(text) {
@@ -1928,28 +1895,34 @@ if (downloadBtn) {
 // --- AI Request Routing ---
 async function handleAiRequest() {
   const aiPromptInput = document.getElementById("ai-prompt-input");
-  const aiResponseArea = document.getElementById("ai-response-area");
+  const aiResponseArea = document.getElementById("ai-response-area"); // This is the chat container
   const sendButton = document.getElementById("send-button");
 
-  const prompt = aiPromptInput ? aiPromptInput.value : "";
+  const prompt = aiPromptInput ? aiPromptInput.value.trim() : "";
   if (!prompt) return;
 
-  if (aiResponseArea) aiResponseArea.textContent = "Processing...";
+  // Clear input and show user message
+  aiPromptInput.value = "";
+  addMessageToChat("user", prompt);
+
+  // Show typing indicator
+  showTypingIndicator();
+
   if (sendButton) sendButton.disabled = true;
 
   try {
     if (isOnline) {
       console.log("Routing to Gemini API (Online)...");
 
-      // IMPORTANT: Replace with your computer's local IP address
-      const PROXY_URL = "http://10.69.32.72:3000/api/chat";
+      // Replace with your production or local proxy URL
+      const PROXY_URL = "/api/chat";
 
       const response = await fetch(PROXY_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: prompt }),
+        body: JSON.stringify({ message: prompt, language: aiLanguage }),
       });
 
       if (!response.ok) {
@@ -1958,8 +1931,8 @@ async function handleAiRequest() {
       }
 
       const data = await response.json();
-      if (aiResponseArea)
-        aiResponseArea.textContent = data.reply || data.response;
+      removeTypingIndicator();
+      addMessageToChat("ai", data.reply || data.response);
     } else {
       if (gemmaStatus === "ready") {
         console.log("Routing to Local Gemma (Offline)...");
@@ -1970,49 +1943,31 @@ async function handleAiRequest() {
         ) {
           const { OfflineAi } = window.Capacitor.Plugins;
           const result = await OfflineAi.generateResponse({ prompt: prompt });
-          if (aiResponseArea) aiResponseArea.textContent = result.response;
+          removeTypingIndicator();
+          addMessageToChat("ai", result.response);
         } else {
           throw new Error("OfflineAi plugin not available");
         }
       } else {
-        if (aiResponseArea)
-          aiResponseArea.textContent =
-            "Offline AI model is not available. Please download it first.";
+        removeTypingIndicator();
+        addMessageToChat(
+          "ai",
+          "I'm currently offline and the local AI model isn't ready. Please connect to the internet or download the model in settings.",
+        );
       }
     }
   } catch (error) {
     console.error("AI Request Failed:", error);
-    if (aiResponseArea) aiResponseArea.textContent = `Error: ${error.message}`;
+    removeTypingIndicator();
+    addMessageToChat("ai", `Error: ${error.message}. Please try again.`);
   } finally {
     if (sendButton) sendButton.disabled = false;
-  }
-}
-
-// --- Charts ---
-function initCharts() {
-  // Adherence Chart
-  const ctx = document.getElementById("adherenceChart");
-  if (ctx) {
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [
-          {
-            label: "Medicine Taken",
-            data: [2, 3, 2, 3, 3, 2, 3],
-            backgroundColor: "rgba(234, 179, 8, 0.8)",
-            borderRadius: 5,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: { beginAtZero: true, max: 3 },
-        },
-      },
-    });
+    if (aiResponseArea) {
+      aiResponseArea.scrollTo({
+        top: aiResponseArea.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }
 }
 

@@ -57,69 +57,33 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center cursor-pointer" onclick="showSection('home')">
                     <i class="fas fa-heartbeat text-3xl text-red-500 mr-2"></i>
-                    <span class="text-2xl font-bold gradient-text">LifePulse</span>
+                    <span class="text-2xl font-bold gradient-text tracking-tight">LifePulse</span>
                 </div>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <i class="fas fa-heartbeat text-3xl text-red-500 mr-2"></i>
-            <span
-              class="text-2xl font-bold gradient-text tracking-tight"
-              onclick="showSection('home')"
-              >LifePulse</span
-            >
-          </div>
 
+                <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
                     <button onclick="showSection('home')"
                         class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Home</button>
                     <button onclick="showSection('dashboard')"
                         class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Dashboard</button>
                     <button onclick="showSection('ai-assistant')"
-                        class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Sanjeevani
-                        AI</button>
+                        class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Sanjeevani AI</button>
                     <button onclick="showSection('emergency')"
-                        class="nav-btn text-red-600 hover:text-red-700 font-medium transition"><i
-                            class="fas fa-ambulance mr-1"></i>Emergency</button>
+                        class="nav-btn text-red-600 hover:text-red-700 font-medium transition">
+                        <i class="fas fa-ambulance mr-1"></i>Emergency
+                    </button>
+                    <button onclick="showSection('medassist')"
+                        class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">
+                        <i class="fas fa-hand-holding-medical mr-1"></i>MedAssist
+                    </button>
                     <button onclick="showSection('family')"
                         class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition">Family</button>
                 </div>
-          <div class="hidden md:flex items-center space-x-8">
-            <button
-              onclick="showSection('home')"
-              class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition"
-            >
-              Home
-            </button>
-            <button
-              onclick="showSection('ai-assistant')"
-              class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition"
-            >
-              Sanjeevani AI
-            </button>
-            <button
-              onclick="showSection('emergency')"
-              class="nav-btn text-red-600 hover:text-red-700 font-medium transition"
-            >
-              <i class="fas fa-ambulance mr-1"></i>Emergency
-            </button>
-            <button
-              onclick="showSection('medassist')"
-              class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition"
-            >
-              <i class="fas fa-hand-holding-medical mr-1"></i>MedAssist
-            </button>
-            <button
-              onclick="showSection('family')"
-              class="nav-btn text-gray-700 hover:text-purple-600 font-medium transition"
-            >
-              Family
-            </button>
-          </div>
 
+                <!-- Profile & Back Button -->
                 <div class="flex items-center space-x-4">
                     <button id="mobileBackButton" onclick="showSection('home')"
-                        class="hidden md:hidden w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition mr-2">
+                        class="hidden w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition mr-2">
                         <i class="fas fa-arrow-left text-gray-600"></i>
                     </button>
                     <button onclick="toggleProfile()"
@@ -129,24 +93,8 @@
                 </div>
             </div>
         </div>
-          <div class="flex items-center space-x-4">
-            <button
-              id="mobileBackButton"
-              onclick="showSection('home')"
-              class="hidden w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition mr-2"
-            >
-              <i class="fas fa-arrow-left text-gray-600"></i>
-            </button>
-            <button
-              onclick="toggleProfile()"
-              class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center hover:bg-purple-200 transition"
-            >
-              <i class="fas fa-user text-purple-600"></i>
-            </button>
-          </div>
-        </div>
-      </div>
     </nav>
+
 
     <!-- Mobile Bottom Navigation -->
     <div id="mobileBottomNav"
@@ -156,10 +104,10 @@
             <i class="fas fa-home text-xl"></i>
             <span class="text-[10px] font-medium">Home</span>
         </button>
-        <button onclick="showSection('dashboard')"
+        <button onclick="showSection('medassist')"
             class="flex flex-col items-center gap-1 text-gray-500 hover:text-purple-600 transition">
-            <i class="fas fa-chart-pie text-xl"></i>
-            <span class="text-[10px] font-medium">Stats</span>
+            <i class="fas fa-hand-holding-medical text-xl"></i>
+            <span class="text-[10px] font-medium">MedAssist</span>
         </button>
         <button onclick="showSection('ai-assistant')"
             class="flex flex-col items-center gap-1 text-purple-600 transition">
@@ -179,54 +127,8 @@
             <i class="fas fa-users text-xl"></i>
             <span class="text-[10px] font-medium">Family</span>
         </button>
-    <div
-      id="mobileBottomNav"
-      class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-[5000] flex justify-between items-center py-2 pb-[env(safe-area-inset-bottom,12px)]"
-    >
-      <button
-        onclick="showSection('home')"
-        class="flex-1 flex flex-col items-center justify-center text-gray-500 hover:text-purple-600 transition"
-      >
-        <i class="fas fa-home text-xl"></i>
-        <span class="text-[10px] font-medium">Home</span>
-      </button>
-
-      <button
-        onclick="showSection('medassist')"
-        class="flex-1 flex flex-col items-center justify-center text-gray-500 hover:text-purple-600 transition"
-      >
-        <i class="fas fa-hand-holding-medical text-xl"></i>
-        <span class="text-[10px] font-medium">MedAssist</span>
-      </button>
-
-      <button
-        onclick="showSection('ai-assistant')"
-        class="flex-1 flex flex-col items-center justify-center text-purple-600 transition"
-      >
-        <div
-          class="bg-purple-600 text-white w-12 h-12 rounded-full flex items-center justify-center -mt-10 shadow-lg border-4 border-white"
-        >
-          <i class="fas fa-robot text-xl"></i>
-        </div>
-        <span class="text-[10px] font-bold">AI</span>
-      </button>
-
-      <button
-        onclick="showSection('emergency')"
-        class="flex-1 flex flex-col items-center justify-center text-gray-500 hover:text-red-600 transition"
-      >
-        <i class="fas fa-ambulance text-xl"></i>
-        <span class="text-[10px] font-medium">SOS</span>
-      </button>
-
-      <button
-        onclick="showSection('family')"
-        class="flex-1 flex flex-col items-center justify-center text-gray-500 hover:text-purple-600 transition"
-      >
-        <i class="fas fa-users text-xl"></i>
-        <span class="text-[10px] font-medium">Family</span>
-      </button>
     </div>
+
 
     <!-- Main Content Container -->
     <div id="mainContainer">
@@ -234,7 +136,7 @@
         <!-- HOME SECTION -->
         <section id="home" class="section active">
             <!-- Hero -->
-            <div class="wave-bg text-white pt-8 pb-16 md:py-20 relative">
+            <div class="wave-bg text-white pt-4 pb-16 md:py-20 relative">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div class="grid md:grid-cols-2 gap-12 items-center">
                         <div>
@@ -310,7 +212,8 @@
                     </div>
 
                     <div class="grid md:grid-cols-3 gap-8">
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                        <!-- Card 1: AI Health Assistant -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-purple-500"
                             onclick="showSection('ai-assistant')">
                             <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-robot text-3xl text-purple-600"></i>
@@ -321,27 +224,9 @@
                             <span class="text-purple-600 font-semibold flex items-center">Explore <i
                                     class="fas fa-arrow-right ml-2"></i></span>
                         </div>
-            <div class="grid md:grid-cols-3 gap-8">
-              <div
-                class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-purple-500"
-                onclick="showSection('ai-assistant')"
-              >
-                <div
-                  class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6"
-                >
-                  <i class="fas fa-robot text-3xl text-purple-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">AI Health Assistant</h3>
-                <p class="text-gray-600 mb-4">
-                  24/7 intelligent health guidance powered by advanced AI. Get
-                  instant answers to health queries in your local language.
-                </p>
-                <span class="text-purple-600 font-semibold flex items-center"
-                  >Explore <i class="fas fa-arrow-right ml-2"></i
-                ></span>
-              </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                        <!-- Card 2: Emergency Support -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-red-500"
                             onclick="showSection('emergency')">
                             <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-ambulance text-3xl text-red-600"></i>
@@ -352,26 +237,9 @@
                             <span class="text-red-600 font-semibold flex items-center">Explore <i
                                     class="fas fa-arrow-right ml-2"></i></span>
                         </div>
-              <div
-                class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-red-500"
-                onclick="showSection('emergency')"
-              >
-                <div
-                  class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mb-6"
-                >
-                  <i class="fas fa-ambulance text-3xl text-red-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Emergency Support</h3>
-                <p class="text-gray-600 mb-4">
-                  One-touch SOS with instant hospital locator. Connect to
-                  emergency services and nearby hospitals within seconds.
-                </p>
-                <span class="text-red-600 font-semibold flex items-center"
-                  >Explore <i class="fas fa-arrow-right ml-2"></i
-                ></span>
-              </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                        <!-- Card 3: Doctor Connect -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-blue-500"
                             onclick="showSection('doctor-connect')">
                             <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-user-md text-3xl text-blue-600"></i>
@@ -382,26 +250,9 @@
                             <span class="text-blue-600 font-semibold flex items-center">Explore <i
                                     class="fas fa-arrow-right ml-2"></i></span>
                         </div>
-              <div
-                class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-blue-500"
-                onclick="showSection('doctor-connect')"
-              >
-                <div
-                  class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6"
-                >
-                  <i class="fas fa-user-md text-3xl text-blue-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Doctor Connect</h3>
-                <p class="text-gray-600 mb-4">
-                  Connect with verified doctors for online consultations. Video
-                  calls, chat, and prescription delivery.
-                </p>
-                <span class="text-blue-600 font-semibold flex items-center"
-                  >Explore <i class="fas fa-arrow-right ml-2"></i
-                ></span>
-              </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                        <!-- Card 4: Health Dashboard -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-green-500"
                             onclick="showSection('dashboard')">
                             <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-chart-line text-3xl text-green-600"></i>
@@ -413,7 +264,8 @@
                                     class="fas fa-arrow-right ml-2"></i></span>
                         </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                        <!-- Card 5: Medicine Reminder -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-yellow-500"
                             onclick="showSection('medicine')">
                             <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-pills text-3xl text-yellow-600"></i>
@@ -424,26 +276,9 @@
                             <span class="text-yellow-600 font-semibold flex items-center">Explore <i
                                     class="fas fa-arrow-right ml-2"></i></span>
                         </div>
-              <div
-                class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-yellow-500"
-                onclick="showSection('medicine')"
-              >
-                <div
-                  class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mb-6"
-                >
-                  <i class="fas fa-pills text-3xl text-yellow-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Medicine Reminder</h3>
-                <p class="text-gray-600 mb-4">
-                  Never miss a dose with smart medication reminders. Track
-                  adherence and order refills automatically.
-                </p>
-                <span class="text-yellow-600 font-semibold flex items-center"
-                  >Explore <i class="fas fa-arrow-right ml-2"></i
-                ></span>
-              </div>
 
-                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer"
+                        <!-- Card 6: Diet Generator -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-orange-500"
                             onclick="showSection('diet')">
                             <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
                                 <i class="fas fa-utensils text-3xl text-orange-600"></i>
@@ -454,72 +289,37 @@
                             <span class="text-orange-600 font-semibold flex items-center">Explore <i
                                     class="fas fa-arrow-right ml-2"></i></span>
                         </div>
+
+                        <!-- Card 7: AI Medicine Analyzer -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-purple-500"
+                            onclick="showSection('medicine-analyzer')">
+                            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
+                                <i class="fas fa-camera text-3xl text-purple-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">AI Medicine Analyzer</h3>
+                            <p class="text-gray-600 mb-4">Upload a photo of your medicine to get detailed info on usage,
+                                dosage, and side effects instantly.</p>
+                            <span class="text-purple-600 font-semibold flex items-center">Try Now <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
+
+                        <!-- Card 8: Pharmacy Finder -->
+                        <div class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-blue-500"
+                            onclick="showSection('pharmacy-finder')">
+                            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                                <i class="fas fa-map-marked-alt text-3xl text-blue-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Find Nearby Stores</h3>
+                            <p class="text-gray-600 mb-4">Locate open pharmacies and medical stores near you with
+                                real-time distance and directions.</p>
+                            <span class="text-blue-600 font-semibold flex items-center">Find Now <i
+                                    class="fas fa-arrow-right ml-2"></i></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-              <div
-                class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-orange-500"
-                onclick="showSection('diet')"
-              >
-                <div
-                  class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mb-6"
-                >
-                  <i class="fas fa-utensils text-3xl text-orange-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Diet Generator</h3>
-                <p class="text-gray-600 mb-4">
-                  Personalized nutrition plans based on local ingredients.
-                  AI-generated diet charts for diabetes, pregnancy, and more.
-                </p>
-                <span class="text-orange-600 font-semibold flex items-center"
-                  >Explore <i class="fas fa-arrow-right ml-2"></i
-                ></span>
-              </div>
 
-              <!-- AI Medicine AnalyzerCard -->
-              <div
-                class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-purple-500"
-                onclick="showSection('medicine-analyzer')"
-              >
-                <div
-                  class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6"
-                >
-                  <i class="fas fa-camera text-3xl text-purple-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">AI Medicine Analyzer</h3>
-                <p class="text-gray-600 mb-4">
-                  Upload a photo of your medicine to get detailed info on usage,
-                  dosage, and side effects instantly.
-                </p>
-                <span class="text-purple-600 font-semibold flex items-center"
-                  >Try Now <i class="fas fa-arrow-right ml-2"></i
-                ></span>
-              </div>
-
-              <!-- Pharmacy Finder Card -->
-              <div
-                class="feature-card bg-white rounded-2xl p-8 shadow-lg cursor-pointer border-t-4 border-blue-500"
-                onclick="showSection('pharmacy-finder')"
-              >
-                <div
-                  class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6"
-                >
-                  <i class="fas fa-map-marked-alt text-3xl text-blue-600"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Find Nearby Stores</h3>
-                <p class="text-gray-600 mb-4">
-                  Locate open pharmacies and medical stores near you with
-                  real-time distance and directions.
-                </p>
-                <span class="text-blue-600 font-semibold flex items-center"
-                  >Find Now <i class="fas fa-arrow-right ml-2"></i
-                ></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
         <!-- AI ASSISTANT SECTION -->
         <section id="ai-assistant" class="section hidden h-[calc(100dvh-64px)] flex flex-col">
@@ -531,6 +331,7 @@
                         </div>
                         <div>
                             <h2 class="font-bold">Dr.Sanjeevani (AI)</h2>
+                            <p id="network-status-indicator" class="text-[10px] opacity-80">⚪ Initializing...</p>
                         </div>
                     </div>
                     <div class="flex gap-2 items-center">
@@ -548,13 +349,28 @@
                             title="Voice Mode">
                             <i class="fas fa-microphone"></i>
                         </button>
-                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="flex-1 overflow-hidden flex flex-col max-w-4xl mx-auto w-full">
-                <div id="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-hidden bg-gray-50">
+                <!-- Download Status (Mobile/Offline App) -->
+                <div id="download-container" class="hidden bg-white border-b p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-bold text-gray-700">Offline AI Model</span>
+                        <span id="download-status-text" class="text-xs text-purple-600">Download required for offline use</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2 mb-3">
+                        <div id="download-progress" class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <button id="download-button" class="w-full py-2 bg-purple-600 text-white rounded-lg text-sm font-bold hover:bg-purple-700 transition">
+                        Download Offline Model (250MB)
+                    </button>
+                </div>
+
+                <div id="ai-interaction-container" class="flex-1 flex flex-col overflow-hidden">
+                    <!-- Chat Area -->
+                <div id="ai-response-area" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-hidden bg-gray-50">
                     <!-- Welcome Message -->
                     <div class="flex items-start space-x-3">
                         <div
@@ -605,10 +421,10 @@
                             class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition text-gray-600">
                             <i class="fas fa-microphone"></i>
                         </button>
-                        <input type="text" id="chatInput" placeholder="Type your health query..."
+                        <input type="text" id="ai-prompt-input" placeholder="Type your health query..."
                             class="flex-1 bg-gray-100 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                            onkeypress="if(event.key==='Enter') sendMessage()">
-                        <button onclick="sendMessage()"
+                            onkeypress="if(event.key==='Enter') handleAiRequest()">
+                        <button id="send-button" onclick="handleAiRequest()"
                             class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition text-white">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -617,13 +433,13 @@
                             <i class="fas fa-camera"></i>
                         </button>
                     </div>
-                </div>
+                </div> <!-- Close ai-interaction-container -->
             </div>
         </section>
 
         <!-- EMERGENCY SECTION -->
         <section id="emergency" class="section hidden">
-            <div class="bg-red-600 text-white py-8">
+            <div class="bg-red-600 text-white pt-4 pb-8">
                 <div class="max-w-7xl mx-auto px-4 text-center">
                     <h1 class="text-4xl font-bold mb-2"><i class="fas fa-ambulance mr-3"></i>Emergency Support</h1>
                     <p class="text-red-100">24/7 Emergency Assistance • One-Touch SOS • Hospital Locator</p>
@@ -724,7 +540,7 @@
 
         <!-- DASHBOARD SECTION -->
         <section id="dashboard" class="section hidden">
-            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-8">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white pt-4 pb-8">
                 <div class="max-w-7xl mx-auto px-4">
                     <h1 class="text-3xl font-bold mb-2">Health Dashboard</h1>
                     <p>Track your vital signs and health metrics</p>
@@ -845,40 +661,11 @@
                 </div>
             </div>
         </section>
-              <div
-                class="mt-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200"
-              >
-                <h4 class="font-bold text-yellow-800 mb-2">
-                  <i class="fas fa-exclamation-triangle mr-2"></i>First Aid
-                  Quick Guide
-                </h4>
-                <div class="space-y-2 text-sm text-yellow-700">
-                  <p>
-                    <strong>Heart Attack:</strong> Keep person calm, loosen
-                    clothing, give aspirin if available
-                  </p>
-                  <p>
-                    <strong>Bleeding:</strong> Apply direct pressure with clean
-                    cloth
-                  </p>
-                  <p>
-                    <strong>Choking:</strong> Perform Heimlich maneuver if
-                    trained
-                  </p>
-                  <p>
-                    <strong>Snake Bite:</strong> Keep victim still, immobilize
-                    limb, do not cut wound
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
         <!-- MEDICINE REMINDER SECTION -->
         <section id="medicine" class="section hidden">
-            <div class="bg-yellow-500 text-white py-8">
+            <div class="bg-yellow-500 text-white pt-4 pb-8">
                 <div class="max-w-7xl mx-auto px-4">
                     <h1 class="text-3xl font-bold mb-2"><i class="fas fa-pills mr-3"></i>Medicine Reminder</h1>
                     <p>Never miss a dose with smart medication tracking</p>
@@ -980,7 +767,7 @@
 
         <!-- DIET GENERATOR SECTION -->
         <section id="diet" class="section hidden">
-            <div class="bg-green-600 text-white py-8">
+            <div class="bg-green-600 text-white pt-4 pb-8">
                 <div class="max-w-7xl mx-auto px-4">
                     <h1 class="text-3xl font-bold mb-2"><i class="fas fa-utensils mr-3"></i>AI Diet Generator</h1>
                     <p>Personalized nutrition plans using local ingredients</p>
@@ -1079,7 +866,7 @@
 
         <!-- DOCTOR CONNECT SECTION -->
         <section id="doctor-connect" class="section hidden">
-            <div class="bg-blue-600 text-white py-8">
+            <div class="bg-blue-600 text-white pt-4 pb-8">
                 <div class="max-w-7xl mx-auto px-4">
                     <h1 class="text-3xl font-bold mb-2"><i class="fas fa-user-md mr-3"></i>Doctor Connect</h1>
                     <p>Consult with verified doctors via video, audio, or chat</p>
@@ -1206,7 +993,7 @@
         <!-- FAMILY DASHBOARD SECTION -->
         <section id="family" class="section hidden">
             <!-- Premium Header -->
-            <div class="relative overflow-hidden bg-pink-600 px-4 py-12 text-white">
+            <div class="relative overflow-hidden bg-pink-600 px-4 pt-4 pb-12 text-white">
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"
                     style="pointer-events: none;"></div>
                 <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-pink-400 blur-3xl opacity-20"
@@ -1486,7 +1273,7 @@
 
         <!-- REPORT ANALYZER SECTION -->
         <section id="report-analyzer" class="section hidden">
-            <div class="bg-indigo-600 text-white py-8">
+            <div class="bg-indigo-600 text-white pt-4 pb-8">
                 <div class="max-w-7xl mx-auto px-4">
                     <h1 class="text-3xl font-bold mb-2"><i class="fas fa-file-medical-alt mr-3"></i>Report Analyzer</h1>
                     <p>Upload medical reports for AI-powered analysis</p>
@@ -1554,7 +1341,6 @@
             </div>
         </section>
 
-    </div>
 
     <!-- PROFILE SECTION -->
     <div id="profilePanel"
@@ -1861,7 +1647,6 @@
                 </button>
             </div>
         </div>
-    </div>
 
     <!-- Voice Chat Modal -->
     <div id="voiceModal" class="fixed inset-0 bg-black/50 hidden z-[6000] flex items-center justify-center">
@@ -1982,11 +1767,12 @@
             </form>
         </div>
     </div>
+    </div>
 
     <!-- MEDASSIST HUB SECTION -->
     <section id="medassist" class="section hidden">
       <div
-        class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 text-white py-16 relative overflow-hidden"
+        class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 text-white pt-4 pb-16 relative overflow-hidden"
       >
         <div
           class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"
@@ -2334,6 +2120,9 @@
         </div>
       </div>
     </section>
+
+    </div>
+    </div>
 
     <!-- Footer -->
     <footer id="mainFooter" class="hidden bg-gray-900 text-white">
