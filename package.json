@@ -4,6 +4,7 @@
   "description": "AI-Powered Healthcare Website with Google Gemini Integration",
   "main": "api/chat.js",
   "scripts": {
+    "start": "echo 'Vercel deployment: No persistent server required.' && exit 0",
     "dev": "node server/index.js",
     "dev:local": "node server/index.js",
     "dev:vercel": "vercel dev",
