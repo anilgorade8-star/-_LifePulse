@@ -1079,13 +1079,24 @@ function takeMedicine(btn) {
 }
 
 function addMedicine() {
-  const name = prompt("Enter medicine name:");
-  if (name) {
-    const time = prompt("Enter time (e.g., 08:00):");
+  document.getElementById("medicineReminderModal").classList.remove("hidden");
+}
+
+function closeMedicineModal() {
+  document.getElementById("medicineReminderModal").classList.add("hidden");
+  document.getElementById("medicineForm").reset();
+}
+
+function saveMedicineFromModal() {
+  const name = document.getElementById("medicineNameInput").value;
+  const time = document.getElementById("medicineTimeInput").value;
+
+  if (name && time) {
     const list = document.getElementById("medicineList");
     const div = document.createElement("div");
     div.className =
       "medicine-card bg-gray-50 rounded-xl p-4 border-l-4 border-gray-400";
+    div.setAttribute("data-time", time); // Add data-time attribute for reminders
     div.innerHTML = `
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
@@ -1097,15 +1108,37 @@ function addMedicine() {
                         <span class="text-xs bg-gray-200 text-gray-800 px-2 py-1 rounded mt-1 inline-block">${time}</span>
                     </div>
                 </div>
-                <button onclick="takeMedicine(this)" class="w-12 h-12 rounded-full border-2 border-gray-400 hover:bg-gray-400 hover:text-white transition flex items-center justify-center text-gray-400">
-                    <i class="fas fa-check"></i>
-                </button>
+                <div class="flex items-center gap-2">
+                    <button onclick="deleteMedicine(this)" class="w-10 h-10 rounded-full border border-red-200 text-red-400 hover:bg-red-50 transition flex items-center justify-center">
+                        <i class="fas fa-trash-alt text-sm"></i>
+                    </button>
+                    <button onclick="takeMedicine(this)" class="w-12 h-12 rounded-full border-2 border-gray-400 hover:bg-gray-400 hover:text-white transition flex items-center justify-center text-gray-400">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
             </div>
         `;
     list.appendChild(div);
+    closeMedicineModal();
+    updateAdherenceChart();
+    showNotification("Medicine reminder added!", "success");
+  } else {
+    showNotification("Please enter both medicine name and time.", "error");
   }
 }
-
+function deleteMedicine(btn) {
+  showConfirmModal(
+    "Delete Reminder?",
+    "Are you sure you want to remove this medicine reminder?",
+    () => {
+      const card = btn.closest(".medicine-card");
+      if (card) {
+        card.remove();
+        showNotification("Medicine reminder deleted!", "success");
+      }
+    }
+  );
+}
 function checkMedicineReminders() {
   const now = new Date();
   const currentTime =
@@ -1116,16 +1149,12 @@ function checkMedicineReminders() {
   document.querySelectorAll(".medicine-card").forEach((card) => {
     const medTime = card.getAttribute("data-time");
     if (medTime === currentTime && !card.classList.contains("taken")) {
-      showNotification(
-        `Time to take your medicine: ${card.querySelector("h4").textContent}`,
-        "warning",
-      );
+      const medName = card.querySelector("h4").textContent;
+      showNotification(`Time to take your medicine: ${medName}`, "warning");
+
       // Play reminder sound
       if ("speechSynthesis" in window) {
-        const msg = new SpeechSynthesisUtterance(
-          "Medicine reminder: Time to take your " +
-          card.querySelector("h4").textContent,
-        );
+        const msg = new SpeechSynthesisUtterance(`Medicine reminder: Time to take your ${medName}`);
         window.speechSynthesis.speak(msg);
       }
     }
@@ -1412,80 +1441,114 @@ function saveMedicalInfo() {
 }
 
 function addEmergencyContact() {
-  const name = prompt('Enter contact name (e.g., "Mother - Sunita"):');
-  if (!name) return;
+  document.getElementById("contactModalTitle").textContent = "Add Emergency Contact";
+  document.getElementById("editContactId").value = "";
+  document.getElementById("contactForm").reset();
+  document.getElementById("emergencyContactModal").classList.remove("hidden");
+}
 
-  const phone = prompt("Enter phone number:");
-  if (!phone) return;
+function closeContactModal() {
+  document.getElementById("emergencyContactModal").classList.add("hidden");
+}
 
-  const contactId = emergencyContactIdCounter++;
-  const contactsList = document.getElementById("emergencyContactsList");
+function saveContactFromModal() {
+  const name = document.getElementById("contactNameInput").value;
+  const phone = document.getElementById("contactPhoneInput").value;
+  const editId = document.getElementById("editContactId").value;
 
-  const colors = [
-    "bg-red-50",
-    "bg-blue-50",
-    "bg-green-50",
-    "bg-yellow-50",
-    "bg-purple-50",
-  ];
-  const color = colors[Math.floor(Math.random() * colors.length)];
+  if (editId) {
+    // Editing existing contact
+    const contactDiv = document.querySelector(`.emergency-contact[data-id="${editId}"]`);
+    if (contactDiv) {
+      contactDiv.querySelector(".contact-name").textContent = name;
+      contactDiv.querySelector(".contact-phone").textContent = phone;
+      showNotification("Contact updated!", "success");
+    }
+  } else {
+    // Adding new contact
+    const contactId = emergencyContactIdCounter++;
+    const contactsList = document.getElementById("emergencyContactsList");
 
-  const div = document.createElement("div");
-  div.className = `flex items-center justify-between p-3 ${color} rounded-lg emergency-contact`;
-  div.setAttribute("data-id", contactId);
-  div.innerHTML = `
-        <div class="flex-1">
-            <p class="font-medium contact-name">${name}</p>
-            <p class="text-sm text-gray-600 contact-phone">${phone}</p>
-        </div>
-        <button onclick="editEmergencyContact(${contactId})" class="text-gray-500 hover:text-purple-600 mr-2">
-            <i class="fas fa-edit"></i>
-        </button>
-        <button onclick="deleteEmergencyContact(${contactId})" class="text-gray-500 hover:text-red-600">
-            <i class="fas fa-trash"></i>
-        </button>
-    `;
+    const colors = ["bg-red-50", "bg-blue-50", "bg-green-50", "bg-yellow-50", "bg-purple-50"];
+    const color = colors[Math.floor(Math.random() * colors.length)];
 
-  contactsList.appendChild(div);
+    const div = document.createElement("div");
+    div.className = `flex items-center justify-between p-3 ${color} rounded-lg emergency-contact`;
+    div.setAttribute("data-id", contactId);
+    div.innerHTML = `
+            <div class="flex-1">
+                <p class="font-medium contact-name">${name}</p>
+                <p class="text-sm text-gray-600 contact-phone">${phone}</p>
+            </div>
+            <button onclick="editEmergencyContact(${contactId})" class="text-gray-500 hover:text-purple-600 mr-2">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button onclick="deleteEmergencyContact(${contactId})" class="text-gray-500 hover:text-red-600">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+    contactsList.appendChild(div);
+    showNotification("Emergency contact added!", "success");
+  }
+
   saveEmergencyContacts();
-  showNotification("Emergency contact added!", "success");
+  closeContactModal();
 }
 
 function editEmergencyContact(contactId) {
-  const contactDiv = document.querySelector(
-    `.emergency-contact[data-id="${contactId}"]`,
-  );
+  const contactDiv = document.querySelector(`.emergency-contact[data-id="${contactId}"]`);
   if (!contactDiv) return;
 
-  const nameEl = contactDiv.querySelector(".contact-name");
-  const phoneEl = contactDiv.querySelector(".contact-phone");
+  const name = contactDiv.querySelector(".contact-name").textContent;
+  const phone = contactDiv.querySelector(".contact-phone").textContent;
 
-  const newName = prompt("Enter new name:", nameEl.textContent);
-  if (newName) {
-    nameEl.textContent = newName;
-  }
-
-  const newPhone = prompt("Enter new phone:", phoneEl.textContent);
-  if (newPhone) {
-    phoneEl.textContent = newPhone;
-  }
-
-  saveEmergencyContacts();
-  showNotification("Contact updated!", "success");
+  document.getElementById("contactModalTitle").textContent = "Edit Emergency Contact";
+  document.getElementById("editContactId").value = contactId;
+  document.getElementById("contactNameInput").value = name;
+  document.getElementById("contactPhoneInput").value = phone;
+  document.getElementById("emergencyContactModal").classList.remove("hidden");
 }
 
 function deleteEmergencyContact(contactId) {
-  if (!confirm("Are you sure you want to delete this contact?")) return;
-
-  const contactDiv = document.querySelector(
-    `.emergency-contact[data-id="${contactId}"]`,
+  showConfirmModal(
+    "Delete Contact?",
+    "Are you sure you want to remove this emergency contact?",
+    () => {
+      const contactDiv = document.querySelector(`.emergency-contact[data-id="${contactId}"]`);
+      if (contactDiv) {
+        contactDiv.remove();
+        saveEmergencyContacts();
+        showNotification("Contact deleted!", "success");
+      }
+    }
   );
-  if (contactDiv) {
-    contactDiv.remove();
-    saveEmergencyContacts();
-    showNotification("Contact deleted!", "success");
-  }
 }
+
+// Custom Confirmation Modal Logic
+let confirmCallback = null;
+
+function showConfirmModal(title, message, onConfirm) {
+  document.getElementById("confirmTitle").textContent = title;
+  document.getElementById("confirmMessage").textContent = message;
+  confirmCallback = onConfirm;
+  document.getElementById("confirmModal").classList.remove("hidden");
+}
+
+function closeConfirmModal() {
+  document.getElementById("confirmModal").classList.add("hidden");
+  confirmCallback = null;
+}
+
+// Attach listener to Yes button once
+document.addEventListener("DOMContentLoaded", () => {
+  const yesBtn = document.getElementById("confirmYesBtn");
+  if (yesBtn) {
+    yesBtn.addEventListener("click", () => {
+      if (confirmCallback) confirmCallback();
+      closeConfirmModal();
+    });
+  }
+});
 
 function saveEmergencyContacts() {
   const contacts = [];
@@ -1724,6 +1787,7 @@ function renderFamilyMember(member) {
   const card = document.createElement("div");
   card.className =
     "bg-white rounded-[2.5rem] p-6 shadow-xl hover:shadow-2xl transition-all border border-gray-100 group animate-card-entry";
+  card.setAttribute("data-id", member.id); // Add data-id for deletion
 
   card.innerHTML = `
         <div class="flex flex-col md:flex-row gap-6">
@@ -1775,11 +1839,34 @@ function renderFamilyMember(member) {
                         <div class="font-bold text-pink-600">Available</div>
                     </div>
                 </div>
+                <div class="flex justify-end mt-4">
+                    <button onclick="deleteFamilyMember(${member.id})" class="text-red-500 hover:text-red-700 text-sm font-medium">
+                        <i class="fas fa-trash mr-1"></i> Delete Member
+                    </button>
+                </div>
             </div>
         </div>
     `;
 
   list.appendChild(card);
+}
+
+function deleteFamilyMember(memberId) {
+  showConfirmModal(
+    "Delete Family Member?",
+    "Are you sure you want to remove this family member?",
+    () => {
+      let members = JSON.parse(localStorage.getItem("familyMembers") || "[]");
+      members = members.filter((member) => member.id !== memberId);
+      localStorage.setItem("familyMembers", JSON.stringify(members));
+
+      const memberCard = document.querySelector(`#familyMembersList > div[data-id="${memberId}"]`);
+      if (memberCard) {
+        memberCard.remove();
+        showNotification("Family member deleted!", "success");
+      }
+    }
+  );
 }
 
 function loadFamilyMembers() {
@@ -1788,14 +1875,18 @@ function loadFamilyMembers() {
 }
 
 async function handleLogout() {
-  if (confirm("Are you sure you want to logout?")) {
-    const { error } = await _supabase.auth.signOut();
-    if (error) {
-      showNotification("Error logging out: " + error.message, "error");
-    } else {
-      window.location.href = "auth.html";
+  showConfirmModal(
+    "Logout?",
+    "Are you sure you want to sign out of LifePulse?",
+    async () => {
+      const { error } = await _supabase.auth.signOut();
+      if (error) {
+        showNotification("Error logging out: " + error.message, "error");
+      } else {
+        window.location.href = "auth.html";
+      }
     }
-  }
+  );
 }
 
 // --- Capacitor Plugin Support ---
