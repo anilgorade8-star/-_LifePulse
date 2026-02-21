@@ -15,7 +15,96 @@ body {
 }
 
 #mainContainer {
-  padding-top: 0; /* Handled by body padding */
+  padding-top: 0;
+  /* Handled by body padding */
+}
+
+/* Navbar Highlighting & Hover Effects */
+.nav-btn {
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-btn:hover {
+  background: rgba(147, 51, 234, 0.05);
+  /* Very subtle purple tint */
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-nav {
+  color: #9333ea !important;
+  font-weight: 700 !important;
+  background: rgba(147, 51, 234, 0.08);
+  /* Slightly more visible pill for active */
+}
+
+/* Red special case for Emergency */
+.nav-btn[data-nav="emergency"]:hover {
+  background: rgba(239, 68, 68, 0.05);
+  color: #dc2626 !important;
+}
+
+.nav-btn[data-nav="emergency"].active-nav {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626 !important;
+}
+
+/* Centered Underline Expansion */
+.nav-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #9333ea;
+  border-radius: 99px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(-50%);
+}
+
+.nav-btn[data-nav="emergency"]::after {
+  background: #dc2626;
+}
+
+.nav-btn:hover::after,
+.nav-btn.active-nav::after {
+  width: calc(100% - 32px);
+  /* Matches padding */
+}
+
+/* Mobile Bottom Nav Highlighting */
+#mobileBottomNav button.active-nav {
+  color: #9333ea !important;
+}
+
+#mobileBottomNav button.active-nav i {
+  color: #9333ea;
+  transform: scale(1.1);
+}
+
+#mobileBottomNav button.active-nav span {
+  font-weight: 700;
+}
+
+/* Exception for AI button which is already special */
+#mobileBottomNav button[data-nav="ai-assistant"].active-nav div {
+  background: #7e22ce;
+  box-shadow: 0 0 15px rgba(147, 51, 234, 0.4);
+}
+
+@keyframes slide-in {
+  from {
+    width: 0;
+    left: 50%;
+  }
+
+  to {
+    width: 100%;
+    left: 0;
+  }
 }
 
 /* Mobile specific top margin for bezel clearance */
@@ -34,6 +123,7 @@ body {
   #mainContainer {
     padding-bottom: 80px;
   }
+
   /* Safe Flush Fill: Bridge the gap behind navbar without touching content */
   #mainContainer {
     padding-top: 0 !important;
@@ -49,7 +139,8 @@ body {
     left: 0;
     right: 0;
     height: calc(64px + env(safe-area-inset-top, 0px));
-    z-index: 1000; /* Behind navbar (2000) */
+    z-index: 1000;
+    /* Behind navbar (2000) */
     pointer-events: none;
   }
 
@@ -57,21 +148,27 @@ body {
   #home.active::before {
     background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
   }
+
   #medassist.active::before {
     background: linear-gradient(to bottom right, #4f46e5, #9333ea, #4f46e5);
   }
+
   #emergency.active::before {
     background: #dc2626;
   }
+
   #medicine-analyzer.active::before {
     background: #9333ea;
   }
+
   #pharmacy-finder.active::before {
     background: #2563eb;
   }
+
   #medicine.active::before {
     background: #eab308;
   }
+
   #diet.active::before {
     background: #16a34a;
   }
@@ -127,6 +224,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -136,12 +234,15 @@ body {
 .stagger-1 {
   animation-delay: 0.1s;
 }
+
 .stagger-2 {
   animation-delay: 0.2s;
 }
+
 .stagger-3 {
   animation-delay: 0.3s;
 }
+
 .stagger-4 {
   animation-delay: 0.4s;
 }
@@ -150,6 +251,7 @@ body {
 .bg-gradient-pink {
   background: linear-gradient(135deg, #ec4899 0%, #be185d 100%) !important;
 }
+
 .avatar-ring {
   padding: 3px;
   background: linear-gradient(45deg, #ec4899, #8b5cf6);
@@ -178,6 +280,7 @@ body {
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
@@ -196,6 +299,7 @@ body {
 .typing-indicator span:nth-child(2) {
   animation-delay: 0.2s;
 }
+
 .typing-indicator span:nth-child(3) {
   animation-delay: 0.4s;
 }
@@ -205,6 +309,7 @@ body {
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -228,6 +333,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -255,9 +361,11 @@ body {
   0% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
   }
+
   70% {
     box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
   }
@@ -289,6 +397,7 @@ body {
   0% {
     transform: translate(0, 0);
   }
+
   100% {
     transform: translate(50px, 50px);
   }
@@ -336,9 +445,11 @@ body {
   0% {
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
   }
+
   70% {
     box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
@@ -399,7 +510,8 @@ body {
 
 /* Fix for language selection dropdown options visibility */
 #aiLanguageSelect option {
-  color: #1f2937 !important; /* text-gray-800 */
+  color: #1f2937 !important;
+  /* text-gray-800 */
   background-color: white !important;
 }
 
@@ -438,9 +550,11 @@ body {
   100% {
     transform: scale(1);
   }
+
   25% {
     transform: scale(1.1);
   }
+
   35% {
     transform: scale(1.2);
   }
@@ -530,6 +644,7 @@ body {
     transform: translateY(0) scale(1.1);
     color: #9333ea;
   }
+
   50% {
     transform: translateY(-15px) scale(0.9);
     color: #c084fc;
@@ -583,8 +698,214 @@ input[type="range"]::-webkit-slider-thumb {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 1024px) {
-  #pharmacy-list {
-    height: 300px;
+@keyframes pulse-purple {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7);
+  }
+
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(147, 51, 234, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+  }
+}
+
+.listening-glow {
+  animation: pulse-purple 2s infinite !important;
+  background-color: #f3e8ff !important;
+}
+
+#voiceRecognizedText {
+  min-height: 4rem;
+  background: #f9fafb;
+  padding: 1.5rem;
+  font-style: italic;
+  color: #4b5563;
+  width: 100%;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  border: 1px dashed #e5e7eb;
+}
+
+/* --- Voice Assistant Animations --- */
+.voice-listening {
+  background-color: #ef4444 !important;
+  /* Red-500 */
+  color: white !important;
+  animation: voice-pulse 1.5s infinite;
+}
+
+@keyframes voice-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+/* --- Pregnancy Companion Styles --- */
+.preg-gradient-bg {
+  background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+}
+
+.preg-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.preg-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.preg-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+}
+
+.preg-metric-card {
+  background: #fdf2f8;
+  border-left: 4px solid #ec4899;
+}
+
+.preg-weekly-circle {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: conic-gradient(#ec4899 var(--preg-progress, 0%), #f3f4f6 0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preg-weekly-circle::before {
+  content: "";
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  background: white;
+  border-radius: 50%;
+}
+
+.preg-weekly-content {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.preg-progress-container {
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.preg-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #9333ea, #ec4899);
+  transition: width 0.5s ease;
+}
+
+/* Fetal Development Styles */
+.fetal-metric-box {
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+}
+
+.fetal-organ-bar {
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  margin-top: 4px;
+}
+
+.fetal-organ-progress {
+  height: 100%;
+  border-radius: 99px;
+}
+
+/* AI Floating Panel */
+#pregnancy-ai-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 350px;
+  max-width: calc(100vw - 40px);
+  height: 500px;
+  z-index: 5500; /* Higher than nav but lower than profile */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.2);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: bottom right;
+  animation: preg-panel-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes preg-panel-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+#pregnancy-ai-panel.hidden {
+  display: none;
+  opacity: 0;
+  transform: scale(0.9) translateY(10px);
+  pointer-events: none;
+}
+
+.preg-ai-header {
+  background: linear-gradient(135deg, #9333ea, #ec4899);
+  padding: 1.25rem;
+  color: white;
+}
+
+.preg-ai-chat {
+  flex: 1;
+  background: white;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.preg-ai-input {
+  background: white;
+  padding: 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+@media (max-width: 768px) {
+  #pregnancy-ai-panel {
+    bottom: 80px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    height: 80vh;
   }
 }

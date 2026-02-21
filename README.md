@@ -10,26 +10,29 @@ Affordable, offline-ready healthcare support designed for rural India, featuring
 
 ### Core Platform
 
-- **Consolidated Single-Page Application (SPA)** - Fast, responsive experience centered in `public/index.html`.
-- **Firebase Authentication** - Secure, role-based login (User/Doctor/Health Worker) with Google Sign-In support.
-- **Fixed Intelligent Navigation** - Persistent main navigation with a functional hamburger menu for secondary tools.
-- **Responsive Design** - Mobile-first, optimized for low-bandwidth rural environments.
+- **Brand-Focused Homepage** - Clean landing page with mission statement and platform overview
+- **Professional Login System** - Role-based authentication (User/Doctor/Health Worker)
+- **Fixed Navigation** - Main features + hamburger menu for secondary tools
+- **Responsive Design** - Mobile-first, optimized for low-bandwidth rural areas
 
 ### Main Features
 
-1. **🤖 AI Health Assistant** - 24/7 intelligent health guidance using Gemini 2.0 Flash API.
-2. **🚨 Emergency Help** - One-touch SOS button with hospital locator and sharing capabilities.
-3. **👨‍⚕️ Doctor Connect** - Browse and connect with verified medical professionals.
-4. **📊 Health Dashboard** - Track vital health metrics and family health trends.
+1. **🤖 AI Health Assistant** - 24/7 intelligent health guidance with symptom checker
+2. **🚨 Emergency Help** - One-touch SOS button with hospital locator
+3. **👨‍⚕️ Doctor Connect** - Online consultations with verified doctors
+4. **📊 Health Dashboard** - Track family health metrics and trends
 
 ### Additional Features (Hamburger Menu)
 
-- **Medicine Reminder**: Never miss a dose with scheduled alerts.
-- **Family Dashboard**: Manage health records for the whole family.
-- **Report Analyzer**: AI-powered analysis of medical lab reports.
-- **Diet Generator**: Personalized nutrition plans based on health data.
-- **Medicine Analyzer**: Photo-based extraction of medicine details.
-- **Pharmacy Finder**: Interactive map to locate nearby medical stores.
+- Medicine Reminder
+- Family Dashboard
+- Voice Assistant (Multi-language)
+- Report Analyzer
+- Diet Generator
+- Hospital Finder
+- **AI Medicine Analyzer** (New) - Photo-based medicine info extraction
+- **Pharmacy Finder** (New) - Locate nearby medical stores on map
+- Settings
 
 ---
 
@@ -37,17 +40,14 @@ Affordable, offline-ready healthcare support designed for rural India, featuring
 
 ### 1. Local Development (Vercel Dev)
 
-The recommended way to run LifePulse locally is using the Vercel CLI, which handles the frontend and serverless API functions simultaneously.
+The recommended way to run LifePulse locally is using the Vercel CLI, which handles both frontline and serverless functions correctly.
 
 ```bash
-# Install dependencies
-npm install
-
 # Run the complete environment
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Open [http://localhost:3000](http://localhost:3000) to view it.
 
 ### 2. Simple Static Server
 
@@ -55,30 +55,32 @@ If you only want to test the UI without AI features:
 
 ```bash
 # Using Python
-cd public
 python -m http.server 8000
 ```
 
----
+### 3. Legacy Local Server
+
+For testing the legacy Express backend:
+
+```bash
+npm run dev:local
+```
 
 ## 📂 Project Structure
 
-```
+```text
 LifePulse/
-├── api/                # Production Backend (Serverless Functions)
-│   ├── chat.js         # Gemini AI API Integration
-│   ├── nearby-hospitals.js # Hospital Locator API
-│   ├── analyze-medicine.js # Medicine Image Analysis
-│   └── ...             # Other feature-specific handlers
+├── api/                # Production Backend (Serverless)
+│   └── chat.js         # Gemini AI API Handler
 ├── public/             # Frontend Static Assets
-│   ├── index.html      # Main Application (Auth, UI Sections, Modals)
-│   ├── script.js       # Core Frontend Orchestrator & UI Logic
-│   ├── styles.css      # Custom Design System & Global Styles
-│   ├── firebase-auth.js # Authentication Logic
-│   └── firebase-config.js # Firebase Project Configuration
-├── vercel.json         # Deployment & Routing Configuration
-├── package.json        # Dependencies & NPM Scripts
-└── README.md           # Project Documentation
+│   ├── index.html      # Main Application UI
+│   ├── script.js       # Frontend Logic
+│   └── styles.css      # Custom Styles
+├── server/             # Legacy Backend (Local Dev Only)
+│   └── index.js        # Express Server
+├── vercel.json         # Deployment Configuration
+├── package.json        # Dependencies & Scripts
+└── VERCEL_DEPLOYMENT.md # Detailed Deployment Guide
 ```
 
 ---
@@ -87,15 +89,16 @@ LifePulse/
 
 ### Colors
 
-- **Primary Purple/Indigo**: `#9333ea` (Branding & Buttons)
-- **Secondary Blue**: `#2563eb` (Information & Trust)
-- **Emergency Red**: `#dc2626` (SOS & Alerts)
-- **Success Green**: `#10b981` (Confirmations & Health)
+- **Primary Blue**: `#4A90E2`
+- **Primary Green**: `#5CB85C`
+- **Gradient**: Blue → Green (135deg)
+- **Background**: Light blue → Light green gradient
 
 ### Typography
 
-- **Primary Font**: Modern Sans-Serif (Performance-optimized)
-- **Accessibility**: 18px base text for high readability.
+- **Font**: System fonts (performance-optimized)
+- **Base Size**: 18px (accessibility for elderly users)
+- **Headings**: Bold, clean hierarchy
 
 ### Components
 
@@ -108,28 +111,31 @@ LifePulse/
 
 ## 💻 Technology Stack
 
-- **Frontend**: HTML5, Vanilla CSS3, JavaScript (ES6+), Tailwind CSS (via CDN)
-- **Backend**: Vercel Serverless Functions (Node.js)
-- **AI**: Google Gemini 2.0 Flash API
-- **Auth**: Firebase Authentication
-- **Maps**: Leaflet.js
-- **Export**: html2pdf.js
+- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+)
+- **Architecture**: Multi-page application (MPA)
+- **Design**: Mobile-first responsive
+- **Accessibility**: WCAG AA compliant
+- **Performance**: Optimized for 3G networks
 
 ---
 
-## 🔐 Authentication
+## 🔐 Demo Authentication
 
-LifePulse uses Firebase for secure user management.
+For demonstration purposes, the login accepts any credentials:
 
-- **Roles**: User, Doctor, Health Worker.
-- **Persistence**: User session persists between reloads.
-- **Authorization**: Some dashboard features require being logged in.
+1. Go to `/login.html`
+2. Enter any email/phone and password
+3. Click "Sign In"
+4. Select your role (User/Doctor/Health Worker)
+5. Get redirected to dashboard
+
+**Production Note**: Replace with actual backend API integration.
 
 ---
 
 ## 🎯 Key Features Explained
 
-### 1. Homepage
+### 1. Homepage (index.html)
 
 - **NO feature sections** - Pure branding only
 - Animated medical icons floating in background
@@ -144,7 +150,7 @@ LifePulse uses Firebase for secure user management.
 - Fixed position with scroll effects
 - Mobile responsive hamburger collapse
 
-### 3. AI Assistant
+### 3. AI Assistant (pages/ai-assistant.html)
 
 - Interactive chat interface
 - Quick reply buttons
@@ -152,14 +158,14 @@ LifePulse uses Firebase for secure user management.
 - Keyword-based response system (demo)
 - Medical disclaimer
 
-### 4. Emergency Help
+### 4. Emergency Help (pages/emergency.html)
 
 - Large SOS button with pulse animation
 - Press & hold for 3 seconds to activate
 - Nearby hospitals list (demo data)
 - Emergency contact numbers (Ambulance: 108, etc.)
 
-### 5. Login System
+### 5. Login System (login.html)
 
 - Email/Phone + Password inputs
 - Password show/hide toggle
@@ -194,9 +200,9 @@ All layouts adapt smoothly across devices.
 
 ## 🌐 Browser Support
 
-- Chrome/Edge (latest)
-- Safari (latest)
-- Firefox (latest)
+- Chrome/Edge (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
 - Mobile browsers (iOS Safari, Chrome Mobile)
 
 ---
@@ -235,7 +241,7 @@ Affordable AI healthcare for rural India with 850M+ people lacking access.
 - ✅ **AI-powered** - Intelligent health guidance 24/7
 - ✅ **Accessible** - Multi-language, voice support, elderly-friendly
 - ✅ **Affordable** - No subscription, free basic features
-- ✅ **Scalable** - Cloud-based, handles millions of users
+- ✅ **Scalable** - Cloud-based, handles millions of userslvvsa
 
 ### Demo Strategy
 

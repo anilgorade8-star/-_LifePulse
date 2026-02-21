@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
   animateStats();
   initCharts();
   checkConnectivity();
+  initVoiceAssistant();
 
   // Heart rate simulation removed at user request to avoid fake data
 
@@ -144,6 +145,11 @@ function showSection(sectionId, updateHistory = true) {
     target.classList.add("active");
     window.scrollTo(0, 0);
 
+    // Initialize pregnancy section if active
+    if (sectionId === "pregnancy-companion" && window.initPregnancy) {
+      window.initPregnancy();
+    }
+
     // Update URL and History
     if (updateHistory) {
       try {
@@ -201,8 +207,71 @@ function showSection(sectionId, updateHistory = true) {
     if (sectionId === "dashboard") {
       updateDashboardCharts();
     }
+
+    // Initial highlight
+    setActiveNav();
   }
 }
+
+/**
+ * Route-aware navigation highlighting.
+ * Matches window.location.pathname and hash to the correct nav item.
+ */
+function setActiveNav() {
+  const pathname = window.location.pathname;
+  const hash = window.location.hash;
+
+  // Determine the primary active section
+  let activeSection = "";
+
+  if (hash && hash.length > 1) {
+    activeSection = hash.substring(1);
+  } else {
+    // Check path for specific pages (e.g., pharmacy.html)
+    const pageMatch = pathname.match(/\/([^\/.]+)(\.html)?$/);
+    if (pageMatch && pageMatch[1] !== "index") {
+      activeSection = pageMatch[1];
+    } else {
+      activeSection = "home";
+    }
+  }
+
+  // Remove active-nav from all links first
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.classList.remove("active-nav");
+
+    // Add active-nav if data-nav matches the determined active section
+    if (link.getAttribute("data-nav") === activeSection) {
+      link.classList.add("active-nav");
+    }
+  });
+}
+
+// Override History API to sync nav highlights
+const originalPushState = history.pushState;
+history.pushState = function () {
+  originalPushState.apply(this, arguments);
+  setActiveNav();
+};
+
+const originalReplaceState = history.replaceState;
+history.replaceState = function () {
+  originalReplaceState.apply(this, arguments);
+  setActiveNav();
+};
+
+// Global Listeners
+window.addEventListener("popstate", setActiveNav);
+document.addEventListener("DOMContentLoaded", () => {
+  setActiveNav();
+
+  // Attach delay-triggered highlight to all nav links (for manual navigations)
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      setTimeout(setActiveNav, 50);
+    });
+  });
+});
 
 // Handle Capacitor Back Button (Mobile)
 document.addEventListener("DOMContentLoaded", () => {
@@ -469,60 +538,34 @@ function getLocalizedWelcome(lang) {
   const welcomes = {
     en: "Namaste! I am Dr. Sanjeevani. How can I assist you with your health today?",
     hi: "नमस्ते! मैं डॉ. संजीवनी हूँ। आज मैं आपके स्वास्थ्य में कैसे सुधार कर सकती हूँ?",
-    ta: "வணக்கம்! நான் டாக்டர் சஞ்சீவனி. இன்று உங்கள் ஆரோக்கியத்திற்கு நான் எப்படி உதவ முடியும்?",
+    ta: "வணக்கம்! நான் டாக்டர் சஞ்சีவனி. இன்று உங்கள் ஆரோக்கியத்திற்கு நான் எப்படி உதவ முடியும்?",
     te: "నమస్తే! నేను డాక్టర్ సంజీవని. ఈరోజు మీ ఆరోగ్య విషయంలో నేను మీకు ఎలా సహాయపడగలను?",
     bn: "নমস্কার! আমি ডক্টর সঞ্জীবনী। আজ আমি আপনার স্বাস্থ্যের জন্য কীভাবে সাহায্য করতে পারি?",
-    mr: "नमस्ते! मी डॉ. संजीवनी आहे. आज मी तुमच्या आरोग्यासाठी कशी मदत करू शकते?",
+    mr: "नमस्ते! मी डॉ. संजीवनी आहे. आज मी તમારા आरोग्यासाठी कशी मदत करू शकते?",
+    gu: "નમસ્તે! હું ડૉ. સંજીવની છું. આજે હું તમારા સ્વાસ્થ્ય માટે તમને કેવી રીતે મદદ કરી શકું?",
+    kn: "ನಮಸ್ತೆ! ನಾನು ಡಾ. ಸಂಜೀವನಿ. ಇಂದು ನಿಮ್ಮ ಆರೋಗ್ಯಕ್ಕೆ ನಾನು ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ?",
+    ml: "നമസ്കാരം! ഞാൻ ഡോ. സഞ്ജീവനി. ഇന്ന് നിങ്ങളുടെ ആരോഗ്യത്തിനായി എനിക്ക് എങ്ങനെ സഹായിക്കാനാകും?",
+    pa: "ਨਮਸਤੇ! ਮੈਂ ਡਾ. ਸੰਜੀਵਨੀ ਹਾਂ। ਅੱਜ ਮੈਂ ਤੁਹਾਡੀ ਸਿਹਤ ਵਿੱਚ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦੀ ਹਾਂ?",
+    or: "ନମସ୍କାର! ମୁଁ ଡଃ ସଞ୍ଜୀବନୀ। ଆଜି ମୁଁ ଆପଣଙ୍କ ସ୍ୱାସ୍ଥ୍ୟ ପାଇଁ କିପରି ସାହାଯ୍ୟ କରିପାରିବି?",
   };
   return welcomes[lang] || welcomes["en"];
 }
 
-// Voice Functions
-function toggleVoiceInput() {
-  if (
-    !("webkitSpeechRecognition" in window) &&
-    !("SpeechRecognition" in window)
-  ) {
-    showNotification(
-      "Speech recognition is not supported in this browser.",
-      "error",
-    );
-    return;
-  }
-
-  const voiceModal = document.getElementById("voiceModal");
-  if (voiceModal) {
-    voiceModal.classList.remove("hidden");
-    startListening();
-  }
+// Utility to detect Hindi characters
+function isHindi(text) {
+  const hindiPattern = /[\u0900-\u097F]/;
+  return hindiPattern.test(text);
 }
 
+// --- Integrated Voice Assistant (Bilingual: Hindi/English) ---
 let recognition = null;
-let isStarting = false; // Tracks if voice recognition is in the process of starting
+let isVoiceActive = false;
+finalTranscript = "";
 
-function startListening() {
-  // If already listening or starting, abort the current instance first
-  if ((isListening || isStarting) && recognition) {
-    isIntentionalStop = true;
-    try {
-      recognition.abort();
-    } catch (e) {
-      console.warn("Error aborting previous recognition:", e);
-    }
-    isListening = false;
-    isStarting = false;
-  }
-
+function initVoiceAssistant() {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    showNotification(
-      "Speech recognition is not supported in this browser.",
-      "error",
-    );
-    closeVoiceModal();
-    return;
-  }
+  if (!SpeechRecognition) return;
 
   recognition = new SpeechRecognition();
 
@@ -534,72 +577,134 @@ function startListening() {
     te: "te-IN",
     bn: "bn-IN",
     mr: "mr-IN",
+    gu: "gu-IN",
+    kn: "kn-IN",
+    ml: "ml-IN",
+    pa: "pa-IN",
+    or: "or-IN",
   };
 
   recognition.lang = langMap[aiLanguage] || "en-IN";
-  recognition.interimResults = false;
+  recognition.interimResults = true;
+  recognition.continuous = true;
   recognition.maxAlternatives = 1;
 
   recognition.onstart = () => {
-    isListening = true;
-    isStarting = false;
+    isVoiceActive = true;
     isIntentionalStop = false;
+    const voiceBtn = document.getElementById("voice-btn");
+    const statusInd = document.getElementById("voice-status-indicator");
+    if (voiceBtn) voiceBtn.classList.add("voice-listening");
+    if (statusInd) statusInd.classList.remove("hidden");
     console.log("Speech recognition started");
   };
 
   recognition.onresult = (event) => {
-    const text = event.results[0][0].transcript;
-    const input = document.getElementById("ai-prompt-input");
-    if (input) {
-      input.value = text;
+    const inputField = document.getElementById("ai-prompt-input");
+    if (!inputField) return;
+
+    let interimTranscript = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        finalTranscript += transcript + " ";
+      } else {
+        interimTranscript += transcript;
+      }
     }
+
+    inputField.value = finalTranscript + interimTranscript;
+    inputField.scrollTop = inputField.scrollHeight;
   };
 
   recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-    isStarting = false;
-    isListening = false;
-
-    if (event.error !== "no-speech" && event.error !== "aborted") {
-      showNotification(`Voice Error: ${event.error}`, "error");
-    } else if (event.error === "aborted" && !isIntentionalStop) {
-      // Only show aborted if it wasn't triggered by our own logic
-      showNotification("Voice session interrupted.", "warning");
+    console.error("Voice Error:", event.error);
+    if (event.error === "no-speech" || event.error === "aborted") {
+      return; // Let onend handle the restart if not intentional
     }
-    closeVoiceModal();
+    if (event.error === "not-allowed") {
+      showNotification(
+        "Microphone access denied. Please enable it in browser settings.",
+        "error",
+      );
+    } else {
+      showNotification(`Voice Error: ${event.error}`, "error");
+    }
+    stopVoiceAssistant();
   };
 
   recognition.onend = () => {
-    isListening = false;
-    isStarting = false;
-    if (!isIntentionalStop) {
-      closeVoiceModal();
+    if (!isIntentionalStop && isVoiceActive) {
+      console.log("Auto-restarting speech recognition...");
+      try {
+        recognition.start();
+      } catch (e) {
+        console.error("Auto-restart failed:", e);
+        stopVoiceAssistant();
+      }
+    } else {
+      stopVoiceAssistant();
     }
   };
+}
 
-  try {
-    isStarting = true;
-    recognition.start();
-  } catch (e) {
-    console.error("Failed to start speech recognition:", e);
-    isStarting = false;
-    showNotification("Wait a moment before trying again.", "warning");
-    closeVoiceModal();
+function toggleVoiceInput() {
+  if (!recognition) initVoiceAssistant();
+  if (!recognition) {
+    showNotification("Voice input not supported on this browser.", "error");
+    return;
+  }
+
+  if (isVoiceActive) {
+    isIntentionalStop = true;
+    stopVoiceAssistant();
+    // Auto-send if there's text
+    const input = document.getElementById("ai-prompt-input");
+    if (input && input.value.trim().length > 0) {
+      handleAiRequest();
+    }
+  } else {
+    finalTranscript = "";
+    const input = document.getElementById("ai-prompt-input");
+    if (input) input.value = "";
+
+    // Update language settings before starting
+    const langMap = {
+      en: "en-IN",
+      hi: "hi-IN",
+      ta: "ta-IN",
+      te: "te-IN",
+      bn: "bn-IN",
+      mr: "mr-IN",
+      gu: "gu-IN",
+      kn: "kn-IN",
+      ml: "ml-IN",
+      pa: "pa-IN",
+      or: "or-IN",
+    };
+    recognition.lang = langMap[aiLanguage] || "en-IN";
+
+    try {
+      recognition.start();
+    } catch (e) {
+      console.error("Failed to start voice:", e);
+      // If it says already started, just sync UI
+      if (e.name === "InvalidStateError") {
+        isVoiceActive = true;
+      }
+    }
   }
 }
 
-function closeVoiceModal() {
-  if (isListening && recognition) {
-    isIntentionalStop = true;
+function stopVoiceAssistant() {
+  if (recognition && isVoiceActive) {
     recognition.stop();
   }
-  document.getElementById("voiceModal").classList.add("hidden");
-  isListening = false;
-}
-
-function processVoice() {
-  closeVoiceModal();
-  handleAiRequest();
+  isVoiceActive = false;
+  const voiceBtn = document.getElementById("voice-btn");
+  const statusInd = document.getElementById("voice-status-indicator");
+  if (voiceBtn) voiceBtn.classList.remove("voice-listening");
+  if (statusInd) statusInd.classList.add("hidden");
 }
 
 function speakResponse(element) {
@@ -626,15 +731,25 @@ function speakResponse(element) {
 
     // Map our language codes to speech synthesis locales
     const langMap = {
-      en: "en-IN",
+      en: "en-GB", // Female voice common in GB locale
       hi: "hi-IN",
       ta: "ta-IN",
       te: "te-IN",
       bn: "bn-IN",
       mr: "mr-IN",
+      gu: "gu-IN",
+      kn: "kn-IN",
+      ml: "ml-IN",
+      pa: "pa-IN",
+      or: "or-IN",
     };
 
-    utterance.lang = langMap[aiLanguage] || "en-IN";
+    // Auto-detect language if not explicitly set by aiLanguage
+    if (isHindi(text)) {
+      utterance.lang = "hi-IN";
+    } else {
+      utterance.lang = langMap[aiLanguage] || "en-IN";
+    }
     utterance.rate = 0.9;
 
     const voices = window.speechSynthesis.getVoices();
@@ -675,7 +790,18 @@ function speakResponse(element) {
 
     if (preferredVoice) {
       utterance.voice = preferredVoice;
+    } else if (utterance.lang === "en-GB") {
+      // Fallback for English to US female if GB not found
+      const usFemale = voices.find(
+        (v) =>
+          v.lang.startsWith("en-US") &&
+          femaleKeywords.some((kw) => v.name.toLowerCase().includes(kw)),
+      );
+      if (usFemale) utterance.voice = usFemale;
     }
+
+    utterance.pitch = 1.1; // Slightly higher pitch for a more pleasant female voice
+    utterance.rate = 0.95; // Slightly slower for clarity
 
     window.speechSynthesis.speak(utterance);
   };
@@ -2646,7 +2772,13 @@ async function handleAiRequest() {
 
       const data = await response.json();
       removeTypingIndicator();
-      addMessageToChat("ai", data.reply || data.response);
+      const reply = data.reply || data.response;
+      addMessageToChat("ai", reply);
+
+      // Auto-speak AI response
+      if (typeof speakResponse === "function") {
+        speakResponse(reply);
+      }
     } else {
       if (gemmaStatus === "ready") {
         console.log("Routing to Local Gemma (Offline)...");
@@ -2658,7 +2790,13 @@ async function handleAiRequest() {
           const { OfflineAi } = window.Capacitor.Plugins;
           const result = await OfflineAi.generateResponse({ prompt: prompt });
           removeTypingIndicator();
-          addMessageToChat("ai", result.response);
+          const reply = result.response;
+          addMessageToChat("ai", reply);
+
+          // Auto-speak AI response
+          if (typeof speakResponse === "function") {
+            speakResponse(reply);
+          }
         } else {
           throw new Error("OfflineAi plugin not available");
         }
@@ -2773,9 +2911,4 @@ async function saveProfileCompletion() {
         '<span>Complete Profile</span> <i class="fas fa-arrow-right text-sm"></i>';
     }
   }
-}
-
-// Map Helper
-function initMap() {
-  // Existing initMap...
 }
