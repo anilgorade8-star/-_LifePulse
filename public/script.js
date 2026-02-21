@@ -8,6 +8,8 @@ let pharmacyMap = null;
 let pharmacyMarkers = [];
 let heartRateInterval = null;
 let lastKnownLocation = null; // Stores {lat, lng, timestamp}
+let isListening = false; // Tracks if voice recognition is active
+let isIntentionalStop = false; // Tracks if stop was triggered by user
 
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
@@ -386,8 +388,36 @@ function updateAILanguage() {
     aiLanguage = select.value;
     currentLanguage = select.value; // Sync with voice language
     console.log("AI Language updated to:", aiLanguage);
+
+    // Update welcome message if chat is empty or contains the default welcome
+    const container = document.getElementById("ai-response-area");
+    if (container && (container.children.length <= 1)) {
+      container.innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-purple-600"></i>
+                </div>
+                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-md max-w-[80%]">
+                    <p class="text-gray-800">${getLocalizedWelcome(aiLanguage)}</p>
+                </div>
+            </div>
+        `;
+    }
+
     showNotification(`Sanjeevani will now speak in ${select.options[select.selectedIndex].text}`, "info");
   }
+}
+
+function getLocalizedWelcome(lang) {
+  const welcomes = {
+    'en': "Namaste! I am Dr. Sanjeevani. How can I assist you with your health today?",
+    'hi': "नमस्ते! मैं डॉ. संजीवनी हूँ। आज मैं आपके स्वास्थ्य में कैसे सुधार कर सकती हूँ?",
+    'ta': "வணக்கம்! நான் டாக்டர் சஞ்சீவனி. இன்று உங்கள் ஆரோக்கியத்திற்கு நான் எப்படி உதவ முடியும்?",
+    'te': "నమస్తే! నేను డాక్టర్ సంజీవని. ఈరోజు మీ ఆరోగ్య విషయంలో నేను మీకు ఎలా సహాయపడగలను?",
+    'bn': "নমস্কার! আমি ডক্টর সঞ্জীবনী। আজ আমি আপনার স্বাস্থ্যের জন্য কীভাবে সাহায্য করতে পারি?",
+    'mr': "नमस्ते! मी डॉ. संजीवनी आहे. आज मी तुमच्या आरोग्यासाठी कशी मदत करू शकते?"
+  };
+  return welcomes[lang] || welcomes['en'];
 }
 
 // Voice Functions
@@ -405,8 +435,28 @@ function toggleVoiceInput() {
 }
 
 let recognition = null;
+let isStarting = false; // Tracks if voice recognition is in the process of starting
+
 function startListening() {
+  // If already listening or starting, abort the current instance first
+  if ((isListening || isStarting) && recognition) {
+    isIntentionalStop = true;
+    try {
+      recognition.abort();
+    } catch (e) {
+      console.warn("Error aborting previous recognition:", e);
+    }
+    isListening = false;
+    isStarting = false;
+  }
+
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showNotification("Speech recognition is not supported in this browser.", "error");
+    closeVoiceModal();
+    return;
+  }
+
   recognition = new SpeechRecognition();
 
   // Map our language codes to recognition locales
@@ -423,6 +473,13 @@ function startListening() {
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
+  recognition.onstart = () => {
+    isListening = true;
+    isStarting = false;
+    isIntentionalStop = false;
+    console.log("Speech recognition started");
+  };
+
   recognition.onresult = (event) => {
     const text = event.results[0][0].transcript;
     const input = document.getElementById("ai-prompt-input");
@@ -433,21 +490,44 @@ function startListening() {
 
   recognition.onerror = (event) => {
     console.error("Speech recognition error:", event.error);
-    if (event.error !== 'no-speech') {
+    isStarting = false;
+    isListening = false;
+
+    if (event.error !== 'no-speech' && event.error !== 'aborted') {
       showNotification(`Voice Error: ${event.error}`, "error");
+    } else if (event.error === 'aborted' && !isIntentionalStop) {
+      // Only show aborted if it wasn't triggered by our own logic
+      showNotification("Voice session interrupted.", "warning");
     }
     closeVoiceModal();
   };
 
   recognition.onend = () => {
-    closeVoiceModal();
+    isListening = false;
+    isStarting = false;
+    if (!isIntentionalStop) {
+      closeVoiceModal();
+    }
   };
 
-  recognition.start();
+  try {
+    isStarting = true;
+    recognition.start();
+  } catch (e) {
+    console.error("Failed to start speech recognition:", e);
+    isStarting = false;
+    showNotification("Wait a moment before trying again.", "warning");
+    closeVoiceModal();
+  }
 }
 
 function closeVoiceModal() {
+  if (isListening && recognition) {
+    isIntentionalStop = true;
+    recognition.stop();
+  }
   document.getElementById("voiceModal").classList.add("hidden");
+  isListening = false;
 }
 
 function processVoice() {
@@ -474,44 +554,62 @@ function speakResponse(element) {
 
   if (!text) return;
 
-  const utterance = new SpeechSynthesisUtterance(text);
+  const performSpeak = () => {
+    const utterance = new SpeechSynthesisUtterance(text);
 
-  // Map our language codes to speech synthesis locales
-  const langMap = {
-    'en': 'en-IN',
-    'hi': 'hi-IN',
-    'ta': 'ta-IN',
-    'te': 'te-IN',
-    'bn': 'bn-IN',
-    'mr': 'mr-IN'
+    // Map our language codes to speech synthesis locales
+    const langMap = {
+      'en': 'en-IN',
+      'hi': 'hi-IN',
+      'ta': 'ta-IN',
+      'te': 'te-IN',
+      'bn': 'bn-IN',
+      'mr': 'mr-IN'
+    };
+
+    utterance.lang = langMap[aiLanguage] || 'en-IN';
+    utterance.rate = 0.9;
+
+    const voices = window.speechSynthesis.getVoices();
+
+    // 1. Try to find a highly specific female voice for the language
+    const femaleKeywords = ['female', 'samantha', 'zira', 'veena', 'priya', 'kalpana', 'shravani', 'lekha'];
+    let preferredVoice = voices.find(v =>
+      v.lang.replace('_', '-').startsWith(utterance.lang) &&
+      femaleKeywords.some(kw => v.name.toLowerCase().includes(kw))
+    );
+
+    // 2. Fallback: Try "Google" or "Natural" female-sounding voices for the language
+    if (!preferredVoice) {
+      preferredVoice = voices.find(v =>
+        v.lang.replace('_', '-').startsWith(utterance.lang) &&
+        (v.name.toLowerCase().includes('google') ||
+          v.name.toLowerCase().includes('natural'))
+      );
+    }
+
+    // 3. Fallback: Any voice for that language
+    if (!preferredVoice) {
+      preferredVoice = voices.find(v => v.lang.replace('_', '-').startsWith(utterance.lang));
+    }
+
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+
+    window.speechSynthesis.speak(utterance);
   };
 
-  utterance.lang = langMap[aiLanguage] || 'en-IN';
-  utterance.rate = 0.9;
-
-  // Find a suitable voice (prefer female)
-  const voices = window.speechSynthesis.getVoices();
-  let preferredVoice = voices.find(v =>
-    v.lang.startsWith(utterance.lang) &&
-    (v.name.toLowerCase().includes('female') ||
-      v.name.toLowerCase().includes('google') ||
-      v.name.toLowerCase().includes('natural') ||
-      v.name.toLowerCase().includes('samantha'))
-  );
-
-  // Fallback to any voice for that language
-  if (!preferredVoice) {
-    preferredVoice = voices.find(v => v.lang.startsWith(utterance.lang));
+  // If voices are empty, wait for them to load
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.addEventListener('voiceschanged', performSpeak, { once: true });
+  } else {
+    performSpeak();
   }
-
-  if (preferredVoice) {
-    utterance.voice = preferredVoice;
-  }
-
-  window.speechSynthesis.speak(utterance);
 }
 
 function startVoiceChat() {
+  showSection("ai-assistant");
   toggleVoiceInput();
 }
 

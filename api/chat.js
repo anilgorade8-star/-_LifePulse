@@ -89,7 +89,7 @@ module.exports = async function handler(req, res) {
     // Initialize Gemini API
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: "gemini-1.5-flash",
       generationConfig: {
         temperature: 0.7,
         topP: 0.95,
@@ -121,7 +121,7 @@ module.exports = async function handler(req, res) {
       history: [
         {
           role: "user",
-          parts: [{ text: langInstruction + SYSTEM_PROMPT }],
+          parts: [{ text: SYSTEM_PROMPT }],
         },
         {
           role: "model",
@@ -134,7 +134,10 @@ module.exports = async function handler(req, res) {
       ],
     });
 
-    const result = await chat.sendMessage(message);
+    // Inject language instruction into the actual message
+    const fullMessage = langInstruction + message;
+
+    const result = await chat.sendMessage(fullMessage);
     const response = await result.response;
     const text = response.text();
 
