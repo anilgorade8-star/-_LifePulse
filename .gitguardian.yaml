@@ -1,0 +1,29 @@
+# ============================================================
+# GitGuardian ggshield Configuration — LifePulse Project
+# ============================================================
+# This file configures the ggshield CLI scanner.
+# Install: pip install ggshield
+# Authenticate: ggshield auth login
+# Then the pre-commit hook runs it automatically on every commit.
+
+version: 2
+
+exit-zero: false          # Block commits when secrets are found (default)
+verbose: false
+
+# Files / paths to exclude from scanning
+ignore-paths:
+  - node_modules/
+  - .git/
+  - "*.log"
+  - test_results*.txt
+  - chat_test_results*.txt
+  - section_starts.txt
+  - sections.txt
+  - tags_map.txt
+  - .env.example           # example file — contains placeholder values only
+
+# Secret detector configuration
+secret:
+  show-secrets: false      # Never print the actual secret in CLI output
+  ignore-known-breakpoints: true

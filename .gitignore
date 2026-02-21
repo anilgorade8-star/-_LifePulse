@@ -1,7 +1,19 @@
-# Environment variables - NEVER commit this file!
+# =============================================
+# 🔐  SECRETS — NEVER commit these files!
+# =============================================
 .env
+.env.*
 .env.local
 .env.*.local
+*.pem
+*.key
+*.p12
+*service-account*.json
+*serviceAccount*.json
+firebase-adminsdk*.json
+
+# GitGuardian ggshield cache
+.cache/ggshield/
 
 # Dependencies
 node_modules/
