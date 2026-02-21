@@ -10,6 +10,7 @@ let heartRateInterval = null;
 let lastKnownLocation = null; // Stores {lat, lng, timestamp}
 let isListening = false; // Tracks if voice recognition is active
 let isIntentionalStop = false; // Tracks if stop was triggered by user
+let isProfileComplete = true; // Default to true, updated by auth observer
 
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
@@ -82,6 +83,16 @@ function checkConnectivity() {
 
 // Navigation
 function showSection(sectionId, updateHistory = true) {
+  // --- ROUTE GUARD ---
+  if (
+    !isProfileComplete &&
+    sectionId !== "complete-profile" &&
+    sectionId !== "home"
+  ) {
+    console.warn("Blocked navigation: User must complete profile");
+    sectionId = "complete-profile";
+  }
+
   // Hide all sections
   document.querySelectorAll(".section").forEach((section) => {
     section.classList.add("hidden");
@@ -391,7 +402,7 @@ function updateAILanguage() {
 
     // Update welcome message if chat is empty or contains the default welcome
     const container = document.getElementById("ai-response-area");
-    if (container && (container.children.length <= 1)) {
+    if (container && container.children.length <= 1) {
       container.innerHTML = `
             <div class="flex items-start space-x-3">
                 <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
@@ -404,26 +415,35 @@ function updateAILanguage() {
         `;
     }
 
-    showNotification(`Sanjeevani will now speak in ${select.options[select.selectedIndex].text}`, "info");
+    showNotification(
+      `Sanjeevani will now speak in ${select.options[select.selectedIndex].text}`,
+      "info",
+    );
   }
 }
 
 function getLocalizedWelcome(lang) {
   const welcomes = {
-    'en': "Namaste! I am Dr. Sanjeevani. How can I assist you with your health today?",
-    'hi': "नमस्ते! मैं डॉ. संजीवनी हूँ। आज मैं आपके स्वास्थ्य में कैसे सुधार कर सकती हूँ?",
-    'ta': "வணக்கம்! நான் டாக்டர் சஞ்சீவனி. இன்று உங்கள் ஆரோக்கியத்திற்கு நான் எப்படி உதவ முடியும்?",
-    'te': "నమస్తే! నేను డాక్టర్ సంజీవని. ఈరోజు మీ ఆరోగ్య విషయంలో నేను మీకు ఎలా సహాయపడగలను?",
-    'bn': "নমস্কার! আমি ডক্টর সঞ্জীবনী। আজ আমি আপনার স্বাস্থ্যের জন্য কীভাবে সাহায্য করতে পারি?",
-    'mr': "नमस्ते! मी डॉ. संजीवनी आहे. आज मी तुमच्या आरोग्यासाठी कशी मदत करू शकते?"
+    en: "Namaste! I am Dr. Sanjeevani. How can I assist you with your health today?",
+    hi: "नमस्ते! मैं डॉ. संजीवनी हूँ। आज मैं आपके स्वास्थ्य में कैसे सुधार कर सकती हूँ?",
+    ta: "வணக்கம்! நான் டாக்டர் சஞ்சீவனி. இன்று உங்கள் ஆரோக்கியத்திற்கு நான் எப்படி உதவ முடியும்?",
+    te: "నమస్తే! నేను డాక్టర్ సంజీవని. ఈరోజు మీ ఆరోగ్య విషయంలో నేను మీకు ఎలా సహాయపడగలను?",
+    bn: "নমস্কার! আমি ডক্টর সঞ্জীবনী। আজ আমি আপনার স্বাস্থ্যের জন্য কীভাবে সাহায্য করতে পারি?",
+    mr: "नमस्ते! मी डॉ. संजीवनी आहे. आज मी तुमच्या आरोग्यासाठी कशी मदत करू शकते?",
   };
-  return welcomes[lang] || welcomes['en'];
+  return welcomes[lang] || welcomes["en"];
 }
 
 // Voice Functions
 function toggleVoiceInput() {
-  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-    showNotification("Speech recognition is not supported in this browser.", "error");
+  if (
+    !("webkitSpeechRecognition" in window) &&
+    !("SpeechRecognition" in window)
+  ) {
+    showNotification(
+      "Speech recognition is not supported in this browser.",
+      "error",
+    );
     return;
   }
 
@@ -450,9 +470,13 @@ function startListening() {
     isStarting = false;
   }
 
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
-    showNotification("Speech recognition is not supported in this browser.", "error");
+    showNotification(
+      "Speech recognition is not supported in this browser.",
+      "error",
+    );
     closeVoiceModal();
     return;
   }
@@ -461,15 +485,15 @@ function startListening() {
 
   // Map our language codes to recognition locales
   const langMap = {
-    'en': 'en-IN',
-    'hi': 'hi-IN',
-    'ta': 'ta-IN',
-    'te': 'te-IN',
-    'bn': 'bn-IN',
-    'mr': 'mr-IN'
+    en: "en-IN",
+    hi: "hi-IN",
+    ta: "ta-IN",
+    te: "te-IN",
+    bn: "bn-IN",
+    mr: "mr-IN",
   };
 
-  recognition.lang = langMap[aiLanguage] || 'en-IN';
+  recognition.lang = langMap[aiLanguage] || "en-IN";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
@@ -493,9 +517,9 @@ function startListening() {
     isStarting = false;
     isListening = false;
 
-    if (event.error !== 'no-speech' && event.error !== 'aborted') {
+    if (event.error !== "no-speech" && event.error !== "aborted") {
       showNotification(`Voice Error: ${event.error}`, "error");
-    } else if (event.error === 'aborted' && !isIntentionalStop) {
+    } else if (event.error === "aborted" && !isIntentionalStop) {
       // Only show aborted if it wasn't triggered by our own logic
       showNotification("Voice session interrupted.", "warning");
     }
@@ -536,7 +560,7 @@ function processVoice() {
 }
 
 function speakResponse(element) {
-  if (!('speechSynthesis' in window)) {
+  if (!("speechSynthesis" in window)) {
     showNotification("Speech synthesis is not supported.", "error");
     return;
   }
@@ -546,7 +570,7 @@ function speakResponse(element) {
 
   // Handle both string and element input
   let text = "";
-  if (typeof element === 'string') {
+  if (typeof element === "string") {
     text = element.replace(/<[^>]*>/g, "");
   } else if (element && (element.innerText || element.textContent)) {
     text = element.innerText || element.textContent;
@@ -559,38 +583,51 @@ function speakResponse(element) {
 
     // Map our language codes to speech synthesis locales
     const langMap = {
-      'en': 'en-IN',
-      'hi': 'hi-IN',
-      'ta': 'ta-IN',
-      'te': 'te-IN',
-      'bn': 'bn-IN',
-      'mr': 'mr-IN'
+      en: "en-IN",
+      hi: "hi-IN",
+      ta: "ta-IN",
+      te: "te-IN",
+      bn: "bn-IN",
+      mr: "mr-IN",
     };
 
-    utterance.lang = langMap[aiLanguage] || 'en-IN';
+    utterance.lang = langMap[aiLanguage] || "en-IN";
     utterance.rate = 0.9;
 
     const voices = window.speechSynthesis.getVoices();
 
     // 1. Try to find a highly specific female voice for the language
-    const femaleKeywords = ['female', 'samantha', 'zira', 'veena', 'priya', 'kalpana', 'shravani', 'lekha'];
-    let preferredVoice = voices.find(v =>
-      v.lang.replace('_', '-').startsWith(utterance.lang) &&
-      femaleKeywords.some(kw => v.name.toLowerCase().includes(kw))
+    const femaleKeywords = [
+      "female",
+      "samantha",
+      "zira",
+      "veena",
+      "priya",
+      "kalpana",
+      "shravani",
+      "lekha",
+    ];
+    let preferredVoice = voices.find(
+      (v) =>
+        v.lang.replace("_", "-").startsWith(utterance.lang) &&
+        femaleKeywords.some((kw) => v.name.toLowerCase().includes(kw)),
     );
 
     // 2. Fallback: Try "Google" or "Natural" female-sounding voices for the language
     if (!preferredVoice) {
-      preferredVoice = voices.find(v =>
-        v.lang.replace('_', '-').startsWith(utterance.lang) &&
-        (v.name.toLowerCase().includes('google') ||
-          v.name.toLowerCase().includes('natural'))
+      preferredVoice = voices.find(
+        (v) =>
+          v.lang.replace("_", "-").startsWith(utterance.lang) &&
+          (v.name.toLowerCase().includes("google") ||
+            v.name.toLowerCase().includes("natural")),
       );
     }
 
     // 3. Fallback: Any voice for that language
     if (!preferredVoice) {
-      preferredVoice = voices.find(v => v.lang.replace('_', '-').startsWith(utterance.lang));
+      preferredVoice = voices.find((v) =>
+        v.lang.replace("_", "-").startsWith(utterance.lang),
+      );
     }
 
     if (preferredVoice) {
@@ -602,7 +639,9 @@ function speakResponse(element) {
 
   // If voices are empty, wait for them to load
   if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.addEventListener('voiceschanged', performSpeak, { once: true });
+    window.speechSynthesis.addEventListener("voiceschanged", performSpeak, {
+      once: true,
+    });
   } else {
     performSpeak();
   }
@@ -694,7 +733,9 @@ function triggerSOS() {
 
 function renderSOSContacts(locationLink, autoTrigger = false) {
   const container = document.getElementById("sosEmergencyContacts");
-  const contacts = JSON.parse(localStorage.getItem("emergencyContacts") || "[]");
+  const contacts = JSON.parse(
+    localStorage.getItem("emergencyContacts") || "[]",
+  );
 
   if (!container) return;
 
@@ -718,11 +759,17 @@ function renderSOSContacts(locationLink, autoTrigger = false) {
     const waLink = `https://wa.me/${primary.phone.replace(/\D/g, "")}?text=${encodedMsg}`;
 
     // 1. Try Capacitor Background SMS (Silent/Truly Automatic)
-    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.SMS) {
+    if (
+      window.Capacitor &&
+      window.Capacitor.Plugins &&
+      window.Capacitor.Plugins.SMS
+    ) {
       window.Capacitor.Plugins.SMS.send({
-        numbers: contacts.map(c => c.phone.replace(/\D/g, "")),
-        text: message
-      }).then(() => console.log("Background SMS sent")).catch(err => console.error(err));
+        numbers: contacts.map((c) => c.phone.replace(/\D/g, "")),
+        text: message,
+      })
+        .then(() => console.log("Background SMS sent"))
+        .catch((err) => console.error(err));
     } else {
       // Fallback: Automated SMS App opening (One-click)
       const smsLink = `sms:${primary.phone}?body=${encodedMsg}`;
@@ -1265,20 +1312,20 @@ async function fetchNearbyHospitals(lat, lng) {
                     <div class="text-xs text-gray-500 mb-1">${address}</div>
                     <div class="text-sm text-blue-600 font-medium"><i class="fas fa-route mr-1"></i>${distance} km</div>
                 </div>
-                ${phone !== "Not Available"
-          ? `
+                ${
+                  phone !== "Not Available"
+                    ? `
                 <a href="tel:${phone}" onclick="event.stopPropagation()" class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 shadow-md transform hover:scale-105 transition ml-2">
                     <i class="fas fa-phone"></i>
                 </a>`
-          : ""
-        }
+                    : ""
+                }
             `;
       hospitalList.appendChild(div);
     });
   } catch (error) {
     console.error("Error fetching hospitals:", error);
-    hospitalList.innerHTML =
-      `<div class="text-center p-4 text-red-500">
+    hospitalList.innerHTML = `<div class="text-center p-4 text-red-500">
         <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
         <p>Failed to load hospitals: ${error.message}</p>
         <button onclick="centerOnUser()" class="mt-2 text-blue-600 font-bold hover:underline">Retry Search</button>
@@ -1365,7 +1412,7 @@ function deleteMedicine(btn) {
         card.remove();
         showNotification("Medicine reminder deleted!", "success");
       }
-    }
+    },
   );
 }
 function checkMedicineReminders() {
@@ -1383,7 +1430,9 @@ function checkMedicineReminders() {
 
       // Play reminder sound
       if ("speechSynthesis" in window) {
-        const msg = new SpeechSynthesisUtterance(`Medicine reminder: Time to take your ${medName}`);
+        const msg = new SpeechSynthesisUtterance(
+          `Medicine reminder: Time to take your ${medName}`,
+        );
         window.speechSynthesis.speak(msg);
       }
     }
@@ -1670,7 +1719,8 @@ function saveMedicalInfo() {
 }
 
 function addEmergencyContact() {
-  document.getElementById("contactModalTitle").textContent = "Add Emergency Contact";
+  document.getElementById("contactModalTitle").textContent =
+    "Add Emergency Contact";
   document.getElementById("editContactId").value = "";
   document.getElementById("contactForm").reset();
   document.getElementById("emergencyContactModal").classList.remove("hidden");
@@ -1687,7 +1737,9 @@ function saveContactFromModal() {
 
   if (editId) {
     // Editing existing contact
-    const contactDiv = document.querySelector(`.emergency-contact[data-id="${editId}"]`);
+    const contactDiv = document.querySelector(
+      `.emergency-contact[data-id="${editId}"]`,
+    );
     if (contactDiv) {
       contactDiv.querySelector(".contact-name").textContent = name;
       contactDiv.querySelector(".contact-phone").textContent = phone;
@@ -1698,7 +1750,13 @@ function saveContactFromModal() {
     const contactId = emergencyContactIdCounter++;
     const contactsList = document.getElementById("emergencyContactsList");
 
-    const colors = ["bg-red-50", "bg-blue-50", "bg-green-50", "bg-yellow-50", "bg-purple-50"];
+    const colors = [
+      "bg-red-50",
+      "bg-blue-50",
+      "bg-green-50",
+      "bg-yellow-50",
+      "bg-purple-50",
+    ];
     const color = colors[Math.floor(Math.random() * colors.length)];
 
     const div = document.createElement("div");
@@ -1725,13 +1783,16 @@ function saveContactFromModal() {
 }
 
 function editEmergencyContact(contactId) {
-  const contactDiv = document.querySelector(`.emergency-contact[data-id="${contactId}"]`);
+  const contactDiv = document.querySelector(
+    `.emergency-contact[data-id="${contactId}"]`,
+  );
   if (!contactDiv) return;
 
   const name = contactDiv.querySelector(".contact-name").textContent;
   const phone = contactDiv.querySelector(".contact-phone").textContent;
 
-  document.getElementById("contactModalTitle").textContent = "Edit Emergency Contact";
+  document.getElementById("contactModalTitle").textContent =
+    "Edit Emergency Contact";
   document.getElementById("editContactId").value = contactId;
   document.getElementById("contactNameInput").value = name;
   document.getElementById("contactPhoneInput").value = phone;
@@ -1743,13 +1804,15 @@ function deleteEmergencyContact(contactId) {
     "Delete Contact?",
     "Are you sure you want to remove this emergency contact?",
     () => {
-      const contactDiv = document.querySelector(`.emergency-contact[data-id="${contactId}"]`);
+      const contactDiv = document.querySelector(
+        `.emergency-contact[data-id="${contactId}"]`,
+      );
       if (contactDiv) {
         contactDiv.remove();
         saveEmergencyContacts();
         showNotification("Contact deleted!", "success");
       }
-    }
+    },
   );
 }
 
@@ -2064,7 +2127,7 @@ function renderFamilyMember(member) {
                         <div class="font-bold text-gray-800">Active</div>
                     </div>
                     <div class="bg-gray-50 rounded-2xl p-3 border border-gray-100">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase">Consult</div>
+                        <div class="text-[10px] font-bold text-pink-600 uppercase">Consult</div>
                         <div class="font-bold text-pink-600">Available</div>
                     </div>
                 </div>
@@ -2089,12 +2152,14 @@ function deleteFamilyMember(memberId) {
       members = members.filter((member) => member.id !== memberId);
       localStorage.setItem("familyMembers", JSON.stringify(members));
 
-      const memberCard = document.querySelector(`#familyMembersList > div[data-id="${memberId}"]`);
+      const memberCard = document.querySelector(
+        `#familyMembersList > div[data-id="${memberId}"]`,
+      );
       if (memberCard) {
         memberCard.remove();
         showNotification("Family member deleted!", "success");
       }
-    }
+    },
   );
 }
 
@@ -2114,7 +2179,7 @@ async function handleLogout() {
       } else {
         window.location.href = "auth.html";
       }
-    }
+    },
   );
 }
 
@@ -2416,4 +2481,82 @@ async function handleAiRequest() {
 const sendBtn = document.getElementById("send-button");
 if (sendBtn) {
   sendBtn.addEventListener("click", handleAiRequest);
+}
+// Profile Completion
+async function saveProfileCompletion() {
+  const age = document.getElementById("cp-age").value;
+  const gender = document.getElementById("cp-gender").value;
+  const mobile = document.getElementById("cp-mobile").value;
+  const height = document.getElementById("cp-height").value;
+  const weight = document.getElementById("cp-weight").value;
+  const submitBtn = document.getElementById("cp-submit-btn");
+
+  // Validation
+  if (!age || !gender || !mobile || !height || !weight) {
+    showNotification("Please fill in all fields", "error");
+    return;
+  }
+
+  if (age < 1 || age > 120) {
+    showNotification("Please enter a valid age (1-120)", "error");
+    return;
+  }
+
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    showNotification("Please enter a valid 10-digit mobile number", "error");
+    return;
+  }
+
+  if (height < 50 || height > 250) {
+    showNotification("Please enter a realistic height (50-250 cm)", "error");
+    return;
+  }
+
+  if (weight < 2 || weight > 300) {
+    showNotification("Please enter a realistic weight (2-300 kg)", "error");
+    return;
+  }
+
+  try {
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    }
+
+    const profileData = {
+      age: parseInt(age),
+      gender: gender,
+      mobile: mobile,
+      height: parseInt(height),
+      weight: parseInt(weight),
+    };
+
+    // Call the global function from firebase-auth.js
+    if (window.saveProfileData) {
+      await window.saveProfileData(profileData);
+      showNotification("Profile completed successfully!", "success");
+
+      // Redirect to dashboard (this will be handled by the auth state observer, but we can trigger it)
+      setTimeout(() => {
+        showSection("dashboard");
+        // Reload to refresh UI states if needed, or rely on state observer
+        window.location.reload();
+      }, 1500);
+    } else {
+      throw new Error("Save function not initialized");
+    }
+  } catch (error) {
+    console.error("Error saving profile:", error);
+    showNotification("Failed to save profile: " + error.message, "error");
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML =
+        '<span>Complete Profile</span> <i class="fas fa-arrow-right text-sm"></i>';
+    }
+  }
+}
+
+// Map Helper
+function initMap() {
+  // Existing initMap...
 }
