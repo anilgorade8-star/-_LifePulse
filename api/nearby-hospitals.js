@@ -25,7 +25,9 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const query = `[out:json][timeout:25];(node["amenity"="hospital"](around:${radius},${lat},${lon});way["amenity"="hospital"](around:${radius},${lat},${lon});node["amenity"="clinic"](around:${radius},${lat},${lon});way["amenity"="clinic"](around:${radius},${lat},${lon}););out center;`;
+    const query = `[out:json][timeout:25];(node["amenity"="hospital"](around:${radius},${lat},${lon});way["amenity"="hospital"](around:${radius},${lat},${lon});node["healthcare"="hospital"](around:${radius},${lat},${lon});way["healthcare"="hospital"](around:${radius},${lat},${lon});node["amenity"="clinic"](around:${radius},${lat},${lon});way["amenity"="clinic"](around:${radius},${lat},${lon});node["amenity"="doctors"](around:${radius},${lat},${lon});way["amenity"="doctors"](around:${radius},${lat},${lon}););out center;`;
+
+    console.log("Hospital Query:", query);
 
     let response;
     try {

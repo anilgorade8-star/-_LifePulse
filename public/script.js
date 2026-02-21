@@ -7,6 +7,7 @@ let map = null;
 let pharmacyMap = null;
 let pharmacyMarkers = [];
 let heartRateInterval = null;
+let lastKnownLocation = null; // Stores {lat, lng, timestamp}
 
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
@@ -203,12 +204,18 @@ function addMessageToChat(sender, message) {
             </div>
         `;
   } else {
+    // Add speak button for AI responses
     div.innerHTML = `
             <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
                 <i class="fas fa-robot text-purple-600"></i>
             </div>
-            <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-md max-w-[80%]">
-                ${formattedMessage}
+            <div class="flex-1 space-y-2">
+                <div class="bg-white rounded-2xl rounded-tl-none p-4 shadow-md max-w-[90%] ai-reply-content">
+                    ${formattedMessage}
+                </div>
+                <button onclick="speakResponse(this.previousElementSibling)" class="text-xs font-bold text-purple-600 flex items-center gap-1 hover:text-purple-700 transition px-2 py-1 bg-purple-50 rounded-lg w-fit">
+                    <i class="fas fa-volume-up"></i> Listen to Sanjeevani
+                </button>
             </div>
         `;
   }
@@ -372,31 +379,71 @@ function clearChat() {
   }
 }
 
+// AI Language and Voice Functions
+function updateAILanguage() {
+  const select = document.getElementById("aiLanguageSelect");
+  if (select) {
+    aiLanguage = select.value;
+    currentLanguage = select.value; // Sync with voice language
+    console.log("AI Language updated to:", aiLanguage);
+    showNotification(`Sanjeevani will now speak in ${select.options[select.selectedIndex].text}`, "info");
+  }
+}
+
 // Voice Functions
 function toggleVoiceInput() {
-  document.getElementById("voiceModal").classList.remove("hidden");
-  // Start speech recognition
-  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = currentLanguage === "hi" ? "hi-IN" : "en-IN";
-    recognition.start();
-
-    recognition.onresult = function (event) {
-      const transcript = event.results[0][0].transcript;
-      const aiPromptInput = document.getElementById("ai-prompt-input");
-      if (aiPromptInput) {
-        aiPromptInput.value = transcript;
-      } else {
-        document.getElementById("chatInput").value = transcript;
-      }
-    };
-
-    recognition.onend = function () {
-      setTimeout(() => closeVoiceModal(), 1000);
-    };
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showNotification("Speech recognition is not supported in this browser.", "error");
+    return;
   }
+
+  const voiceModal = document.getElementById("voiceModal");
+  if (voiceModal) {
+    voiceModal.classList.remove("hidden");
+    startListening();
+  }
+}
+
+let recognition = null;
+function startListening() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+
+  // Map our language codes to recognition locales
+  const langMap = {
+    'en': 'en-IN',
+    'hi': 'hi-IN',
+    'ta': 'ta-IN',
+    'te': 'te-IN',
+    'bn': 'bn-IN',
+    'mr': 'mr-IN'
+  };
+
+  recognition.lang = langMap[aiLanguage] || 'en-IN';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onresult = (event) => {
+    const text = event.results[0][0].transcript;
+    const input = document.getElementById("ai-prompt-input");
+    if (input) {
+      input.value = text;
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    if (event.error !== 'no-speech') {
+      showNotification(`Voice Error: ${event.error}`, "error");
+    }
+    closeVoiceModal();
+  };
+
+  recognition.onend = () => {
+    closeVoiceModal();
+  };
+
+  recognition.start();
 }
 
 function closeVoiceModal() {
@@ -408,14 +455,60 @@ function processVoice() {
   handleAiRequest();
 }
 
-function speakResponse(text) {
-  if ("speechSynthesis" in window) {
-    const utterance = new SpeechSynthesisUtterance();
-    utterance.text = text.replace(/<[^>]*>/g, ""); // Remove HTML tags
-    utterance.lang = currentLanguage === "hi" ? "hi-IN" : "en-IN";
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
+function speakResponse(element) {
+  if (!('speechSynthesis' in window)) {
+    showNotification("Speech synthesis is not supported.", "error");
+    return;
   }
+
+  // Stop any current speaking
+  window.speechSynthesis.cancel();
+
+  // Handle both string and element input
+  let text = "";
+  if (typeof element === 'string') {
+    text = element.replace(/<[^>]*>/g, "");
+  } else if (element && (element.innerText || element.textContent)) {
+    text = element.innerText || element.textContent;
+  }
+
+  if (!text) return;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  // Map our language codes to speech synthesis locales
+  const langMap = {
+    'en': 'en-IN',
+    'hi': 'hi-IN',
+    'ta': 'ta-IN',
+    'te': 'te-IN',
+    'bn': 'bn-IN',
+    'mr': 'mr-IN'
+  };
+
+  utterance.lang = langMap[aiLanguage] || 'en-IN';
+  utterance.rate = 0.9;
+
+  // Find a suitable voice (prefer female)
+  const voices = window.speechSynthesis.getVoices();
+  let preferredVoice = voices.find(v =>
+    v.lang.startsWith(utterance.lang) &&
+    (v.name.toLowerCase().includes('female') ||
+      v.name.toLowerCase().includes('google') ||
+      v.name.toLowerCase().includes('natural') ||
+      v.name.toLowerCase().includes('samantha'))
+  );
+
+  // Fallback to any voice for that language
+  if (!preferredVoice) {
+    preferredVoice = voices.find(v => v.lang.startsWith(utterance.lang));
+  }
+
+  if (preferredVoice) {
+    utterance.voice = preferredVoice;
+  }
+
+  window.speechSynthesis.speak(utterance);
 }
 
 function startVoiceChat() {
@@ -436,45 +529,68 @@ function triggerSOS() {
     locationStatus.className = "text-yellow-600 font-bold";
   }
 
-  // Capture Location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        const locationLink = `https://www.google.com/maps?q=${lat},${lng}`;
+  const handleSuccess = (position) => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    lastKnownLocation = { lat, lng, timestamp: new Date().getTime() };
+    const locationLink = `https://www.google.com/maps?q=${lat},${lng}`;
 
-        if (locationStatus) {
-          locationStatus.textContent = "Active";
-          locationStatus.className = "text-green-600 font-bold";
-        }
-
-        renderSOSContacts(locationLink, true); // Added true for auto-trigger
-      },
-      (error) => {
-        console.error("SOS Geolocation error:", error);
-        let errorMsg = "Unavailable";
-        if (error.code === 1) errorMsg = "Permission Denied";
-        else if (error.code === 3) errorMsg = "Timeout";
-
-        if (locationStatus) {
-          locationStatus.textContent = errorMsg;
-          locationStatus.className = "text-red-500 font-bold";
-        }
-        renderSOSContacts(null, true);
-      },
-      {
-        timeout: 15000,
-        enableHighAccuracy: true,
-        maximumAge: 0
-      },
-    );
-  } else {
     if (locationStatus) {
-      locationStatus.textContent = "Not Supported";
+      locationStatus.textContent = "Active";
+      locationStatus.className = "text-green-600 font-bold";
+    }
+    renderSOSContacts(locationLink, true);
+  };
+
+  const handleFailure = (error) => {
+    console.error("SOS Geolocation error:", error);
+
+    if (lastKnownLocation) {
+      const { lat, lng, timestamp } = lastKnownLocation;
+      const ageSeconds = Math.round((new Date().getTime() - timestamp) / 1000);
+      let ageText =
+        ageSeconds < 60
+          ? `${ageSeconds}s ago`
+          : ageSeconds < 3600
+            ? `${Math.round(ageSeconds / 60)}m ago`
+            : `${Math.round(ageSeconds / 3600)}h ago`;
+
+      if (locationStatus) {
+        locationStatus.textContent = `Last known (${ageText})`;
+        locationStatus.className = "text-blue-600 font-bold text-sm text-right";
+      }
+      renderSOSContacts(`https://www.google.com/maps?q=${lat},${lng}`, true);
+      return;
+    }
+
+    let errorMsg = "Unavailable";
+    if (error.code === 1) errorMsg = "Permission Denied";
+    else if (error.code === 3) errorMsg = "Timeout";
+
+    if (locationStatus) {
+      locationStatus.textContent = errorMsg;
       locationStatus.className = "text-red-500 font-bold";
     }
     renderSOSContacts(null, true);
+  };
+
+  if (navigator.geolocation) {
+    // Attempt 1: High Accuracy (8s timeout)
+    navigator.geolocation.getCurrentPosition(
+      handleSuccess,
+      (err) => {
+        console.warn("High accuracy failed, trying coarse location...", err);
+        // Attempt 2: Coarse accuracy (more reliable)
+        navigator.geolocation.getCurrentPosition(handleSuccess, handleFailure, {
+          timeout: 10000,
+          enableHighAccuracy: false,
+          maximumAge: 60000,
+        });
+      },
+      { timeout: 8000, enableHighAccuracy: true, maximumAge: 0 },
+    );
+  } else {
+    handleFailure({ code: 0, message: "Not supported" });
   }
 }
 
@@ -499,7 +615,7 @@ function renderSOSContacts(locationLink, autoTrigger = false) {
   // Automate first contact notification if requested
   if (autoTrigger && contacts.length > 0) {
     const primary = contacts[0];
-    const message = `EMERGENCY! I need help. My current location is: ${locationLink || "Unavailable (check GPS/permissions)"}`;
+    const message = `EMERGENCY! I need help. My current location is: ${locationLink || "Unavailable (Please send your location manually!)"}`;
     const encodedMsg = encodeURIComponent(message);
     const waLink = `https://wa.me/${primary.phone.replace(/\D/g, "")}?text=${encodedMsg}`;
 
@@ -523,7 +639,7 @@ function renderSOSContacts(locationLink, autoTrigger = false) {
 
   container.innerHTML = contacts
     .map((contact) => {
-      const message = `EMERGENCY! I need help. My current location is: ${locationLink || "Unavailable"}`;
+      const message = `EMERGENCY! I need help. My current location is: ${locationLink || "Unavailable (Please send your location manually!)"}`;
       const encodedMsg = encodeURIComponent(message);
       const waLink = `https://wa.me/${contact.phone.replace(/\D/g, "")}?text=${encodedMsg}`;
       const smsLink = `sms:${contact.phone}?body=${encodedMsg}`;
@@ -762,6 +878,7 @@ function initPharmacyMap() {
         const lng = position.coords.longitude;
         const radius = document.getElementById("radius-range").value;
 
+        lastKnownLocation = { lat, lng, timestamp: new Date().getTime() };
         pharmacyMap.setView([lat, lng], 14);
 
         L.circle([lat, lng], {
@@ -923,6 +1040,7 @@ function initMap() {
           (position) => {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
+            lastKnownLocation = { lat, lng, timestamp: new Date().getTime() };
             map.setView([lat, lng], 14);
 
             const userIcon = L.divIcon({
@@ -974,13 +1092,22 @@ async function fetchNearbyHospitals(lat, lng) {
     const response = await fetch(
       `/api/nearby-hospitals?lat=${lat}&lon=${lng}&radius=5000`,
     );
+
+    if (!response.ok) {
+      throw new Error(`Server returned error ${response.status}`);
+    }
+
     const data = await response.json();
+
+    if (data.error) {
+      throw new Error(data.error);
+    }
 
     hospitalList.innerHTML = "";
 
     if (!data.hospitals || data.hospitals.length === 0) {
       hospitalList.innerHTML =
-        '<div class="text-center p-4 text-gray-500">No hospitals found nearby.</div>';
+        '<div class="text-center p-4 text-gray-500">No hospitals found within 5km. Try moving the map or checking later.</div>';
       return;
     }
 
@@ -1053,7 +1180,11 @@ async function fetchNearbyHospitals(lat, lng) {
   } catch (error) {
     console.error("Error fetching hospitals:", error);
     hospitalList.innerHTML =
-      '<div class="text-center p-4 text-red-500">Failed to load hospitals.</div>';
+      `<div class="text-center p-4 text-red-500">
+        <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
+        <p>Failed to load hospitals: ${error.message}</p>
+        <button onclick="centerOnUser()" class="mt-2 text-blue-600 font-bold hover:underline">Retry Search</button>
+      </div>`;
   }
 }
 
