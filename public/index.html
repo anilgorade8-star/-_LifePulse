@@ -1654,230 +1654,227 @@
                     </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Voice Chat Modal -->
-            <div id="voiceModal" class="fixed inset-0 bg-black/50 hidden z-[6000] flex items-center justify-center">
-                <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
-                    <div
-                        class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                        <i class="fas fa-microphone text-4xl text-purple-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Listening...</h3>
-                    <p class="text-gray-600 mb-6">Speak clearly in Hindi or English</p>
-                    <div class="flex justify-center gap-4">
-                        <button onclick="closeVoiceModal()"
-                            class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel</button>
-                        <button onclick="processVoice()"
-                            class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Done</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SOS Modal -->
-            <div id="sosModal" class="fixed inset-0 bg-red-600/90 hidden z-[6000] flex items-center justify-center">
-                <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
-                    <div
-                        class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                        <i class="fas fa-ambulance text-4xl text-red-600"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2 text-red-600">Emergency SOS Activated</h3>
-                    <p class="text-gray-600 mb-6">Calling 108... Notifying emergency contacts...</p>
-                    <div class="space-y-3 mb-6">
-                        <!-- Status Row: 108 -->
-                        <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
-                            <span class="flex items-center"><i class="fas fa-phone-alt text-green-500 mr-2"></i>108
-                                Ambulance</span>
-                            <span class="text-green-600 font-bold">Connecting...</span>
-                        </div>
-                        <!-- Status Row: Location -->
-                        <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
-                            <span class="flex items-center"><i
-                                    class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Location
-                                Shared</span>
-                            <span class="text-green-600 font-bold" id="sosLocationStatus">Detecting...</span>
-                        </div>
-                    </div>
-
-                    <!-- Emergency Contacts Notification Panel -->
-                    <div class="text-left mb-6">
-                        <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">Notify Family Members
-                        </h4>
-                        <div id="sosEmergencyContacts" class="space-y-2">
-                            <!-- Dynamic contacts will be injected here -->
-                            <p class="text-xs text-center text-gray-400 py-2">Loading contacts...</p>
-                        </div>
-                    </div>
-
-                    <button onclick="closeSOS()"
-                        class="w-full py-3 bg-gray-200 rounded-lg hover:bg-gray-300 font-bold text-gray-700">Cancel
-                        SOS</button>
-                </div>
-            </div>
-
-            <!-- Add Family Member Modal -->
-            <div id="addMemberModal"
-                class="fixed inset-0 bg-black/50 hidden z-[6000] flex items-center justify-center backdrop-blur-sm p-4 overflow-y-auto">
+        <!-- Voice Chat Modal -->
+        <div id="voiceModal" class="fixed inset-0 bg-black/50 hidden z-[6000] flex items-center justify-center">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
                 <div
-                    class="bg-white rounded-[2.5rem] p-8 max-w-lg w-full shadow-2xl animate-card-entry my-auto max-h-[95vh] overflow-y-auto custom-scrollbar">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-2xl font-black text-gray-800">Add Family Member</h3>
-                        <button onclick="closeAddMemberModal()" class="text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
+                    class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                    <i class="fas fa-microphone text-4xl text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Listening...</h3>
+                <p class="text-gray-600 mb-6">Speak clearly in Hindi or English</p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="closeVoiceModal()"
+                        class="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel</button>
+                    <button onclick="processVoice()"
+                        class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Done</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SOS Modal -->
+        <div id="sosModal" class="fixed inset-0 bg-red-600/90 hidden z-[6000] flex items-center justify-center">
+            <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+                <div
+                    class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                    <i class="fas fa-ambulance text-4xl text-red-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2 text-red-600">Emergency SOS Activated</h3>
+                <p class="text-gray-600 mb-6">Calling 108... Notifying emergency contacts...</p>
+                <div class="space-y-3 mb-6">
+                    <!-- Status Row: 108 -->
+                    <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
+                        <span class="flex items-center"><i class="fas fa-phone-alt text-green-500 mr-2"></i>108
+                            Ambulance</span>
+                        <span class="text-green-600 font-bold">Connecting...</span>
+                    </div>
+                    <!-- Status Row: Location -->
+                    <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
+                        <span class="flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Location
+                            Shared</span>
+                        <span class="text-green-600 font-bold" id="sosLocationStatus">Detecting...</span>
+                    </div>
+                </div>
+
+                <!-- Emergency Contacts Notification Panel -->
+                <div class="text-left mb-6">
+                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">Notify Family Members
+                    </h4>
+                    <div id="sosEmergencyContacts" class="space-y-2">
+                        <!-- Dynamic contacts will be injected here -->
+                        <p class="text-xs text-center text-gray-400 py-2">Loading contacts...</p>
+                    </div>
+                </div>
+
+                <button onclick="closeSOS()"
+                    class="w-full py-3 bg-gray-200 rounded-lg hover:bg-gray-300 font-bold text-gray-700">Cancel
+                    SOS</button>
+            </div>
+        </div>
+
+        <!-- Add Family Member Modal -->
+        <div id="addMemberModal"
+            class="fixed inset-0 bg-black/70 hidden z-[6000] flex items-center justify-center backdrop-blur-lg p-4 overflow-y-auto">
+            <div
+                class="bg-white rounded-[2.5rem] p-8 max-w-lg w-full shadow-2xl animate-card-entry my-auto max-h-[95vh] overflow-y-auto custom-scrollbar">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-black text-gray-800">Add Family Member</h3>
+                    <button onclick="closeAddMemberModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <form id="addMemberForm" onsubmit="event.preventDefault(); saveFamilyMember();" class="space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Full Name</label>
+                        <input type="text" id="memberFullNames" required
+                            class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1"
+                            placeholder="e.g. Rahul Mane">
                     </div>
 
-                    <form id="addMemberForm" onsubmit="event.preventDefault(); saveFamilyMember();" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Full Name</label>
-                            <input type="text" id="memberFullNames" required
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Age</label>
+                            <input type="number" id="memberAge" required
                                 class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1"
-                                placeholder="e.g. Rahul Mane">
+                                placeholder="30">
                         </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Age</label>
-                                <input type="number" id="memberAge" required
-                                    class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1"
-                                    placeholder="30">
-                            </div>
-                            <div>
-                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Gender</label>
-                                <select id="memberGender"
-                                    class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label
-                                    class="text-xs font-bold text-gray-400 uppercase tracking-widest">Relation</label>
-                                <input type="text" id="memberRelation" required
-                                    class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1"
-                                    placeholder="e.g. Mother">
-                            </div>
-                            <div>
-                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Blood
-                                    Group</label>
-                                <select id="memberBloodGroup"
-                                    class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1">
-                                    <option>A+</option>
-                                    <option>A-</option>
-                                    <option>B+</option>
-                                    <option>B-</option>
-                                    <option>O+</option>
-                                    <option>O-</option>
-                                    <option>AB+</option>
-                                    <option>AB-</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Health Condition
-                                (Optional)</label>
-                            <input type="text" id="memberCondition"
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Gender</label>
+                            <select id="memberGender"
+                                class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Relation</label>
+                            <input type="text" id="memberRelation" required
                                 class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1"
-                                placeholder="e.g. Hypertension">
+                                placeholder="e.g. Mother">
                         </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Blood
+                                Group</label>
+                            <select id="memberBloodGroup"
+                                class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1">
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                            </select>
+                        </div>
+                    </div>
 
-                        <button type="submit"
-                            class="w-full py-4 bg-gradient-pink text-white rounded-2xl font-bold shadow-lg shadow-pink-200 hover:shadow-pink-300 transition-all mt-4">
-                            Add Member
-                        </button>
-                    </form>
-                </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Health Condition
+                            (Optional)</label>
+                        <input type="text" id="memberCondition"
+                            class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-pink-500 focus:outline-none font-medium mt-1"
+                            placeholder="e.g. Hypertension">
+                    </div>
+
+                    <button type="submit"
+                        class="w-full py-4 bg-gradient-pink text-white rounded-2xl font-bold shadow-lg shadow-pink-200 hover:shadow-pink-300 transition-all mt-4">
+                        Add Member
+                    </button>
+                </form>
             </div>
+        </div>
 
-            <!-- Emergency Contact Modal -->
-            <div id="emergencyContactModal"
-                class="fixed inset-0 bg-black/50 hidden z-[6000] flex items-center justify-center backdrop-blur-sm p-4">
-                <div class="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-2xl animate-card-entry">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-2xl font-black text-gray-800" id="contactModalTitle">Add Emergency Contact</h3>
-                        <button onclick="closeContactModal()" class="text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
-                    </div>
-                    <form id="contactForm" onsubmit="event.preventDefault(); saveContactFromModal();" class="space-y-4">
-                        <input type="hidden" id="editContactId">
-                        <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Full Name /
-                                Relation</label>
-                            <input type="text" id="contactNameInput" required
-                                class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-red-500 focus:outline-none font-medium mt-1"
-                                placeholder="e.g. Mother - Sunita">
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Phone
-                                Number</label>
-                            <input type="tel" id="contactPhoneInput" required
-                                class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-red-500 focus:outline-none font-medium mt-1"
-                                placeholder="+91 98765 43210">
-                        </div>
-                        <button type="submit"
-                            class="w-full py-4 bg-red-600 text-white rounded-2xl font-bold shadow-lg shadow-red-100 hover:bg-red-700 transition-all mt-4">
-                            Save Contact
-                        </button>
-                    </form>
+        <!-- Emergency Contact Modal -->
+        <div id="emergencyContactModal"
+            class="fixed inset-0 bg-black/70 hidden z-[6000] flex items-center justify-center backdrop-blur-lg p-4">
+            <div class="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-2xl animate-card-entry">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-black text-gray-800" id="contactModalTitle">Add Emergency Contact</h3>
+                    <button onclick="closeContactModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
                 </div>
-            </div>
-
-            <!-- Medicine Reminder Modal -->
-            <div id="medicineReminderModal"
-                class="fixed inset-0 bg-black/50 hidden z-[6000] flex items-center justify-center backdrop-blur-sm p-4">
-                <div class="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-2xl animate-card-entry">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-2xl font-black text-gray-800">Add Medicine Reminder</h3>
-                        <button onclick="closeMedicineModal()" class="text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
+                <form id="contactForm" onsubmit="event.preventDefault(); saveContactFromModal();" class="space-y-4">
+                    <input type="hidden" id="editContactId">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Full Name /
+                            Relation</label>
+                        <input type="text" id="contactNameInput" required
+                            class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-red-500 focus:outline-none font-medium mt-1"
+                            placeholder="e.g. Mother - Sunita">
                     </div>
-                    <form id="medicineForm" onsubmit="event.preventDefault(); saveMedicineFromModal();"
-                        class="space-y-4">
-                        <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Medicine
-                                Name</label>
-                            <input type="text" id="medicineNameInput" required
-                                class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-purple-500 focus:outline-none font-medium mt-1"
-                                placeholder="e.g. Paracetamol">
-                        </div>
-                        <div>
-                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Time</label>
-                            <input type="time" id="medicineTimeInput" required
-                                class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-purple-500 focus:outline-none font-medium mt-1">
-                        </div>
-                        <button type="submit"
-                            class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold shadow-lg shadow-purple-100 hover:bg-purple-700 transition-all mt-4">
-                            Set Reminder
-                        </button>
-                    </form>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Phone
+                            Number</label>
+                        <input type="tel" id="contactPhoneInput" required
+                            class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-red-500 focus:outline-none font-medium mt-1"
+                            placeholder="+91 98765 43210">
+                    </div>
+                    <button type="submit"
+                        class="w-full py-4 bg-red-600 text-white rounded-2xl font-bold shadow-lg shadow-red-100 hover:bg-red-700 transition-all mt-4">
+                        Save Contact
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Medicine Reminder Modal -->
+        <div id="medicineReminderModal"
+            class="fixed inset-0 bg-black/70 hidden z-[6000] flex items-center justify-center backdrop-blur-lg p-4">
+            <div class="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-2xl animate-card-entry">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-black text-gray-800">Add Medicine Reminder</h3>
+                    <button onclick="closeMedicineModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
                 </div>
+                <form id="medicineForm" onsubmit="event.preventDefault(); saveMedicineFromModal();" class="space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Medicine
+                            Name</label>
+                        <input type="text" id="medicineNameInput" required
+                            class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-purple-500 focus:outline-none font-medium mt-1"
+                            placeholder="e.g. Paracetamol">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Time</label>
+                        <input type="time" id="medicineTimeInput" required
+                            class="w-full px-4 py-3 rounded-2xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-purple-500 focus:outline-none font-medium mt-1">
+                    </div>
+                    <button type="submit"
+                        class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold shadow-lg shadow-purple-100 hover:bg-purple-700 transition-all mt-4">
+                        Set Reminder
+                    </button>
+                </form>
             </div>
+        </div>
 
-            <!-- Generic Confirmation Modal -->
-            <div id="confirmModal"
-                class="fixed inset-0 bg-black/50 hidden z-[7000] flex items-center justify-center backdrop-blur-sm p-4">
-                <div class="bg-white rounded-[2.5rem] p-8 max-w-sm w-full shadow-2xl animate-card-entry text-center">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
-                    </div>
-                    <h3 class="text-xl font-black text-gray-800 mb-2" id="confirmTitle">Are you sure?</h3>
-                    <p class="text-gray-500 mb-6" id="confirmMessage">This action cannot be undone.</p>
-                    <div class="flex gap-3">
-                        <button onclick="closeConfirmModal()"
-                            class="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-all">
-                            Cancel
-                        </button>
-                        <button id="confirmYesBtn"
-                            class="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 transition-all">
-                            Yes, Delete
-                        </button>
-                    </div>
+        <!-- Generic Confirmation Modal -->
+        <div id="confirmModal"
+            class="fixed inset-0 bg-black/70 hidden z-[7000] flex items-center justify-center backdrop-blur-lg p-4">
+            <div class="bg-white rounded-[2.5rem] p-8 max-w-sm w-full shadow-2xl animate-card-entry text-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-xl font-black text-gray-800 mb-2" id="confirmTitle">Are you sure?</h3>
+                <p class="text-gray-500 mb-6" id="confirmMessage">This action cannot be undone.</p>
+                <div class="flex gap-3">
+                    <button onclick="closeConfirmModal()"
+                        class="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-all">
+                        Cancel
+                    </button>
+                    <button id="confirmYesBtn"
+                        class="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 transition-all">
+                        Yes, Delete
+                    </button>
                 </div>
             </div>
         </div>
