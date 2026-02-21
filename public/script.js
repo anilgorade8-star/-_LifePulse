@@ -38,16 +38,48 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Initialize visibility states (footer, nav buttons)
+  // Initialize visibility states based on URL hash
   try {
-    showSection("home", false);
+    const initialSection = window.location.hash.substring(1) || "home";
+    showSection(initialSection, false); // false = don't push new history entry on load
   } catch (e) {
     console.error("Error during initial showSection:", e);
-    // Force hide loader if navigation fails
     const loader = document.getElementById("loadingScreen");
     if (loader) loader.style.display = "none";
   }
+
+  // Seed initial state to enable gestures immediately
+  try {
+    const startHash = window.location.hash.substring(1) || "home";
+    if (history.state === null) {
+      history.replaceState(
+        { section: startHash },
+        "",
+        window.location.hash || "#" + startHash,
+      );
+    }
+  } catch (e) {
+    console.warn("History API restricted");
+  }
 });
+
+// Move listeners outside to ensure they are ready before any potential reloads
+const handleHistoryNav = () => {
+  const hashSection = window.location.hash.substring(1) || "home";
+  if (typeof showSection === "function") {
+    showSection(hashSection, false);
+  }
+};
+
+window.addEventListener("popstate", function (event) {
+  if (event.state && event.state.section) {
+    showSection(event.state.section, false);
+  } else {
+    handleHistoryNav();
+  }
+});
+
+window.addEventListener("hashchange", handleHistoryNav);
 
 function initApp() {
   // Check online status
@@ -80,7 +112,17 @@ function checkConnectivity() {
 // Navigation
 function showSection(sectionId, updateHistory = true) {
   // --- ROUTE GUARD ---
+  // 1. Guest Access Guard: Redirect unauthenticated users to home if they try to access any other feature
+  if (!window.isLoggedIn && sectionId !== "home") {
+    console.warn("Blocked navigation: User must login to access this feature");
+    showNotification("Please login to access this feature.", "info");
+    if (window.showAuthGate) window.showAuthGate();
+    sectionId = "home";
+  }
+
+  // 2. Profile Completion Guard: Ensure logged in users complete their profile
   if (
+    window.isLoggedIn &&
     !isProfileComplete &&
     sectionId !== "complete-profile" &&
     sectionId !== "home"
@@ -104,7 +146,12 @@ function showSection(sectionId, updateHistory = true) {
 
     // Update URL and History
     if (updateHistory) {
-      history.pushState({ section: sectionId }, "", "#" + sectionId);
+      try {
+        history.pushState({ section: sectionId }, "", "#" + sectionId);
+      } catch (e) {
+        // Fallback for file:// or restricted protocols
+        window.location.hash = sectionId;
+      }
     }
 
     // Handle Mobile Back Button visibility
@@ -1523,7 +1570,7 @@ function initCharts() {
         datasets: [
           {
             label: "Medicine Taken",
-            data: [2, 3, 2, 3, 3, 2, 3],
+            data: [0, 0, 0, 0, 0, 0, 0],
             backgroundColor: "rgba(234, 179, 8, 0.8)",
             borderRadius: 5,
           },
@@ -1549,13 +1596,13 @@ function updateDashboardCharts() {
         datasets: [
           {
             label: "Blood Sugar",
-            data: [110, 105, 120, 115, 110, 108, 112],
+            data: [0, 0, 0, 0, 0, 0, 0],
             borderColor: "rgb(147, 51, 234)",
             tension: 0.4,
           },
           {
             label: "Blood Pressure",
-            data: [120, 118, 122, 119, 121, 118, 120],
+            data: [0, 0, 0, 0, 0, 0, 0],
             borderColor: "rgb(59, 130, 246)",
             tension: 0.4,
           },
@@ -1628,8 +1675,18 @@ function showNotification(message, type = "info") {
 let emergencyContactIdCounter = 1; // Start from 1 for new users
 
 function toggleProfile() {
+  if (!window.isLoggedIn) {
+    if (window.showAuthGate) window.showAuthGate();
+    return;
+  }
+
   const panel = document.getElementById("profilePanel");
+  if (!panel) return;
   panel.classList.remove("translate-x-full");
+
+  // Only authenticated view needed now
+  const authView = document.getElementById("authenticatedProfileView");
+  if (authView) authView.style.display = "block";
 }
 
 function closeProfile() {
@@ -1908,9 +1965,15 @@ function saveEmergencyContacts() {
 }
 
 function loadEmergencyContacts() {
-  const contacts = JSON.parse(
-    localStorage.getItem("emergencyContacts") || "[]",
-  );
+  let contacts = JSON.parse(localStorage.getItem("emergencyContacts") || "[]");
+
+  // Clean up "Brother Raj" if he exists (default data removal)
+  const initialCount = contacts.length;
+  contacts = contacts.filter((c) => c.name !== "Brother Raj");
+  if (contacts.length !== initialCount) {
+    localStorage.setItem("emergencyContacts", JSON.stringify(contacts));
+  }
+
   const list = document.getElementById("emergencyContactsList");
   const noContactsText = document.getElementById("noContactsText");
   if (!list) return;
@@ -2693,9 +2756,9 @@ async function saveProfileCompletion() {
       await window.saveProfileData(profileData);
       showNotification("Profile completed successfully!", "success");
 
-      // Redirect to dashboard
+      // Redirect to home
       setTimeout(() => {
-        showSection("dashboard");
+        showSection("home");
         window.location.reload();
       }, 1500);
     } else {

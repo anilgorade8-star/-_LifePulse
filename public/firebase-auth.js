@@ -14,6 +14,9 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+window.isLoggedIn = false;
+window.isProfileComplete = false;
+
 const authGate = document.getElementById("auth-gate");
 const googleLoginBtn = document.getElementById("google-login");
 const logoutBtn = document.getElementById("logoutBtn");
@@ -23,6 +26,15 @@ const manualSignInBtn = document.getElementById("manual-signin");
 const manualSignUpBtn = document.getElementById("manual-signup");
 
 const provider = new GoogleAuthProvider();
+
+// --- AUTH UTILITIES ---
+window.showAuthGate = () => {
+  if (authGate) authGate.classList.remove("hidden");
+};
+
+window.hideAuthGate = () => {
+  if (authGate) authGate.classList.add("hidden");
+};
 
 // --- AUTH HANDLERS ---
 
@@ -156,12 +168,13 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     // --- PROFILE COMPLETION GATE ---
+    window.isLoggedIn = true;
     if (!userData.profileCompleted) {
       console.log("Profile incomplete, redirecting...");
       window.isProfileComplete = false;
 
       // Show only the complete-profile section
-      if (authGate) authGate.style.display = "none";
+      window.hideAuthGate();
       if (typeof window.showSection === "function") {
         window.showSection("complete-profile", false);
       }
@@ -184,7 +197,7 @@ onAuthStateChanged(auth, async (user) => {
     } else {
       // Profile is complete
       window.isProfileComplete = true;
-      if (authGate) authGate.style.display = "none";
+      window.hideAuthGate();
       if (logoutBtn) logoutBtn.style.display = "flex";
 
       // Restore navigation
@@ -201,8 +214,18 @@ onAuthStateChanged(auth, async (user) => {
         currentHash === "#home"
       ) {
         if (typeof window.showSection === "function") {
-          window.showSection("dashboard");
+          window.showSection("home");
         }
+      }
+
+      // Update Profile Views
+      const authView = document.getElementById("authenticatedProfileView");
+      if (authView) authView.style.display = "block";
+
+      // Re-trigger showSection to apply logged-in route guards
+      if (typeof window.showSection === "function") {
+        const hash = window.location.hash.substring(1) || "home";
+        window.showSection(hash, false);
       }
     }
 
@@ -287,14 +310,25 @@ onAuthStateChanged(auth, async (user) => {
       }
     }
   } else {
-    console.log("No User");
-    if (authGate) authGate.style.display = "flex";
+    console.log("No User - Guest Mode");
+    window.isLoggedIn = false;
+    window.isProfileComplete = false;
+    window.hideAuthGate();
     if (logoutBtn) logoutBtn.style.display = "none";
+
+    const authView = document.getElementById("authenticatedProfileView");
+    if (authView) authView.style.display = "none";
 
     const profilePanel = document.getElementById("profilePanel");
     if (profilePanel) profilePanel.classList.add("translate-x-full");
     const profileOverlay = document.getElementById("profileOverlay");
     if (profileOverlay) profileOverlay.classList.add("hidden");
+
+    // Re-trigger showSection to apply guest route guards
+    if (typeof window.showSection === "function") {
+      const hash = window.location.hash.substring(1) || "home";
+      window.showSection(hash, false);
+    }
   }
 });
 

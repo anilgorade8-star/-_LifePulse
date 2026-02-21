@@ -202,8 +202,12 @@
 
 <body class="bg-gray-50 text-gray-800">
     <!-- Firebase Auth Gate -->
-    <div id="auth-gate" class="auth-gate">
-        <div class="auth-card">
+    <div id="auth-gate" class="auth-gate hidden">
+        <div class="auth-card relative">
+            <!-- Close Button -->
+            <button onclick="hideAuthGate()" class="absolute top-6 right-6 w-10 h-10 bg-gray-50 text-gray-400 hover:text-gray-600 rounded-full flex items-center justify-center transition hover:bg-gray-100">
+                <i class="fas fa-times text-xl"></i>
+            </button>
             <div class="brand-icon">
                 <i class="fas fa-heartbeat"></i>
             </div>
@@ -1047,6 +1051,278 @@
         </section>
 
 
+
+        <!-- MEDASSIST HUB SECTION -->
+        <section id="medassist" class="section hidden">
+            <div
+                class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 text-white py-16 relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
+                </div>
+                <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+                    <h1 class="text-5xl font-black mb-4 tracking-tight">MedAssist</h1>
+                    <p class="text-purple-100 text-lg max-w-2xl mx-auto opacity-90">
+                        Smart Medicine Support – Your one-stop destination for medicine
+                        analysis and local pharmacy discovery.
+                    </p>
+                </div>
+                <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 -mt-12 pb-20 relative z-20">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Option 1: Medicine Analyzer -->
+                    <div onclick="showSection('medicine-analyzer')"
+                        class="group bg-white rounded-[2.5rem] p-10 shadow-2xl hover:shadow-purple-200/50 transition-all duration-500 cursor-pointer border border-gray-50 transform hover:-translate-y-2">
+                        <div
+                            class="w-20 h-20 bg-purple-100 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner">
+                            <i class="fas fa-camera text-4xl text-purple-600"></i>
+                        </div>
+                        <h2 class="text-3xl font-black text-gray-800 mb-3 group-hover:text-purple-600 transition">
+                            Medicine Analyzer
+                        </h2>
+                        <p class="text-gray-500 text-lg leading-relaxed mb-8">
+                            Use our AI-powered visual scanner to get instant details, dosage,
+                            and safety info from any medicine strip or bottle.
+                        </p>
+                        <div class="flex items-center text-purple-600 font-bold text-lg">
+                            Open Scanner
+                            <i class="fas fa-arrow-right ml-3 group-hover:translate-x-3 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <!-- Option 2: Nearby Pharmacy -->
+                    <div onclick="
+              showSection('pharmacy-finder');
+              initPharmacyMap();
+            " class="group bg-white rounded-[2.5rem] p-10 shadow-2xl hover:shadow-blue-200/50 transition-all duration-500 cursor-pointer border border-gray-50 transform hover:-translate-y-2">
+                        <div
+                            class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner">
+                            <i class="fas fa-map-location-dot text-4xl text-blue-600"></i>
+                        </div>
+                        <h2 class="text-3xl font-black text-gray-800 mb-3 group-hover:text-blue-600 transition">
+                            Nearby Pharmacy
+                        </h2>
+                        <p class="text-gray-500 text-lg leading-relaxed mb-8">
+                            Find verified medical stores and hospital medicine centers near
+                            your current location with real-time directions.
+                        </p>
+                        <div class="flex items-center text-blue-600 font-bold text-lg">
+                            Find Stores
+                            <i class="fas fa-arrow-right ml-3 group-hover:translate-x-3 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <!-- Option 3: Medicine Reminder -->
+                    <div onclick="showSection('medicine')"
+                        class="group bg-white rounded-[2.5rem] p-10 shadow-2xl hover:shadow-yellow-200/50 transition-all duration-500 cursor-pointer border border-gray-50 transform hover:-translate-y-2">
+                        <div
+                            class="w-20 h-20 bg-yellow-100 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner">
+                            <i class="fas fa-clock text-4xl text-yellow-600"></i>
+                        </div>
+                        <h2 class="text-3xl font-black text-gray-800 mb-3 group-hover:text-yellow-600 transition">
+                            Medicine Reminder
+                        </h2>
+                        <p class="text-gray-500 text-lg leading-relaxed mb-8">
+                            Never miss a dose! Set smart alerts for your medications, track
+                            your daily adherence, and get refill notifications.
+                        </p>
+                        <div class="flex items-center text-yellow-600 font-bold text-lg">
+                            Set Reminder
+                            <i class="fas fa-arrow-right ml-3 group-hover:translate-x-3 transition-transform"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro-Tip Banner -->
+                <div
+                    class="mt-12 bg-white/50 backdrop-blur-sm rounded-3xl p-6 border border-white/50 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-black text-yellow-600 uppercase tracking-widest">MedAssist Tip</span>
+                        <p class="text-gray-600 text-sm">
+                            Use the **Medicine Analyzer** first to identify your medicine,
+                            then set a **Reminder** to stay on track!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI MEDICINE ANALYZER SECTION -->
+        <section id="medicine-analyzer" class="section hidden">
+            <div class="bg-purple-600 text-white py-16 relative">
+                <button onclick="showSection('medassist')"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center hover:bg-white/30 transition shadow-lg"
+                    title="Back to MedAssist">
+                    <i class="fas fa-chevron-left text-white text-xl"></i>
+                </button>
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-3">
+                        <i class="fas fa-camera mr-3"></i>AI Medicine Analyzer
+                    </h1>
+                    <p class="text-purple-100 text-lg opacity-90">
+                        Upload a clear photo of medicine strips or bottles for instant
+                        AI-powered information.
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 py-8">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+                    <div class="p-8">
+                        <!-- Upload Area -->
+                        <div id="medicine-upload-area"
+                            class="border-4 border-dashed border-purple-100 rounded-3xl p-12 text-center hover:border-purple-300 transition-all cursor-pointer group"
+                            onclick="document.getElementById('medicine-file-input').click()">
+                            <input type="file" id="medicine-file-input" class="hidden" accept="image/*"
+                                onchange="previewMedicineImage(this)" />
+                            <div
+                                class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-purple-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">
+                                Drop Medicine Photo or Click to Upload
+                            </h3>
+                            <p class="text-gray-500">Supports JPG, PNG, and WebP</p>
+                        </div>
+
+                        <!-- Preview Area -->
+                        <div id="medicine-preview-container" class="hidden mt-8">
+                            <div class="relative max-w-sm mx-auto">
+                                <img id="medicine-preview" src="" class="rounded-2xl shadow-lg w-full" />
+                                <button onclick="resetMedicineUpload()"
+                                    class="absolute -top-3 -right-3 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="mt-8">
+                                <button id="analyze-btn" onclick="analyzeMedicine()"
+                                    class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-purple-700 transition flex items-center justify-center gap-3">
+                                    <i class="fas fa-magic"></i> Analyze Medicine
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="analyzer-loading" class="hidden mt-8 text-center p-12">
+                            <div class="loader-heartbeat text-purple-600 mb-4">
+                                <i class="fas fa-microscope text-5xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">
+                                Sanjeevani AI is Analyzing...
+                            </h3>
+                            <p class="text-gray-500 mt-2">
+                                Please wait while we extract detailed medical information.
+                            </p>
+                        </div>
+
+                        <!-- Results Area -->
+                        <div id="medicine-results" class="hidden mt-12 space-y-6">
+                            <!-- Result data will be injected here by JS -->
+                        </div>
+
+                        <!-- Disclaimer -->
+                        <div class="mt-12 p-4 bg-yellow-50 rounded-2xl border border-yellow-100 flex gap-4">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 text-xl mt-1"></i>
+                            <div class="text-sm text-yellow-800">
+                                <p class="font-bold mb-1">Medical Disclaimer</p>
+                                <p>
+                                    This information is AI-generated for educational purposes.
+                                    Never change your medication or start new treatment without
+                                    consulting a qualified doctor.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHARMACY FINDER SECTION -->
+        <section id="pharmacy-finder" class="section hidden">
+            <div class="bg-blue-600 text-white py-16 relative">
+                <button onclick="showSection('medassist')"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center hover:bg-white/30 transition shadow-lg"
+                    title="Back to MedAssist">
+                    <i class="fas fa-chevron-left text-white text-xl"></i>
+                </button>
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-3">
+                        <i class="fas fa-map-marker-alt mr-3"></i>Find Nearby Pharmacy
+                    </h1>
+                    <p class="text-blue-100 text-lg opacity-90">
+                        Locate open medical stores and pharmacies in your vicinity.
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Left Side controls and list -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="bg-white rounded-3xl shadow-lg p-6">
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-sliders-h mr-2 text-blue-500"></i>Search
+                                Filters
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">
+                                        Search Radius
+                                    </label>
+                                    <div class="flex items-center gap-4">
+                                        <input type="range" id="radius-range" min="1000" max="10000" step="500"
+                                            value="3000" class="flex-1 accent-blue-600" oninput="
+                        document.getElementById('radius-val').textContent =
+                          (this.value / 1000).toFixed(1) + ' km'
+                      " onchange="initPharmacyMap()" />
+                                        <span id="radius-val" class="text-sm font-bold text-blue-600 w-12">3.0 km</span>
+                                    </div>
+                                </div>
+                                <button onclick="initPharmacyMap()"
+                                    class="w-full py-3 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-100 transition flex items-center justify-center gap-2">
+                                    <i class="fas fa-sync-alt"></i> Refresh Search
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-3xl shadow-lg overflow-hidden flex flex-col h-[500px]">
+                            <div class="p-6 border-b border-gray-100">
+                                <h3 class="font-bold text-gray-800 flex items-center">
+                                    <i class="fas fa-list mr-2 text-blue-500"></i>Nearby Stores
+                                </h3>
+                            </div>
+                            <div id="pharmacy-list" class="flex-1 overflow-y-auto p-4 space-y-3">
+                                <div class="text-center p-12 text-gray-400">
+                                    <i class="fas fa-location-arrow text-4xl mb-4 opacity-20"></i>
+                                    <p>Enter your location to find nearby stores</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side Map -->
+                    <div class="lg:col-span-2">
+                        <div
+                            class="bg-white rounded-3xl shadow-xl overflow-hidden h-full min-h-[600px] border-8 border-white relative">
+                            <div id="pharmacy-map" class="h-full w-full"></div>
+                            <!-- Map Overlay Tools -->
+                            <div class="absolute bottom-6 left-6 z-[1000] flex gap-2">
+                                <button onclick="centerOnUser()"
+                                    class="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-blue-600 hover:bg-gray-50 transition"
+                                    title="My Location">
+                                    <i class="fas fa-crosshairs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- MEDICINE REMINDER SECTION -->
         <section id="medicine" class="section hidden">
             <div class="bg-yellow-500 text-white py-16">
@@ -1721,7 +1997,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
 
 
@@ -1736,26 +2011,27 @@
                 </button>
             </div>
 
-            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 -mt-20">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold">My Profile</h2>
-                </div>
-                <div class="text-center">
-                    <div class="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center relative">
-                        <i class="fas fa-user text-4xl text-purple-600" id="profileIcon"></i>
-                        <img id="profileImage" class="hidden w-full h-full rounded-full object-cover" alt="Profile">
-                        <button onclick="changeProfilePicture()"
-                            class="absolute bottom-0 right-0 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700">
-                            <i class="fas fa-camera text-xs"></i>
-                        </button>
+            <div id="authenticatedProfileView" class="hidden">
+                <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 -mt-20">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold">My Profile</h2>
                     </div>
-                    <h3 class="text-xl font-bold" id="profileNameDisplay">Add Name</h3>
-                    <p class="text-purple-100 text-sm" id="profileAgeGenderDisplay">Add Age • Add Gender</p>
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center relative">
+                            <i class="fas fa-user text-4xl text-purple-600" id="profileIcon"></i>
+                            <img id="profileImage" class="hidden w-full h-full rounded-full object-cover" alt="Profile">
+                            <button onclick="changeProfilePicture()"
+                                class="absolute bottom-0 right-0 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700">
+                                <i class="fas fa-camera text-xs"></i>
+                            </button>
+                        </div>
+                        <h3 class="text-xl font-bold" id="profileNameDisplay">Add Name</h3>
+                        <p class="text-purple-100 text-sm" id="profileAgeGenderDisplay">Add Age • Add Gender</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="p-6 space-y-6">
-                <!-- Personal Information -->
+                <div class="p-6 space-y-6">
+                    <!-- Personal Information -->
                 <div class="bg-white rounded-xl border-2 border-gray-100 p-4">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-bold text-lg flex items-center">
@@ -2005,8 +2281,9 @@
                         <i class="fas fa-sign-out-alt mr-2"></i>
                         Logout
                     </button>
-                </div>
-            </div>
+                </div> <!-- Inner p-6 closure -->
+            </div> <!-- authenticatedProfileView closure -->
+
         </div>
 
         <!-- Voice Chat Modal -->
@@ -2232,278 +2509,6 @@
             </div>
         </div>
 
-        <!-- MEDASSIST HUB SECTION -->
-        <section id="medassist" class="section hidden">
-            <div
-                class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 text-white py-16 relative overflow-hidden">
-                <div
-                    class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
-                </div>
-                <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
-                    <h1 class="text-5xl font-black mb-4 tracking-tight">MedAssist</h1>
-                    <p class="text-purple-100 text-lg max-w-2xl mx-auto opacity-90">
-                        Smart Medicine Support – Your one-stop destination for medicine
-                        analysis and local pharmacy discovery.
-                    </p>
-                </div>
-                <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-            </div>
-
-            <div class="max-w-7xl mx-auto px-4 -mt-12 pb-20 relative z-20">
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Option 1: Medicine Analyzer -->
-                    <div onclick="showSection('medicine-analyzer')"
-                        class="group bg-white rounded-[2.5rem] p-10 shadow-2xl hover:shadow-purple-200/50 transition-all duration-500 cursor-pointer border border-gray-50 transform hover:-translate-y-2">
-                        <div
-                            class="w-20 h-20 bg-purple-100 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner">
-                            <i class="fas fa-camera text-4xl text-purple-600"></i>
-                        </div>
-                        <h2 class="text-3xl font-black text-gray-800 mb-3 group-hover:text-purple-600 transition">
-                            Medicine Analyzer
-                        </h2>
-                        <p class="text-gray-500 text-lg leading-relaxed mb-8">
-                            Use our AI-powered visual scanner to get instant details, dosage,
-                            and safety info from any medicine strip or bottle.
-                        </p>
-                        <div class="flex items-center text-purple-600 font-bold text-lg">
-                            Open Scanner
-                            <i class="fas fa-arrow-right ml-3 group-hover:translate-x-3 transition-transform"></i>
-                        </div>
-                    </div>
-
-                    <!-- Option 2: Nearby Pharmacy -->
-                    <div onclick="
-              showSection('pharmacy-finder');
-              initPharmacyMap();
-            " class="group bg-white rounded-[2.5rem] p-10 shadow-2xl hover:shadow-blue-200/50 transition-all duration-500 cursor-pointer border border-gray-50 transform hover:-translate-y-2">
-                        <div
-                            class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner">
-                            <i class="fas fa-map-location-dot text-4xl text-blue-600"></i>
-                        </div>
-                        <h2 class="text-3xl font-black text-gray-800 mb-3 group-hover:text-blue-600 transition">
-                            Nearby Pharmacy
-                        </h2>
-                        <p class="text-gray-500 text-lg leading-relaxed mb-8">
-                            Find verified medical stores and hospital medicine centers near
-                            your current location with real-time directions.
-                        </p>
-                        <div class="flex items-center text-blue-600 font-bold text-lg">
-                            Find Stores
-                            <i class="fas fa-arrow-right ml-3 group-hover:translate-x-3 transition-transform"></i>
-                        </div>
-                    </div>
-
-                    <!-- Option 3: Medicine Reminder -->
-                    <div onclick="showSection('medicine')"
-                        class="group bg-white rounded-[2.5rem] p-10 shadow-2xl hover:shadow-yellow-200/50 transition-all duration-500 cursor-pointer border border-gray-50 transform hover:-translate-y-2">
-                        <div
-                            class="w-20 h-20 bg-yellow-100 rounded-3xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner">
-                            <i class="fas fa-clock text-4xl text-yellow-600"></i>
-                        </div>
-                        <h2 class="text-3xl font-black text-gray-800 mb-3 group-hover:text-yellow-600 transition">
-                            Medicine Reminder
-                        </h2>
-                        <p class="text-gray-500 text-lg leading-relaxed mb-8">
-                            Never miss a dose! Set smart alerts for your medications, track
-                            your daily adherence, and get refill notifications.
-                        </p>
-                        <div class="flex items-center text-yellow-600 font-bold text-lg">
-                            Set Reminder
-                            <i class="fas fa-arrow-right ml-3 group-hover:translate-x-3 transition-transform"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pro-Tip Banner -->
-                <div
-                    class="mt-12 bg-white/50 backdrop-blur-sm rounded-3xl p-6 border border-white/50 flex items-center gap-4">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <div>
-                        <span class="text-xs font-black text-yellow-600 uppercase tracking-widest">MedAssist Tip</span>
-                        <p class="text-gray-600 text-sm">
-                            Use the **Medicine Analyzer** first to identify your medicine,
-                            then set a **Reminder** to stay on track!
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI MEDICINE ANALYZER SECTION -->
-        <section id="medicine-analyzer" class="section hidden">
-            <div class="bg-purple-600 text-white py-16 relative">
-                <button onclick="showSection('medassist')"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center hover:bg-white/30 transition shadow-lg"
-                    title="Back to MedAssist">
-                    <i class="fas fa-chevron-left text-white text-xl"></i>
-                </button>
-                <div class="max-w-7xl mx-auto px-4 text-center">
-                    <h1 class="text-4xl font-bold mb-3">
-                        <i class="fas fa-camera mr-3"></i>AI Medicine Analyzer
-                    </h1>
-                    <p class="text-purple-100 text-lg opacity-90">
-                        Upload a clear photo of medicine strips or bottles for instant
-                        AI-powered information.
-                    </p>
-                </div>
-            </div>
-
-            <div class="max-w-4xl mx-auto px-4 py-8">
-                <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
-                    <div class="p-8">
-                        <!-- Upload Area -->
-                        <div id="medicine-upload-area"
-                            class="border-4 border-dashed border-purple-100 rounded-3xl p-12 text-center hover:border-purple-300 transition-all cursor-pointer group"
-                            onclick="document.getElementById('medicine-file-input').click()">
-                            <input type="file" id="medicine-file-input" class="hidden" accept="image/*"
-                                onchange="previewMedicineImage(this)" />
-                            <div
-                                class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-cloud-upload-alt text-4xl text-purple-600"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">
-                                Drop Medicine Photo or Click to Upload
-                            </h3>
-                            <p class="text-gray-500">Supports JPG, PNG, and WebP</p>
-                        </div>
-
-                        <!-- Preview Area -->
-                        <div id="medicine-preview-container" class="hidden mt-8">
-                            <div class="relative max-w-sm mx-auto">
-                                <img id="medicine-preview" src="" class="rounded-2xl shadow-lg w-full" />
-                                <button onclick="resetMedicineUpload()"
-                                    class="absolute -top-3 -right-3 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="mt-8">
-                                <button id="analyze-btn" onclick="analyzeMedicine()"
-                                    class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold text-lg shadow-lg hover:bg-purple-700 transition flex items-center justify-center gap-3">
-                                    <i class="fas fa-magic"></i> Analyze Medicine
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Loading State -->
-                        <div id="analyzer-loading" class="hidden mt-8 text-center p-12">
-                            <div class="loader-heartbeat text-purple-600 mb-4">
-                                <i class="fas fa-microscope text-5xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800">
-                                Sanjeevani AI is Analyzing...
-                            </h3>
-                            <p class="text-gray-500 mt-2">
-                                Please wait while we extract detailed medical information.
-                            </p>
-                        </div>
-
-                        <!-- Results Area -->
-                        <div id="medicine-results" class="hidden mt-12 space-y-6">
-                            <!-- Result data will be injected here by JS -->
-                        </div>
-
-                        <!-- Disclaimer -->
-                        <div class="mt-12 p-4 bg-yellow-50 rounded-2xl border border-yellow-100 flex gap-4">
-                            <i class="fas fa-exclamation-triangle text-yellow-500 text-xl mt-1"></i>
-                            <div class="text-sm text-yellow-800">
-                                <p class="font-bold mb-1">Medical Disclaimer</p>
-                                <p>
-                                    This information is AI-generated for educational purposes.
-                                    Never change your medication or start new treatment without
-                                    consulting a qualified doctor.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PHARMACY FINDER SECTION -->
-        <section id="pharmacy-finder" class="section hidden">
-            <div class="bg-blue-600 text-white py-16 relative">
-                <button onclick="showSection('medassist')"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center hover:bg-white/30 transition shadow-lg"
-                    title="Back to MedAssist">
-                    <i class="fas fa-chevron-left text-white text-xl"></i>
-                </button>
-                <div class="max-w-7xl mx-auto px-4 text-center">
-                    <h1 class="text-4xl font-bold mb-3">
-                        <i class="fas fa-map-marker-alt mr-3"></i>Find Nearby Pharmacy
-                    </h1>
-                    <p class="text-blue-100 text-lg opacity-90">
-                        Locate open medical stores and pharmacies in your vicinity.
-                    </p>
-                </div>
-            </div>
-
-            <div class="max-w-7xl mx-auto px-4 py-8">
-                <div class="grid lg:grid-cols-3 gap-8">
-                    <!-- Left Side controls and list -->
-                    <div class="lg:col-span-1 space-y-6">
-                        <div class="bg-white rounded-3xl shadow-lg p-6">
-                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                                <i class="fas fa-sliders-h mr-2 text-blue-500"></i>Search
-                                Filters
-                            </h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 block">
-                                        Search Radius
-                                    </label>
-                                    <div class="flex items-center gap-4">
-                                        <input type="range" id="radius-range" min="1000" max="10000" step="500"
-                                            value="3000" class="flex-1 accent-blue-600" oninput="
-                        document.getElementById('radius-val').textContent =
-                          (this.value / 1000).toFixed(1) + ' km'
-                      " onchange="initPharmacyMap()" />
-                                        <span id="radius-val" class="text-sm font-bold text-blue-600 w-12">3.0 km</span>
-                                    </div>
-                                </div>
-                                <button onclick="initPharmacyMap()"
-                                    class="w-full py-3 bg-blue-50 text-blue-600 rounded-xl font-bold hover:bg-blue-100 transition flex items-center justify-center gap-2">
-                                    <i class="fas fa-sync-alt"></i> Refresh Search
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-3xl shadow-lg overflow-hidden flex flex-col h-[500px]">
-                            <div class="p-6 border-b border-gray-100">
-                                <h3 class="font-bold text-gray-800 flex items-center">
-                                    <i class="fas fa-list mr-2 text-blue-500"></i>Nearby Stores
-                                </h3>
-                            </div>
-                            <div id="pharmacy-list" class="flex-1 overflow-y-auto p-4 space-y-3">
-                                <div class="text-center p-12 text-gray-400">
-                                    <i class="fas fa-location-arrow text-4xl mb-4 opacity-20"></i>
-                                    <p>Enter your location to find nearby stores</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Side Map -->
-                    <div class="lg:col-span-2">
-                        <div
-                            class="bg-white rounded-3xl shadow-xl overflow-hidden h-full min-h-[600px] border-8 border-white relative">
-                            <div id="pharmacy-map" class="h-full w-full"></div>
-                            <!-- Map Overlay Tools -->
-                            <div class="absolute bottom-6 left-6 z-[1000] flex gap-2">
-                                <button onclick="centerOnUser()"
-                                    class="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-blue-600 hover:bg-gray-50 transition"
-                                    title="My Location">
-                                    <i class="fas fa-crosshairs"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </div>
     </div>
 
     <!-- Footer -->
