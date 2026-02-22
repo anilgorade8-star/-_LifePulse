@@ -2470,18 +2470,14 @@
         <!-- PROFILE SECTION -->
         <div id="profilePanel"
             class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-[6000] overflow-y-auto">
-            <!-- Isolated Sticky Close Button -->
-            <div class="sticky top-0 z-[7000] flex justify-end p-6 pointer-events-none">
-                <button onclick="closeProfile()"
-                    class="pointer-events-auto w-10 h-10 bg-white/50 text-black rounded-full hover:bg-white/80 transition flex items-center justify-center backdrop-blur-sm shadow-sm">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
             <div id="authenticatedProfileView" class="hidden">
-                <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 -mt-20">
+                <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 pt-10">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-bold">My Profile</h2>
+                        <button onclick="closeProfile()"
+                            class="w-10 h-10 bg-white/20 text-white rounded-full hover:bg-white/30 transition flex items-center justify-center backdrop-blur-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                     <div class="text-center">
                         <div
@@ -2741,6 +2737,7 @@
                             <i class="fas fa-sign-out-alt mr-2"></i>
                             Logout
                         </button>
+                        <p class="text-center text-xs text-gray-400 mt-8 pb-2">   Made with ❤️ by Syphons!!</p>
                     </div> <!-- Inner p-6 closure -->
                 </div> <!-- authenticatedProfileView closure -->
 
@@ -2840,7 +2837,7 @@
                 <!-- Bottom Bar -->
                 <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
                     <p class="text-gray-400 text-sm mb-4 md:mb-0">
-                        © 2026 LifePulse. All rights reserved. | Making healthcare accessible for everyone.
+                        © 2026 LifePulse. All rights reserved. | Made with ❤️ by Team Syphons!!
                     </p>
                     <div class="flex space-x-6 text-sm">
                         <a href="#" class="text-gray-400 hover:text-purple-400 transition">Privacy Policy</a>
