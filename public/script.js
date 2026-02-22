@@ -15,9 +15,7 @@ let isProfileComplete = true; // Default to true, updated by auth observer
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
   initApp();
-  loadProfileData();
-  loadFamilyMembers();
-  loadEmergencyContacts();
+  loadProfileData(); // Initial render from localStorage (Firestore will overwrite once auth resolves)
   animateStats();
   initCharts();
   checkConnectivity();
@@ -1955,58 +1953,49 @@ function closeContactModal() {
   document.getElementById("emergencyContactModal").classList.add("hidden");
 }
 
-function saveContactFromModal() {
+async function saveContactFromModal() {
   const name = document.getElementById("contactNameInput").value;
   const phone = document.getElementById("contactPhoneInput").value;
   const editId = document.getElementById("editContactId").value;
 
-  if (editId) {
-    // Editing existing contact
-    const contactDiv = document.querySelector(
-      `.emergency-contact[data-id="${editId}"]`,
-    );
-    if (contactDiv) {
-      contactDiv.querySelector(".contact-name").textContent = name;
-      contactDiv.querySelector(".contact-phone").textContent = phone;
-      showNotification("Contact updated!", "success");
-    }
-  } else {
-    // Adding new contact
-    const contactId = emergencyContactIdCounter++;
-    const contactsList = document.getElementById("emergencyContactsList");
-    const noContactsText = document.getElementById("noContactsText");
-    if (noContactsText) noContactsText.classList.add("hidden");
-
-    const colors = [
-      "bg-red-50",
-      "bg-blue-50",
-      "bg-green-50",
-      "bg-yellow-50",
-      "bg-purple-50",
-    ];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-
-    const div = document.createElement("div");
-    div.className = `flex items-center justify-between p-3 ${color} rounded-lg emergency-contact`;
-    div.setAttribute("data-id", contactId);
-    div.innerHTML = `
-            <div class="flex-1">
-                <p class="font-medium contact-name">${name}</p>
-                <p class="text-sm text-gray-600 contact-phone">${phone}</p>
-            </div>
-            <button onclick="editEmergencyContact(${contactId})" class="text-gray-500 hover:text-purple-600 mr-2">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button onclick="deleteEmergencyContact(${contactId})" class="text-gray-500 hover:text-red-600">
-                <i class="fas fa-trash"></i>
-            </button>
-        `;
-    contactsList.appendChild(div);
-    showNotification("Emergency contact added!", "success");
+  if (!window.isLoggedIn || !window.auth.currentUser) {
+    showNotification("Please login to save contacts.", "warning");
+    return;
   }
 
-  saveEmergencyContacts();
-  closeContactModal();
+  if (!name || !phone) {
+    showNotification("Please fill in all fields.", "error");
+    return;
+  }
+
+  const user = window.auth.currentUser;
+  const contactData = {
+    name,
+    phone,
+    createdAt: window.serverTimestamp(),
+  };
+
+  try {
+    if (editId) {
+      // Editing existing contact in Firestore
+      await window.updateDoc(
+        window.doc(window.db, "users", user.uid, "emergencyContacts", editId),
+        { name, phone },
+      );
+      showNotification("Contact updated!", "success");
+    } else {
+      // Adding new contact to Firestore
+      await window.addDoc(
+        window.collection(window.db, "users", user.uid, "emergencyContacts"),
+        contactData,
+      );
+      showNotification("Contact added!", "success");
+    }
+    closeContactModal();
+  } catch (error) {
+    console.error("Error saving contact: ", error);
+    showNotification("Failed to save contact.", "error");
+  }
 }
 
 function editEmergencyContact(contactId) {
@@ -2024,35 +2013,6 @@ function editEmergencyContact(contactId) {
   document.getElementById("contactNameInput").value = name;
   document.getElementById("contactPhoneInput").value = phone;
   document.getElementById("emergencyContactModal").classList.remove("hidden");
-}
-
-function deleteEmergencyContact(contactId) {
-  showConfirmModal(
-    "Delete Contact?",
-    "Are you sure you want to remove this emergency contact?",
-    () => {
-      const contactDiv = document.querySelector(
-        `.emergency-contact[data-id="${contactId}"]`,
-      );
-      if (contactDiv) {
-        contactDiv.remove();
-        saveEmergencyContacts();
-
-        // Show placeholder if no contacts left
-        const list = document.getElementById("emergencyContactsList");
-        const noContactsText = document.getElementById("noContactsText");
-        if (
-          list &&
-          noContactsText &&
-          list.querySelectorAll(".emergency-contact").length === 0
-        ) {
-          noContactsText.classList.remove("hidden");
-        }
-
-        showNotification("Contact deleted!", "success");
-      }
-    },
-  );
 }
 
 // Custom Confirmation Modal Logic
@@ -2081,53 +2041,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function saveEmergencyContacts() {
-  const contacts = [];
-  document.querySelectorAll(".emergency-contact").forEach((contact) => {
-    const id = contact.getAttribute("data-id");
-    const name = contact.querySelector(".contact-name").textContent;
-    const phone = contact.querySelector(".contact-phone").textContent;
-    contacts.push({ id, name, phone });
-  });
-  localStorage.setItem("emergencyContacts", JSON.stringify(contacts));
-}
+let emergencyUnsubscribe = null;
 
 function loadEmergencyContacts() {
-  let contacts = JSON.parse(localStorage.getItem("emergencyContacts") || "[]");
-
-  // Clean up default data if they exist
-  const initialCount = contacts.length;
-  contacts = contacts.filter(
-    (c) =>
-      c.name !== "Brother Raj" &&
-      c.name.toLowerCase() !== "anil" &&
-      c.name.toLowerCase() !== "anil mane",
-  );
-  if (contacts.length !== initialCount) {
-    localStorage.setItem("emergencyContacts", JSON.stringify(contacts));
-  }
-
+  if (!window.isLoggedIn || !window.auth.currentUser) return;
+  const user = window.auth.currentUser;
   const list = document.getElementById("emergencyContactsList");
   const noContactsText = document.getElementById("noContactsText");
+
   if (!list) return;
 
-  // Clear previous entries except placeholder
-  const existingContacts = list.querySelectorAll(".emergency-contact");
-  existingContacts.forEach((c) => c.remove());
+  // Unsubscribe from previous listener if exists
+  if (emergencyUnsubscribe) emergencyUnsubscribe();
 
-  if (contacts.length > 0) {
-    if (noContactsText) noContactsText.classList.add("hidden");
-    contacts.forEach((contact) => {
-      renderEmergencyContact(contact);
-      // Update ID counter
-      const idNum = parseInt(contact.id);
-      if (idNum >= emergencyContactIdCounter) {
-        emergencyContactIdCounter = idNum + 1;
+  const q = window.query(
+    window.collection(window.db, "users", user.uid, "emergencyContacts"),
+    window.orderBy("createdAt", "desc"),
+  );
+
+  emergencyUnsubscribe = window.onSnapshot(
+    q,
+    (snapshot) => {
+      // Clear previous entries except placeholder
+      const existingContacts = list.querySelectorAll(".emergency-contact");
+      existingContacts.forEach((c) => c.remove());
+
+      if (snapshot.empty) {
+        if (noContactsText) noContactsText.classList.remove("hidden");
+        return;
       }
-    });
-  } else {
-    if (noContactsText) noContactsText.classList.remove("hidden");
-  }
+
+      if (noContactsText) noContactsText.classList.add("hidden");
+      snapshot.forEach((doc) => {
+        const contact = { id: doc.id, ...doc.data() };
+        renderEmergencyContact(contact);
+      });
+    },
+    (error) => {
+      console.error("Error loading emergency contacts: ", error);
+    },
+  );
 }
 
 function renderEmergencyContact(contact) {
@@ -2515,6 +2468,33 @@ function renderFamilyMember(member) {
   list.appendChild(card);
 }
 
+async function deleteEmergencyContact(contactId) {
+  if (!window.isLoggedIn || !window.auth.currentUser) return;
+  const user = window.auth.currentUser;
+
+  showConfirmModal(
+    "Delete Contact?",
+    "Are you sure you want to remove this emergency contact?",
+    async () => {
+      try {
+        await window.deleteDoc(
+          window.doc(
+            window.db,
+            "users",
+            user.uid,
+            "emergencyContacts",
+            contactId,
+          ),
+        );
+        showNotification("Contact removed", "success");
+      } catch (error) {
+        console.error("Error deleting contact: ", error);
+        showNotification("Failed to delete contact", "error");
+      }
+    },
+  );
+}
+
 function deleteFamilyMember(memberId) {
   if (!window.isLoggedIn || !window.auth.currentUser) return;
   const user = window.auth.currentUser;
@@ -2591,11 +2571,10 @@ async function handleLogout() {
     "Logout?",
     "Are you sure you want to sign out of LifePulse?",
     async () => {
-      const { error } = await _supabase.auth.signOut();
-      if (error) {
-        showNotification("Error logging out: " + error.message, "error");
+      if (window.firebaseLogout) {
+        await window.firebaseLogout();
       } else {
-        window.location.href = "auth.html";
+        window.location.href = "index.html";
       }
     },
   );

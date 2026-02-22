@@ -13,6 +13,7 @@ import {
   doc,
   setDoc,
   getDoc,
+  updateDoc,
   collection,
   addDoc,
   deleteDoc,
@@ -23,10 +24,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Expose Firestore utilities to window for script.js
+window.auth = auth;
 window.db = db;
 window.doc = doc;
 window.collection = collection;
 window.addDoc = addDoc;
+window.updateDoc = updateDoc;
 window.deleteDoc = deleteDoc;
 window.onSnapshot = onSnapshot;
 window.query = query;
@@ -148,6 +151,7 @@ if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => {
     try {
       await signOut(auth);
+      localStorage.clear(); // Clear all cached data
       window.location.href = "index.html";
     } catch (error) {
       console.error("Logout Error:", error);
@@ -247,9 +251,11 @@ onAuthStateChanged(auth, async (user) => {
         window.showSection(hash, false);
       }
 
-      // Load family members for the authenticated user
       if (typeof window.loadFamilyMembers === "function") {
         window.loadFamilyMembers();
+      }
+      if (typeof window.loadEmergencyContacts === "function") {
+        window.loadEmergencyContacts();
       }
     }
 
@@ -306,6 +312,11 @@ onAuthStateChanged(auth, async (user) => {
     };
     localStorage.setItem("medicalData", JSON.stringify(localMedical));
 
+    // Now populate profile panel fields from fresh localStorage
+    if (typeof window.loadProfileData === "function") {
+      window.loadProfileData();
+    }
+
     // --- Auto-fill Personal Information Menu ---
     const viewName = document.getElementById("viewName");
     const editName = document.getElementById("editName");
@@ -325,34 +336,40 @@ onAuthStateChanged(auth, async (user) => {
 
     if (viewName) viewName.textContent = finalName;
     if (editName) editName.value = finalName;
-    if (viewEmail) viewEmail.textContent = userData.email || user.email;
-    if (editEmail) editEmail.value = userData.email || user.email;
+    if (viewEmail) viewEmail.textContent = userData.email || user.email || "";
+    if (editEmail) editEmail.value = userData.email || user.email || "";
 
-    if (userData.age) {
-      if (viewAge) viewAge.textContent = userData.age;
-      if (editAge) editAge.value = userData.age;
+    // Always update — empty string is better than stale "Add data" HTML default
+    if (viewAge) viewAge.textContent = userData.age || "";
+    if (editAge) editAge.value = userData.age || "";
+    if (viewGender) viewGender.textContent = userData.gender || "";
+    if (editGender) editGender.value = userData.gender || "";
+    if (viewBloodGroup) viewBloodGroup.textContent = userData.bloodGroup || "";
+    if (editBloodGroup) editBloodGroup.value = userData.bloodGroup || "";
+    if (viewPhone) viewPhone.textContent = userData.mobile || "";
+    if (editPhone) editPhone.value = userData.mobile || "";
+
+    if (viewHeightWeight) {
+      const h = userData.height || "";
+      const w = userData.weight || "";
+      viewHeightWeight.textContent =
+        h && w
+          ? `${h} cm • ${w} kg`
+          : h || w
+            ? `${h || "--"} cm • ${w || "--"} kg`
+            : "";
     }
-    if (userData.gender) {
-      if (viewGender) viewGender.textContent = userData.gender;
-      if (editGender) editGender.value = userData.gender;
-    }
-    if (userData.bloodGroup) {
-      if (viewBloodGroup) viewBloodGroup.textContent = userData.bloodGroup;
-      if (editBloodGroup) editBloodGroup.value = userData.bloodGroup;
-    }
-    if (userData.mobile) {
-      if (viewPhone) viewPhone.textContent = userData.mobile;
-      if (editPhone) editPhone.value = userData.mobile;
-    }
-    if (userData.height || userData.weight) {
-      if (viewHeightWeight) {
-        const h = userData.height || "--";
-        const w = userData.weight || "--";
-        viewHeightWeight.textContent = `${h} cm • ${w} kg`;
-      }
-      if (editHeight && userData.height) editHeight.value = userData.height;
-      if (editWeight && userData.weight) editWeight.value = userData.weight;
-    }
+    if (editHeight) editHeight.value = userData.height || "";
+    if (editWeight) editWeight.value = userData.weight || "";
+
+    // Medical view fields
+    const viewConditions = document.getElementById("viewConditions");
+    const viewAllergies = document.getElementById("viewAllergies");
+    const viewMedications = document.getElementById("viewMedications");
+    if (viewConditions) viewConditions.textContent = userData.conditions || "";
+    if (viewAllergies) viewAllergies.textContent = userData.allergies || "";
+    if (viewMedications)
+      viewMedications.textContent = userData.medications || "";
   } else {
     console.log("No User - Guest Mode");
     window.isLoggedIn = false;
