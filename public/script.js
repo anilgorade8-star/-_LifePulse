@@ -2206,15 +2206,48 @@ function changeProfilePicture() {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = function (event) {
-        const img = document.getElementById("profileImage");
-        const icon = document.getElementById("profileIcon");
-        img.src = event.target.result;
-        img.classList.remove("hidden");
-        icon.classList.add("hidden");
+      reader.onload = async function (event) {
+        const photoData = event.target.result;
 
-        // Save to localStorage
-        localStorage.setItem("profilePicture", event.target.result);
+        // 1. Update Profile Panel
+        const profileImg = document.getElementById("profileImage");
+        const profileIcon = document.getElementById("profileIcon");
+        if (profileImg) {
+          profileImg.src = photoData;
+          profileImg.classList.remove("hidden");
+        }
+        if (profileIcon) {
+          profileIcon.classList.add("hidden");
+        }
+
+        // 2. Update Navigation Bar
+        const navImg = document.getElementById("navProfileImg");
+        const navIcon = document.getElementById("navProfileIcon");
+        if (navImg) {
+          navImg.src = photoData;
+          navImg.classList.remove("hidden");
+        }
+        if (navIcon) {
+          navIcon.classList.add("hidden");
+        }
+
+        // 3. Save to localStorage for immediate consistency
+        localStorage.setItem("profilePicture", photoData);
+
+        // 4. Save to Firestore if logged in
+        if (window.auth && window.auth.currentUser) {
+          try {
+            const user = window.auth.currentUser;
+            await window.updateDoc(window.doc(window.db, "users", user.uid), {
+              photoURL: photoData,
+              updatedAt: new Date().toISOString(),
+            });
+            console.log("Profile picture persisted to Firestore");
+          } catch (err) {
+            console.error("Error saving photo to Firestore:", err);
+          }
+        }
+
         showNotification("Profile picture updated!", "success");
       };
       reader.readAsDataURL(file);
