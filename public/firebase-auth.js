@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  updatePassword,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import {
   doc,
@@ -337,10 +338,23 @@ window.saveProfileData = async (profileData) => {
   const user = auth.currentUser;
   if (!user) throw new Error("No authenticated user");
 
+  const { password, ...firestoreData } = profileData;
+
+  // Update Password if provided (for future logins)
+  if (password) {
+    try {
+      await updatePassword(user, password);
+      console.log("User password updated successfully");
+    } catch (e) {
+      console.warn("Could not update password:", e.message);
+      // Don't block profile save if password update fails (e.g. recent login required)
+    }
+  }
+
   await setDoc(
     doc(db, "users", user.uid),
     {
-      ...profileData,
+      ...firestoreData,
       profileCompleted: true,
       updatedAt: new Date().toISOString(),
     },

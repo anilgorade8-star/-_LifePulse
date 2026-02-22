@@ -116,7 +116,9 @@ function showSection(sectionId, updateHistory = true) {
   // 1. Guest Access Guard: Redirect unauthenticated users to home if they try to access any other feature
   if (!window.isLoggedIn && sectionId !== "home") {
     console.warn("Blocked navigation: User must login to access this feature");
-    showNotification("Please login to access this feature.", "info");
+    if (updateHistory) {
+      showNotification("Please login to access this feature.", "info");
+    }
     if (window.showAuthGate) window.showAuthGate();
     sectionId = "home";
   }
@@ -2185,6 +2187,17 @@ function loadProfileData() {
       document.getElementById("editEmail").value = data.email;
     if (data.name && document.getElementById("profileNameDisplay"))
       document.getElementById("profileNameDisplay").textContent = data.name;
+
+    // Update Family Section "You" name
+    const familyYouName = document.querySelector("#familyMembersList h4");
+    if (
+      data.name &&
+      familyYouName &&
+      familyYouName.textContent.includes("You")
+    ) {
+      familyYouName.textContent = `You (${data.name})`;
+    }
+
     if (
       data.age &&
       data.gender &&
@@ -2837,6 +2850,7 @@ async function saveProfileCompletion() {
   const mobile = document.getElementById("cp-mobile").value;
   const height = document.getElementById("cp-height").value;
   const weight = document.getElementById("cp-weight").value;
+  const password = document.getElementById("cp-password").value;
   const submitBtn = document.getElementById("cp-submit-btn");
 
   // Validation
@@ -2873,6 +2887,11 @@ async function saveProfileCompletion() {
     return;
   }
 
+  if (password && password.length < 6) {
+    showNotification("Password must be at least 6 characters long", "error");
+    return;
+  }
+
   try {
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -2887,6 +2906,7 @@ async function saveProfileCompletion() {
       mobile: mobile,
       height: parseInt(height),
       weight: parseInt(weight),
+      password: password, // Pass to auth logic
     };
 
     // Call the global function from firebase-auth.js
