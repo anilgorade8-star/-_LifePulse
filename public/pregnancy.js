@@ -707,14 +707,16 @@ async function PregnancyAI(query) {
     // Add AI response
     const aiMsg = document.createElement("div");
     aiMsg.className = "flex gap-3 mb-4";
+    const rawReply = data.reply || data.response || "No response received.";
     aiMsg.innerHTML = `
             <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center shrink-0">
                 <i class="fas fa-robot text-pink-600 text-xs"></i>
             </div>
-            <div class="bg-gray-100 rounded-2xl rounded-tl-none p-4 text-xs text-gray-700 leading-relaxed shadow-sm">
-                ${data.reply || data.response}
+            <div class="preg-ai-message bg-gray-100 rounded-2xl rounded-tl-none p-4 text-xs text-gray-700 leading-relaxed shadow-sm flex-1 min-w-0">
+                ${formatPregResponse(rawReply)}
             </div>
         `;
+
     responseArea.appendChild(aiMsg);
     responseArea.scrollTo({
       top: responseArea.scrollHeight,
@@ -762,6 +764,84 @@ window.PregnancyAI = PregnancyAI;
 window.getPregnancyContext = getPregnancyContext;
 window.pregHandleFileSelect = pregHandleFileSelect;
 window.pregClearAttachment = pregClearAttachment;
+
+/**
+ * Converts Gemini markdown-style text into clean formatted HTML.
+ * Supports: **bold**, *italic*, ### headings, - bullet lists, numbered lists.
+ */
+function formatPregResponse(text) {
+  // Escape HTML first
+  let html = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  // Bold **text**
+  html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  // Italic *text*
+  html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
+
+  // Headings: ### or ## or #
+  html = html.replace(/^#{1,3} (.+)$/gm, "<h3>$1</h3>");
+
+  // Convert lines that start with "- " or "• " into list items
+  // Group consecutive list lines into a <ul>
+  const lines = html.split("\n");
+  const out = [];
+  let inList = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const bulletMatch = line.match(/^[-•*]\s+(.+)/);
+    const numberedMatch = line.match(/^\d+\.\s+(.+)/);
+
+    if (bulletMatch || numberedMatch) {
+      if (!inList) {
+        out.push("<ul>");
+        inList = true;
+      }
+      const content = bulletMatch ? bulletMatch[1] : numberedMatch[1];
+      out.push(`<li>${content}</li>`);
+    } else {
+      if (inList) {
+        out.push("</ul>");
+        inList = false;
+      }
+      if (line.trim() !== "") {
+        // Wrap plain text lines in <p> unless they're already tags
+        out.push(line.startsWith("<") ? line : `<p>${line}</p>`);
+      }
+    }
+  }
+  if (inList) out.push("</ul>");
+
+  return out.join("");
+}
+
+/**
+ * Syncs the pregnancy AI panel language dropdown with window.aiLanguage.
+ * Uses the same language variable that powers the main Sanjeevani AI.
+ */
+window.updatePregAILanguage = function () {
+  const sel = document.getElementById("pregAILanguageSelect");
+  if (sel) window.aiLanguage = sel.value;
+};
+
+/**
+ * Toggles the pregnancy AI panel between normal and expanded (fullscreen) mode.
+ */
+window.togglePregAIExpand = function () {
+  const panel = document.getElementById("pregnancy-ai-panel");
+  const btn = document.getElementById("pregAIExpandBtn");
+  if (!panel) return;
+  const expanded = panel.classList.toggle("preg-panel-expanded");
+  if (btn) {
+    btn.querySelector("i").className = expanded
+      ? "fas fa-compress-alt text-xs"
+      : "fas fa-expand-alt text-xs";
+    btn.title = expanded ? "Collapse" : "Expand";
+  }
+};
 
 /**
  * Shortcut: asks the AI for a fully personalised weekly health plan
