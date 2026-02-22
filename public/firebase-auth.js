@@ -279,6 +279,31 @@ onAuthStateChanged(auth, async (user) => {
       profileAgeGenderDisp.textContent = `${displayAge} • ${displayGender}`;
     }
 
+    // --- Gender-Based UI (Pregnancy Care) ---
+    const pregnancyCard = document.getElementById("pregnancyCard");
+    const cpPregGroup = document.getElementById("cp-pregnancy-group");
+    const editPregGroup = document.getElementById("editPregnancyGroup");
+    const cpPregnantSelect = document.getElementById("cp-is-pregnant");
+    const editPregnantSelect = document.getElementById("editIsPregnant");
+
+    if (userData.gender === "Female") {
+      if (cpPregGroup) cpPregGroup.classList.remove("hidden");
+      if (editPregGroup) editPregGroup.classList.remove("hidden");
+
+      const isPregnant = userData.isPregnant === true;
+      if (cpPregnantSelect) cpPregnantSelect.value = isPregnant ? "Yes" : "No";
+      if (editPregnantSelect) editPregnantSelect.value = isPregnant ? "Yes" : "No";
+
+      if (pregnancyCard) {
+        if (isPregnant) pregnancyCard.classList.remove("hidden");
+        else pregnancyCard.classList.add("hidden");
+      }
+    } else {
+      if (cpPregGroup) cpPregGroup.classList.add("hidden");
+      if (editPregGroup) editPregGroup.classList.add("hidden");
+      if (pregnancyCard) pregnancyCard.classList.add("hidden");
+    }
+
     if (finalPhoto) {
       if (profileImg) {
         profileImg.src = finalPhoto;
@@ -297,6 +322,7 @@ onAuthStateChanged(auth, async (user) => {
       name: finalName,
       age: userData.age || "",
       gender: userData.gender || "",
+      isPregnant: userData.isPregnant || false,
       bloodGroup: userData.bloodGroup || "",
       phone: userData.mobile || "",
       email: userData.email || user.email || "",
@@ -384,6 +410,10 @@ onAuthStateChanged(auth, async (user) => {
     if (profilePanel) profilePanel.classList.add("translate-x-full");
     const profileOverlay = document.getElementById("profileOverlay");
     if (profileOverlay) profileOverlay.classList.add("hidden");
+
+    // Hide Pregnancy Card for guests
+    const pregnancyCard = document.getElementById("pregnancyCard");
+    if (pregnancyCard) pregnancyCard.classList.add("hidden");
 
     // Re-trigger showSection to apply guest route guards
     if (typeof window.showSection === "function") {

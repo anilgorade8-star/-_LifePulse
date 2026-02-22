@@ -12,6 +12,60 @@ let isListening = false; // Tracks if voice recognition is active
 let isIntentionalStop = false; // Tracks if stop was triggered by user
 let isProfileComplete = true; // Default to true, updated by auth observer
 
+// --- Pregnancy Conditional Logic ---
+function updatePregnancyVisibility() {
+  const pregnancyCard = document.getElementById("pregnancyCard");
+
+  // Handle CP form
+  const cpGender = document.getElementById("cp-gender");
+  const cpPregGroup = document.getElementById("cp-pregnancy-group");
+  const cpPregnant = document.getElementById("cp-is-pregnant");
+
+  if (cpGender && cpPregGroup) {
+    if (cpGender.value === "Female") {
+      cpPregGroup.classList.remove("hidden");
+    } else {
+      cpPregGroup.classList.add("hidden");
+      if (cpPregnant) cpPregnant.value = "No";
+    }
+  }
+
+  // Handle Edit form
+  const editGender = document.getElementById("editGender");
+  const editPregGroup = document.getElementById("editPregnancyGroup");
+  const editPregnant = document.getElementById("editIsPregnant");
+
+  if (editGender && editPregGroup) {
+    if (editGender.value === "Female") {
+      editPregGroup.classList.remove("hidden");
+    } else {
+      editPregGroup.classList.add("hidden");
+      if (editPregnant) editPregnant.value = "No";
+    }
+  }
+
+  // Handle Main Card Visibility
+  const isCurrentlyPregnant = (cpGender?.value === "Female" && cpPregnant?.value === "Yes") ||
+    (editGender?.value === "Female" && editPregnant?.value === "Yes");
+
+  if (pregnancyCard) {
+    if (isCurrentlyPregnant) {
+      pregnancyCard.classList.remove("hidden");
+    } else {
+      pregnancyCard.classList.add("hidden");
+    }
+  }
+}
+
+// Add listeners when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  const ids = ["cp-gender", "editGender", "cp-is-pregnant", "editIsPregnant"];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("change", updatePregnancyVisibility);
+  });
+});
+
 // Initialize
 document.addEventListener("DOMContentLoaded", function () {
   initApp();
@@ -1481,14 +1535,13 @@ async function fetchNearbyHospitals(lat, lng) {
                     <div class="text-xs text-gray-500 mb-1">${address}</div>
                     <div class="text-sm text-blue-600 font-medium"><i class="fas fa-route mr-1"></i>${distance} km</div>
                 </div>
-                ${
-                  phone !== "Not Available"
-                    ? `
+                ${phone !== "Not Available"
+          ? `
                 <a href="tel:${phone}" onclick="event.stopPropagation()" class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 shadow-md transform hover:scale-105 transition ml-2">
                     <i class="fas fa-phone"></i>
                 </a>`
-                    : ""
-                }
+          : ""
+        }
             `;
       hospitalList.appendChild(div);
     });
@@ -1849,6 +1902,8 @@ async function savePersonalInfo() {
   const phone = document.getElementById("editPhone").value;
   const email = document.getElementById("editEmail").value;
 
+  const isPregnant = document.getElementById("editIsPregnant").value;
+
   // Sync to Firestore if available
   if (window.saveProfileData) {
     try {
@@ -1856,6 +1911,7 @@ async function savePersonalInfo() {
         displayName: name,
         age: parseInt(age),
         gender: gender,
+        isPregnant: isPregnant === "Yes",
         bloodGroup: bloodGroup,
         mobile: phone,
       });
@@ -1890,7 +1946,7 @@ async function savePersonalInfo() {
   cancelEdit("personal");
 
   // Save to localStorage (Fallback)
-  const profileData = { name, age, gender, bloodGroup, phone, email };
+  const profileData = { name, age, gender, isPregnant: isPregnant === "Yes", bloodGroup, phone, email };
   localStorage.setItem("profileData", JSON.stringify(profileData));
 
   showNotification("Profile updated successfully!", "success");
@@ -2164,6 +2220,30 @@ function loadProfileData() {
       document.getElementById("profileAgeGenderDisplay").textContent =
         `${data.age} years • ${data.gender}`;
     }
+
+    // Set pregnancy field visibility and value if available
+    if (data.gender === "Female") {
+      if (document.getElementById("cp-pregnancy-group"))
+        document.getElementById("cp-pregnancy-group").classList.remove("hidden");
+      if (document.getElementById("editPregnancyGroup"))
+        document.getElementById("editPregnancyGroup").classList.remove("hidden");
+
+      const pregnantVal = data.isPregnant ? "Yes" : "No";
+      if (document.getElementById("cp-is-pregnant"))
+        document.getElementById("cp-is-pregnant").value = pregnantVal;
+      if (document.getElementById("editIsPregnant"))
+        document.getElementById("editIsPregnant").value = pregnantVal;
+    } else {
+      if (document.getElementById("cp-pregnancy-group"))
+        document.getElementById("cp-pregnancy-group").classList.add("hidden");
+      if (document.getElementById("editPregnancyGroup"))
+        document.getElementById("editPregnancyGroup").classList.add("hidden");
+    }
+
+    // Refresh card and dropdown visibility based on newly loaded data
+    if (typeof updatePregnancyVisibility === "function") {
+      updatePregnancyVisibility();
+    }
   }
 
   // Load medical data
@@ -2206,48 +2286,15 @@ function changeProfilePicture() {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = async function (event) {
-        const photoData = event.target.result;
+      reader.onload = function (event) {
+        const img = document.getElementById("profileImage");
+        const icon = document.getElementById("profileIcon");
+        img.src = event.target.result;
+        img.classList.remove("hidden");
+        icon.classList.add("hidden");
 
-        // 1. Update Profile Panel
-        const profileImg = document.getElementById("profileImage");
-        const profileIcon = document.getElementById("profileIcon");
-        if (profileImg) {
-          profileImg.src = photoData;
-          profileImg.classList.remove("hidden");
-        }
-        if (profileIcon) {
-          profileIcon.classList.add("hidden");
-        }
-
-        // 2. Update Navigation Bar
-        const navImg = document.getElementById("navProfileImg");
-        const navIcon = document.getElementById("navProfileIcon");
-        if (navImg) {
-          navImg.src = photoData;
-          navImg.classList.remove("hidden");
-        }
-        if (navIcon) {
-          navIcon.classList.add("hidden");
-        }
-
-        // 3. Save to localStorage for immediate consistency
-        localStorage.setItem("profilePicture", photoData);
-
-        // 4. Save to Firestore if logged in
-        if (window.auth && window.auth.currentUser) {
-          try {
-            const user = window.auth.currentUser;
-            await window.updateDoc(window.doc(window.db, "users", user.uid), {
-              photoURL: photoData,
-              updatedAt: new Date().toISOString(),
-            });
-            console.log("Profile picture persisted to Firestore");
-          } catch (err) {
-            console.error("Error saving photo to Firestore:", err);
-          }
-        }
-
+        // Save to localStorage
+        localStorage.setItem("profilePicture", event.target.result);
         showNotification("Profile picture updated!", "success");
       };
       reader.readAsDataURL(file);
@@ -2981,10 +3028,13 @@ async function saveProfileCompletion() {
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     }
 
+    const isPregnant = document.getElementById("cp-is-pregnant").value;
+
     const profileData = {
       displayName: name,
       age: parseInt(age),
       gender: gender,
+      isPregnant: isPregnant === "Yes",
       bloodGroup: bloodGroup,
       mobile: mobile,
       height: parseInt(height),
