@@ -253,25 +253,64 @@ onAuthStateChanged(auth, async (user) => {
       }
     }
 
-    // Update LifePulse Profile UI (Dashboard & Sidebar)
+    // --- Update LifePulse Profile UI (Dashboard & Sidebar) ---
     const profileNameDisp = document.getElementById("profileNameDisplay");
+    const profileAgeGenderDisp = document.getElementById(
+      "profileAgeGenderDisplay",
+    );
     const profileImg = document.getElementById("profileImage");
     const profileIcon = document.getElementById("profileIcon");
+    const navProfileImg = document.getElementById("navProfileImg");
+    const navProfileIcon = document.getElementById("navProfileIcon");
 
-    if (profileNameDisp) profileNameDisp.textContent = userData.displayName;
-    if (profileImg && (user.photoURL || userData.photoURL)) {
-      profileImg.src = user.photoURL || userData.photoURL;
-      profileImg.classList.remove("hidden");
-      if (profileIcon) profileIcon.classList.add("hidden");
+    const finalName = userData.displayName || user.displayName || "User";
+    const finalPhoto = userData.photoURL || user.photoURL;
+
+    if (profileNameDisp) profileNameDisp.textContent = finalName;
+    if (profileAgeGenderDisp) {
+      const displayAge = userData.age ? `${userData.age} years` : "Add Age";
+      const displayGender = userData.gender || "Add Gender";
+      profileAgeGenderDisp.textContent = `${displayAge} • ${displayGender}`;
     }
 
-    // Auto-fill Personal Information Menu
+    if (finalPhoto) {
+      if (profileImg) {
+        profileImg.src = finalPhoto;
+        profileImg.classList.remove("hidden");
+        if (profileIcon) profileIcon.classList.add("hidden");
+      }
+      if (navProfileImg) {
+        navProfileImg.src = finalPhoto;
+        navProfileImg.classList.remove("hidden");
+        if (navProfileIcon) navProfileIcon.classList.add("hidden");
+      }
+    }
+
+    // --- Sync with localStorage for script.js compatibility ---
+    const localProfile = {
+      name: finalName,
+      age: userData.age || "",
+      gender: userData.gender || "",
+      bloodGroup: userData.bloodGroup || "",
+      phone: userData.mobile || "",
+      email: userData.email || user.email || "",
+    };
+    localStorage.setItem("profileData", JSON.stringify(localProfile));
+
+    const localMedical = {
+      height: userData.height || "",
+      weight: userData.weight || "",
+      conditions: userData.conditions || "",
+      allergies: userData.allergies || "",
+      medications: userData.medications || "",
+    };
+    localStorage.setItem("medicalData", JSON.stringify(localMedical));
+
+    // --- Auto-fill Personal Information Menu ---
     const viewName = document.getElementById("viewName");
     const editName = document.getElementById("editName");
     const viewEmail = document.getElementById("viewEmail");
     const editEmail = document.getElementById("editEmail");
-
-    // New Profile Fields
     const viewAge = document.getElementById("viewAge");
     const editAge = document.getElementById("editAge");
     const viewGender = document.getElementById("viewGender");
@@ -284,10 +323,10 @@ onAuthStateChanged(auth, async (user) => {
     const editHeight = document.getElementById("editHeight");
     const editWeight = document.getElementById("editWeight");
 
-    if (viewName) viewName.textContent = userData.displayName;
-    if (editName) editName.value = userData.displayName;
-    if (viewEmail) viewEmail.textContent = userData.email;
-    if (editEmail) editEmail.value = userData.email;
+    if (viewName) viewName.textContent = finalName;
+    if (editName) editName.value = finalName;
+    if (viewEmail) viewEmail.textContent = userData.email || user.email;
+    if (editEmail) editEmail.value = userData.email || user.email;
 
     if (userData.age) {
       if (viewAge) viewAge.textContent = userData.age;
@@ -313,28 +352,6 @@ onAuthStateChanged(auth, async (user) => {
       }
       if (editHeight && userData.height) editHeight.value = userData.height;
       if (editWeight && userData.weight) editWeight.value = userData.weight;
-    }
-
-    // --- Multi-Location Profile Image Sync ---
-    const photoURL = user.photoURL || userData.photoURL;
-    if (photoURL) {
-      // Sidebar Header
-      const profileImg = document.getElementById("profileImage");
-      const profileIcon = document.getElementById("profileIcon");
-      if (profileImg) {
-        profileImg.src = photoURL;
-        profileImg.classList.remove("hidden");
-        if (profileIcon) profileIcon.classList.add("hidden");
-      }
-
-      // Navbar Button
-      const navProfileImg = document.getElementById("navProfileImg");
-      const navProfileIcon = document.getElementById("navProfileIcon");
-      if (navProfileImg) {
-        navProfileImg.src = photoURL;
-        navProfileImg.classList.remove("hidden");
-        if (navProfileIcon) navProfileIcon.classList.add("hidden");
-      }
     }
   } else {
     console.log("No User - Guest Mode");
