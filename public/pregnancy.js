@@ -530,7 +530,7 @@ async function PregnancyAI(query) {
   responseArea.scrollTo({ top: responseArea.scrollHeight, behavior: "smooth" });
 
   try {
-    const response = await fetch("/api/chat", {
+    const response = await fetch("/api/pregnancy-chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
