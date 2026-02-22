@@ -345,7 +345,7 @@
                 </div>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8" id="desktopNav">
+                <div class="hidden md:flex items-center space-x-3 ml-24" id="desktopNav">
                     <button onclick="showSection('home')" data-nav="home"
                         class="nav-btn nav-link text-gray-700 hover:text-purple-600 font-medium transition">Home</button>
                     <button onclick="showSection('dashboard')" data-nav="dashboard"
@@ -2255,7 +2255,8 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div class="bg-green-50/50 rounded-2xl p-5 border border-green-100">
                                     <h4 class="text-xs font-bold text-green-700 uppercase mb-4 flex items-center gap-2">
-                                        <i class="fas fa-apple-alt"></i> Recommended</h4>
+                                        <i class="fas fa-apple-alt"></i> Recommended
+                                    </h4>
                                     <div id="advice-recommended"></div>
                                 </div>
                                 <div class="bg-red-50/50 rounded-2xl p-5 border border-red-100">
@@ -2265,13 +2266,15 @@
                                 </div>
                                 <div class="bg-blue-50/50 rounded-2xl p-5 border border-blue-100">
                                     <h4 class="text-xs font-bold text-blue-700 uppercase mb-4 flex items-center gap-2">
-                                        <i class="fas fa-walking"></i> Exercise</h4>
+                                        <i class="fas fa-walking"></i> Exercise
+                                    </h4>
                                     <div id="advice-exercise"></div>
                                 </div>
                                 <div class="bg-indigo-50/50 rounded-2xl p-5 border border-indigo-100">
                                     <h4
                                         class="text-xs font-bold text-indigo-700 uppercase mb-4 flex items-center gap-2">
-                                        <i class="fas fa-user-md"></i> Doctor Visits</h4>
+                                        <i class="fas fa-user-md"></i> Doctor Visits
+                                    </h4>
                                     <div id="advice-doctor"></div>
                                 </div>
                             </div>
@@ -2281,12 +2284,14 @@
                         <div class="preg-card p-6 mb-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white">
                             <div class="flex items-center justify-between gap-4 flex-wrap">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+                                    <div
+                                        class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
                                         <i class="fas fa-magic text-xl"></i>
                                     </div>
                                     <div>
                                         <h3 class="text-base font-bold">Get Personalised AI Plan</h3>
-                                        <p class="text-xs text-white/80">Based on your current week, vitals &amp; health logs</p>
+                                        <p class="text-xs text-white/80">Based on your current week, vitals &amp; health
+                                            logs</p>
                                     </div>
                                 </div>
                                 <button id="pregAIRecommendBtn" onclick="requestPregnancyRecommendations()"
@@ -2396,8 +2401,7 @@
                     </div>
                     <!-- Language + Expand + Close controls -->
                     <div class="flex items-center gap-1 shrink-0">
-                        <select id="pregAILanguageSelect" onchange="updatePregAILanguage()"
-                            title="Change language"
+                        <select id="pregAILanguageSelect" onchange="updatePregAILanguage()" title="Change language"
                             class="bg-white/20 border-none rounded-lg px-2 py-1.5 text-xs text-white focus:ring-2 focus:ring-white/30 cursor-pointer">
                             <option value="en" class="text-gray-800">EN</option>
                             <option value="hi" class="text-gray-800">हिंदी</option>
@@ -2406,8 +2410,7 @@
                             <option value="bn" class="text-gray-800">বাংলা</option>
                             <option value="mr" class="text-gray-800">मराठी</option>
                         </select>
-                        <button onclick="togglePregAIExpand()" id="pregAIExpandBtn"
-                            title="Expand / Collapse"
+                        <button onclick="togglePregAIExpand()" id="pregAIExpandBtn" title="Expand / Collapse"
                             class="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-all">
                             <i class="fas fa-expand-alt text-xs"></i>
                         </button>
@@ -2430,20 +2433,23 @@
                 </div>
                 <div class="preg-ai-input">
                     <!-- File Attachment Preview (shown when file selected) -->
-                    <div id="preg-file-preview" class="hidden mb-2 flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-2xl px-3 py-2">
+                    <div id="preg-file-preview"
+                        class="hidden mb-2 flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-2xl px-3 py-2">
                         <i class="fas fa-file-medical text-pink-500 text-xs"></i>
-                        <span id="preg-file-name" class="text-xs text-pink-700 font-medium truncate flex-1">report.pdf</span>
-                        <button onclick="pregClearAttachment()" class="w-5 h-5 flex items-center justify-center text-pink-400 hover:text-pink-600 transition shrink-0" title="Remove file">
+                        <span id="preg-file-name"
+                            class="text-xs text-pink-700 font-medium truncate flex-1">report.pdf</span>
+                        <button onclick="pregClearAttachment()"
+                            class="w-5 h-5 flex items-center justify-center text-pink-400 hover:text-pink-600 transition shrink-0"
+                            title="Remove file">
                             <i class="fas fa-times text-[10px]"></i>
                         </button>
                     </div>
                     <!-- Hidden file input -->
-                    <input type="file" id="preg-file-input" accept=".pdf,.jpg,.jpeg,.png,.webp"
-                        class="hidden" onchange="pregHandleFileSelect(this)">
+                    <input type="file" id="preg-file-input" accept=".pdf,.jpg,.jpeg,.png,.webp" class="hidden"
+                        onchange="pregHandleFileSelect(this)">
                     <div class="relative flex items-center gap-2">
                         <!-- Attachment button -->
-                        <button onclick="document.getElementById('preg-file-input').click()"
-                            id="preg-attach-btn"
+                        <button onclick="document.getElementById('preg-file-input').click()" id="preg-attach-btn"
                             title="Attach a medical report (PDF or image)"
                             class="w-10 h-10 bg-gray-100 text-gray-500 hover:bg-pink-100 hover:text-pink-600 rounded-full flex items-center justify-center shrink-0 transition-all">
                             <i class="fas fa-paperclip text-sm"></i>

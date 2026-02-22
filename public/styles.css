@@ -27,28 +27,25 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.nav-btn:hover {
-  background: rgba(147, 51, 234, 0.05);
-  /* Very subtle purple tint */
-  transform: translateY(-1px);
-}
-
 .nav-btn.active-nav {
   color: #9333ea !important;
   font-weight: 700 !important;
-  background: rgba(147, 51, 234, 0.08);
-  /* Slightly more visible pill for active */
+  background: transparent !important;
+}
+
+.nav-btn:hover {
+  background: transparent !important;
 }
 
 /* Red special case for Emergency */
 .nav-btn[data-nav="emergency"]:hover {
-  background: rgba(239, 68, 68, 0.05);
   color: #dc2626 !important;
+  background: transparent !important;
 }
 
 .nav-btn[data-nav="emergency"].active-nav {
-  background: rgba(239, 68, 68, 0.1);
   color: #dc2626 !important;
+  background: transparent !important;
 }
 
 /* Centered Underline Expansion */
@@ -276,6 +273,7 @@ body {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
@@ -305,6 +303,7 @@ body {
 }
 
 @keyframes typing {
+
   0%,
   100% {
     transform: translateY(0);
@@ -384,11 +383,9 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.1) 1px,
-    transparent 1px
-  );
+  background: radial-gradient(circle,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px);
   background-size: 20px 20px;
   animation: move 20s linear infinite;
 }
@@ -546,6 +543,7 @@ body {
 }
 
 @keyframes heartbeat {
+
   0%,
   100% {
     transform: scale(1);
@@ -639,6 +637,7 @@ body {
 }
 
 @keyframes scan {
+
   0%,
   100% {
     transform: translateY(0) scale(1.1);
@@ -852,7 +851,8 @@ input[type="range"]::-webkit-slider-thumb {
   width: 420px;
   max-width: calc(100vw - 40px);
   height: 620px;
-  z-index: 5500; /* Higher than nav but lower than profile */
+  z-index: 5500;
+  /* Higher than nav but lower than profile */
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.2);
@@ -876,6 +876,7 @@ input[type="range"]::-webkit-slider-thumb {
     opacity: 0;
     transform: scale(0.5) translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -916,6 +917,7 @@ input[type="range"]::-webkit-slider-thumb {
     width: auto;
     height: 80vh;
   }
+
   #pregnancy-ai-panel.preg-panel-expanded {
     bottom: 10px;
     right: 10px;
@@ -931,11 +933,13 @@ input[type="range"]::-webkit-slider-thumb {
   padding: 0;
   margin: 6px 0;
 }
+
 .preg-ai-message ul li {
   padding: 3px 0 3px 16px;
   position: relative;
   line-height: 1.5;
 }
+
 .preg-ai-message ul li::before {
   content: "•";
   position: absolute;
@@ -943,10 +947,12 @@ input[type="range"]::-webkit-slider-thumb {
   color: #ec4899;
   font-weight: bold;
 }
+
 .preg-ai-message strong {
   color: #7c3aed;
   font-weight: 700;
 }
+
 .preg-ai-message h3,
 .preg-ai-message h4 {
   color: #9333ea;
@@ -956,6 +962,7 @@ input[type="range"]::-webkit-slider-thumb {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
 .preg-ai-message p {
   margin-bottom: 6px;
   line-height: 1.6;
